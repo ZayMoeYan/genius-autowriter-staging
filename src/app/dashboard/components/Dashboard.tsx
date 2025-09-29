@@ -195,7 +195,7 @@ export default function Dashboard() {
                         <p className="text-gray-600">Manage your content library</p>
                     </div>
 
-                    {loading || filteredContents.length === 0 && (
+                    {loading && (
                         <div className="p-8 text-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
                             <p className="text-gray-600">Loading contents...</p>
@@ -203,7 +203,7 @@ export default function Dashboard() {
                     )
                     }
 
-                    {loading && filteredContents.length === 0 && (
+                    {filteredContents.length === 0 && (
                         <div className="p-8 text-center">
                             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600">
