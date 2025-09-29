@@ -25,6 +25,8 @@ export async function login(username: string, password: string) {
             cookieStore.set('username', data.username, { httpOnly: true})
             cookieStore.set('email', data.email, { httpOnly: true})
         }
+
+        return data.role;
     }catch (err) {
         throw err;
     }
