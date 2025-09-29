@@ -195,19 +195,24 @@ export default function Dashboard() {
                         <p className="text-gray-600">Manage your content library</p>
                     </div>
 
-                    {loading ? (
+                    {loading || filteredContents.length === 0 && (
                         <div className="p-8 text-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
                             <p className="text-gray-600">Loading contents...</p>
                         </div>
-                    ) : filteredContents.length === 0 ? (
+                    )
+                    }
+
+                    {loading && filteredContents.length === 0 && (
                         <div className="p-8 text-center">
                             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600">
                                 {search || statusFilter !== "all" ? "No contents found matching your criteria." : "No contents found."}
                             </p>
                         </div>
-                    ) : (
+                    )
+                    }
+                    { filteredContents.length !== 0 && (
                         <div className="divide-y divide-gray-200">
                             {filteredContents.map((content) => (
                                 <div
