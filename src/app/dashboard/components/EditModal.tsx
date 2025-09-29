@@ -4,11 +4,20 @@ import { useState } from "react";
 export default function EditModal({ content, onClose, onSave }: any) {
     const [title, setTitle] = useState(content.title);
     const [body, setBody] = useState(content.content);
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setIsSaving(true);
 
-        await onSave(content.id, { title, content: body });
+        try {
+            await onSave(content.id, { title, content: body });
+            onClose(); // ✅ close modal after success
+        } catch (err) {
+            console.error("Failed to save:", err);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -26,9 +35,20 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             onClick={onClose}
                             className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 group"
                             aria-label="Close modal"
+                            disabled={isSaving}
                         >
-                            <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <svg
+                                className="w-5 h-5 text-gray-400 group-hover:text-gray-600"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
                             </svg>
                         </button>
                     </div>
@@ -49,6 +69,7 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 bg-gray-50 hover:bg-white"
                             placeholder="Enter content title..."
                             required
+                            disabled={isSaving}
                         />
                     </div>
 
@@ -62,9 +83,10 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             value={body}
                             onChange={(e) => setBody(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 bg-gray-50 hover:bg-white resize-none"
-                            rows={6}
+                            rows={14}
                             placeholder="Enter your content here..."
                             required
+                            disabled={isSaving}
                         />
                     </div>
 
@@ -74,14 +96,26 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             type="button"
                             onClick={onClose}
                             className="px-6 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                            disabled={isSaving}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-6 py-2.5 text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl"
+                            className="px-6 py-2.5 text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl flex items-center"
+                            disabled={isSaving}
                         >
-                            Save Changes
+                            {isSaving ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Saving...
+                                </>
+                            ) : (
+                                "Save Changes"
+                            )}
                         </button>
                     </div>
                 </form>

@@ -50,7 +50,7 @@ export default function Dashboard() {
         setIsDeleting(true);
 
         await deleteContent(id)
-
+        setContents((prev) => prev.filter((c) => c.id !== id));
         setIsDeleting(false);
         setIsDeleteModalOpen(false);
     };
