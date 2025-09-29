@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import {Nav} from "@/components/Nav";
 
 export const metadata: Metadata = {
   title: 'Content Crafter',
@@ -22,10 +23,16 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-black">
+        <Nav/>
         {children}
         <Toaster />
+        <footer className="text-center text-sm text-muted-foreground bg-black p-4">
+            <p>Copyright &copy; 2025 Myanmar Online Technology</p>
+        </footer>
       </body>
+
     </html>
+
   );
 }
