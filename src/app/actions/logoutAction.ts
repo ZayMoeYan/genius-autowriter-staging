@@ -8,4 +8,6 @@ export async function logout() {
     cookieStore.delete('access-token');
     cookieStore.delete('token-type');
     cookieStore.delete('role');
+    cookieStore.delete('username');
+    cookieStore.delete('email');
 }

@@ -29,7 +29,6 @@ export const Nav = () => {
     useEffect(() => {
         getLoginUser().then(user => {
             setCurrentUser(user)
-            console.log(user)
         })
     }, []);
 
@@ -80,7 +79,7 @@ export const Nav = () => {
                             </Link>
                         )}
 
-                        {currentUser?.isLoggedIn && (
+                        {currentUser?.isLoggedIn && currentUser?.role !== "Admin" && (
                             <Link href={"/generator"} >
                                 <Button
                                     variant="ghost"
@@ -96,7 +95,7 @@ export const Nav = () => {
                             </Link>
                         )}
 
-                        {currentUser?.isLoggedIn && (
+                        {currentUser?.isLoggedIn && currentUser?.role !== "Admin" && (
                             <Link href={"/dashboard"} >
                                 <Button
                                     variant="ghost"

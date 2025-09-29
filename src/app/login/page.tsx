@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 import motLogo from '@/app/images/MOT.png';
+import {getLoginUser} from "@/app/actions/getLoginUser";
 
 export default function LoginPage() {
 
@@ -22,8 +23,14 @@ export default function LoginPage() {
         setError("");
 
         try{
-            await login(email, password);
-            window.location.href = "/generator";
+            const role = await login(email, password);
+
+            if(role === "Admin") {
+                window.location.href = "/admin";
+            }else {
+                window.location.href = "/generator";
+            }
+
         }finally {
             setLoading(false)
             setEmail("");
