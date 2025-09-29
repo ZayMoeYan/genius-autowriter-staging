@@ -1,13 +1,27 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { Users, UserCheck, UserX, Shield, Search, Edit, Trash2, Plus, X, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+    Users,
+    UserCheck,
+    UserX,
+    Shield,
+    Search,
+    Edit,
+    Trash2,
+    Plus,
+    X,
+    ChevronLeft,
+    ChevronRight,
+    Sparkles
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import {deleteUserOrAdmin, getUsers, save, updateUserOrAdmin} from "@/app/actions/usersAction";
 import UserDeleteModal from "@/app/admin/components/UserDeleteModal";
+import {useToast} from "@/hooks/use-toast";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -24,34 +38,51 @@ export default function AdminDashboard() {
     const [isUserDeleteModalOpen, setIsUserDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [userToDelete, setUserToDelete] = useState<any | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const { toast } = useToast();
 
-    const fetchUsers = async () => {
-        try {
-            const data = await getUsers();
-            setLoading(true)
-            setUsers(data);
-        } catch (err: any) {
-            setMessage(`❌ ${err.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const data = await getUsers();
+                setLoading(true)
+                setUsers(data);
+            } catch (err: any) {
+                setMessage(`❌ ${err.message}`);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchUsers();
     }, []);
 
 
     const createUser = async (username: string, email: string, password: string, role: string) => {
+        setIsSaving(true);
         try {
             const newUser = { username, email, password, role };
             const data = await save(newUser);
+
+            toast({
+                title: `✅ ${data.role} Created`,
+                description: `${data.role} ${data.username} has been successfully saved.`,
+            });
+
             setUsers([...users, data]);
             setMessage(`✅ Created user: ${data.username}`);
         } catch (err: any) {
             setMessage(`❌ ${err.message}`);
+            toast({
+                title: "❌ Error",
+                description: "Failed to save user. Please try again.",
+            });
+            throw err; // important, so form doesn’t close if failed
+        } finally {
+            setIsSaving(false);
         }
     };
+
 
     const handleUserDeleteClose = () => {
         setIsUserDeleteModalOpen(false);
@@ -401,7 +432,7 @@ export default function AdminDashboard() {
                     <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
                         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-gray-200">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-gray-800">Create New User</h2>
+                                <h2 className="text-gray-800 font-bold">Create New User</h2>
                                 <Button
                                     onClick={() => setShowCreateForm(false)}
                                     variant="ghost"
@@ -414,7 +445,10 @@ export default function AdminDashboard() {
                             <UserForm
                                 onSubmit={createUser}
                                 onCancel={() => setShowCreateForm(false)}
+                                isSaving={isSaving}
+                                onSuccess={() => setShowCreateForm(false)}
                             />
+
                         </div>
                     </div>
                 )}
@@ -538,22 +572,27 @@ export default function AdminDashboard() {
 function UserForm({
                       onSubmit,
                       onCancel,
+                      isSaving,
+                      onSuccess,
                   }: {
-    onSubmit: (username: string, email: string, password: string, role: string) => void;
+    onSubmit: (username: string, email: string, password: string, role: string) => Promise<void>;
     onCancel: () => void;
+    isSaving: boolean;
+    onSuccess: () => void;
 }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("User");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(username, email, password, role);
+        await onSubmit(username, email, password, role);
         setUsername("");
         setEmail("");
         setPassword("");
         setRole("User");
+        onSuccess();
     };
 
     return (
@@ -612,16 +651,28 @@ function UserForm({
                     type="button"
                     onClick={onCancel}
                     variant="outline"
-                    className="border-gray-300  hover:bg-gray-100 hover:text-black"
+                    className="border-gray-300 hover:bg-gray-100 hover:text-black"
+                    disabled={isSaving}
                 >
                     Cancel
                 </Button>
+
                 <Button
                     type="submit"
                     className="bg-red-600 hover:bg-red-700 text-white"
+                    disabled={isSaving}
                 >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create User
+                    {isSaving ? (
+                        <>
+                            <Sparkles className="mr-2 h-4 w-4 animate-spin" />
+                            Saving...
+                        </>
+                    ) : (
+                        <>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create User
+                        </>
+                    )}
                 </Button>
             </div>
         </form>

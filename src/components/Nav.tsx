@@ -54,10 +54,10 @@ export const Nav = () => {
                     <img
                         src={motLogo.src}
                         alt="MOT Logo"
-                        className="h-8 w-auto"
+                        className="h-12 w-auto"
                     />
                     <div className="flex flex-col">
-                        <span className="text-red-500 tracking-wider">GENIUS AUTOWRITER</span>
+                        <span className="text-red-500 tracking-wider font-bold">GENIUS AUTOWRITER</span>
                     </div>
                 </div>
 

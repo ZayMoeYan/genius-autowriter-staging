@@ -4,9 +4,19 @@ import {ChangeEvent, useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {Wand2, Upload, X, Sparkles} from "lucide-react";
-import motLogo from '@/app/images/MOT.png';
-
+import {Wand2, Upload, X, Sparkles, ChevronsUpDown, Check} from "lucide-react";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -30,16 +40,19 @@ import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {generateContentAction, saveContent} from "@/app/actions/contentsAction";
-import { Icons } from "@/components/icons";
 import { buildMyanmarPrompt } from "@/utils/buildMyanmarPrompt";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dropzone} from "@/components/ui/Dropzone";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
-    topic: z.string().min(3, "Topic must be at least 3 characters long."),
-    purpose: z.string().min(1, "Please select a purpose."),
-    audience: z.string().min(3, "Audience must be at least 3 characters long."),
-    writingStyle: z.string().min(1, "Please select a writing style."),
+    topic: z.string().min(3, "Content ရဲ့ အဓိက အကြာင်းအရာကို ရေးသားပေးပါ"),
+    purpose: z.string().min(1, "Content ရဲ့ ရည်ရွယ်ချက် ကိုရေးသားပေးပါ"),
+    audience: z.string().min(3, "Target Audience ကိုရေးသားပေးပါ"),
+    writingStyle: z.array(z.string())
+        .min(1, "Writing Style / Tone ကို တစ်ခုအနည်းဆုံးရွေးပေးပါ")
+        .max(3, "၃ ခုအထိများဆုံးရွေးချယ်နိုင်ပါတယ်"),
+    outputLanguage: z.string(),
     wordCount: z.number().min(50).max(2000),
     imageDescriptions: z.string().optional(),
     keywords: z.string().optional(),
@@ -54,9 +67,11 @@ export default function ContentGeneratorUi() {
 
     const [generatedContent, setGeneratedContent] = useState("");
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [title, setTitle] = useState("");
+    const { toast } = useToast();
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -64,7 +79,8 @@ export default function ContentGeneratorUi() {
             topic: "",
             purpose: "",
             audience: "",
-            writingStyle: "",
+            writingStyle: [],
+            outputLanguage: "",
             wordCount: 300,
             imageDescriptions: "",
             keywords: "",
@@ -113,12 +129,24 @@ export default function ContentGeneratorUi() {
     }
 
     const onSaveContent = async () => {
+        setIsSaving(true);
         try {
             const result = await saveContent(title, generatedContent);
             form.reset();
+
+            toast({
+                title: "✅ Content Created",
+                description: "Your content has been successfully saved.",
+            });
+        } catch (error) {
+            toast({
+                title: "❌ Error",
+                description: "Failed to save content. Please try again.",
+            });
         } finally {
-            setTitle("")
+            setTitle("");
             setGeneratedContent("");
+            setIsSaving(false);
         }
     }
 
@@ -140,9 +168,9 @@ export default function ContentGeneratorUi() {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col">
+            <div className="max-w-7xl mx-auto px-6 py-8 ">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <Card className="shadow-mot border-0 bg-white/95 backdrop-blur-sm">
+                    <Card className="shadow-mot border-0  backdrop-blur-sm">
                         <CardHeader className="space-y-2">
                             <CardTitle className="text-2xl text-secondary">Content Details</CardTitle>
                             <CardDescription className="text-muted-foreground">
@@ -190,30 +218,6 @@ export default function ContentGeneratorUi() {
 
                                     <FormField
                                         control={form.control}
-                                        name="writingStyle"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-secondary font-medium">Writing Style/Tone</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
-                                                            <SelectValue placeholder="Tone ကိုရွေးချယ်ပါ" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="ပျော်ရွှင်စရာနှင့် အားတက်ဖွယ်">ပျော်ရွှင်စရာနှင့် အားတက်ဖွယ်</SelectItem>
-                                                        <SelectItem value="ပညာရှင်ဆန်ဆန်နှင့် ယုံကြည်မှုရှိသော">ပညာရှင်ဆန်ဆန်နှင့် ယုံကြည်မှုရှိသော</SelectItem>
-                                                        <SelectItem value="ရင်းနှီးဖော်ရွေသော">ရင်းနှီးဖော်ရွေသော</SelectItem>
-                                                        <SelectItem value="ဟာသဉာဏ်ပါသော">ဟာသဉာဏ်ပါသော</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
                                         name="audience"
                                         render={({ field }) => (
                                             <FormItem>
@@ -232,14 +236,110 @@ export default function ContentGeneratorUi() {
 
                                     <FormField
                                         control={form.control}
+                                        name="writingStyle"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-secondary font-medium">Writing Style / Tone (အများဆုံ ၃ ခုအထိရွေးချယ်နိုင်ပါသည်)</FormLabel>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            className="w-full justify-between border-input focus:border-primary focus:ring-primary/20"
+                                                        >
+                                                            {field.value && field.value.length > 0
+                                                                ? field.value.join(", ")
+                                                                : "Writing Style / Tone ကိုရွေးချယ်ပါ"}
+                                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] ">
+                                                        <Command className={'w-full'} >
+                                                            <CommandInput placeholder="Search tone..."  />
+                                                            <CommandEmpty>No tone found.</CommandEmpty>
+                                                            <CommandGroup>
+                                                                {[
+                                                                    "ဖော်ရွေသော (Friendly)",
+                                                                    "တရားဝင် (Formal)",
+                                                                    "ဟာသ (Humorous)",
+                                                                    "ယုံကြည်မှုရှိသော (Confident)",
+                                                                    "စိတ်အားထက်သန်သော (Enthusiastic)",
+                                                                    "ပရော်ဖက်ရှင်နယ် (Professional)",
+                                                                    "စကားပြောပုံစံ (Conversational)",
+                                                                    "ဇာတ်လမ်းပြောပုံစံ (Narrative)",
+                                                                    "အသိပေးရှင်းပြပုံစံ (Expository)",
+                                                                    "စည်းရုံးဆွဲဆောင်ပုံစံ (Persuasive)"
+                                                                ].map((style) => {
+                                                                    const isSelected = field.value?.includes(style);
+                                                                    return (
+                                                                        <CommandItem
+                                                                            key={style}
+                                                                            onSelect={() => {
+
+                                                                                const myanmarOnly = style.split("(")[0].trim();
+
+                                                                                let newValue = field.value || [];
+                                                                                if (newValue.includes(myanmarOnly)) {
+                                                                                    newValue = newValue.filter((s) => s !== myanmarOnly);
+                                                                                } else if (newValue.length < 3) {
+                                                                                    newValue = [...newValue, myanmarOnly];
+                                                                                }
+                                                                                field.onChange(newValue);
+                                                                            }}
+                                                                        >
+                                                                            <Check
+                                                                                className={cn(
+                                                                                    "mr-2 h-4 w-4",
+                                                                                    field.value?.includes(style.split("(")[0].trim())
+                                                                                        ? "opacity-100"
+                                                                                        : "opacity-0"
+                                                                                )}
+                                                                            />
+                                                                            {style}
+                                                                        </CommandItem>
+                                                                    );
+                                                                })}
+                                                            </CommandGroup>
+                                                        </Command>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+
+                                    <FormField
+                                        control={form.control}
+                                        name="outputLanguage"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-secondary font-medium">Output Language</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                        <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
+                                                            <SelectValue placeholder="Output Language ကိုရွေးချယ်ပါ" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="မြန်မာ">မြန်မာ (Myanmar)</SelectItem>
+                                                        <SelectItem value="English">အင်္ဂလိပ် (English)</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
                                         name="wordCount"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel className="text-secondary font-medium">Word Count: {field.value}</FormLabel>
                                                 <FormControl>
                                                     <Slider
-                                                        min={50}
-                                                        max={2000}
+                                                        min={100}
+                                                        max={1000}
                                                         step={50}
                                                         onValueChange={(value) => field.onChange(value[0])}
                                                         defaultValue={[field.value]}
@@ -408,9 +508,9 @@ export default function ContentGeneratorUi() {
                         </CardContent>
                     </Card>
 
-                    <Card className="shadow-mot border-0 bg-secondary/95 backdrop-blur-sm">
+                    <Card className="shadow-mot border-0 backdrop-blur-sm ">
                         <CardHeader className="space-y-2">
-                            <CardTitle className="text-2xl text-white">Generated Content</CardTitle>
+                            <CardTitle className="text-2xl text-black">Generated Content</CardTitle>
                             <CardDescription className="text-primary">
                                 Review and edit your AI-generated content here.
                             </CardDescription>
@@ -418,31 +518,31 @@ export default function ContentGeneratorUi() {
                         <CardContent>
                             {isGenerating ? (
                                 <div className="space-y-4">
-                                    <Skeleton className="h-8 w-3/4 bg-white/20" />
-                                    <Skeleton className="h-4 w-full bg-white/20" />
-                                    <Skeleton className="h-4 w-full bg-white/20" />
-                                    <Skeleton className="h-4 w-5/6 bg-white/20" />
-                                    <Skeleton className="h-4 w-full bg-white/20" />
-                                    <Skeleton className="h-4 w-full bg-white/20" />
-                                    <Skeleton className="h-4 w-full bg-white/20" />
-                                    <Skeleton className="h-4 w-2/3 bg-white/20" />
+                                    <Skeleton className="h-8 w-3/4 bg-black/20" />
+                                    <Skeleton className="h-4 w-full bg-black/20" />
+                                    <Skeleton className="h-4 w-full bg-black/20" />
+                                    <Skeleton className="h-4 w-5/6 bg-black/20" />
+                                    <Skeleton className="h-4 w-full bg-black/20" />
+                                    <Skeleton className="h-4 w-full bg-black/20" />
+                                    <Skeleton className="h-4 w-full bg-black/20" />
+                                    <Skeleton className="h-4 w-2/3 bg-black/20" />
                                 </div>
                             ) : generatedContent ? (
                                 <div className="space-y-6">
                                     <Textarea
-                                        className="h-96 min-h-[24rem] bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
+                                        className="h-96 min-h-[24rem] bg-white/10 border-black/20  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
                                         value={generatedContent}
                                         onChange={(e) => setGeneratedContent(e.target.value)}
                                         placeholder="Your generated content will appear here..."
                                     />
                                     <div>
-                                        <label htmlFor="title" className="block text-white mb-2 font-medium">Title of content</label>
+                                        <label htmlFor="title" className="block  mb-2 font-medium">Title of content</label>
                                         <Input
                                             id="title"
                                             value={title}
                                             onChange={onTitleHandler}
                                             placeholder="ဥပမာ - Digital Marketing"
-                                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
+                                            className="bg-white/10 border-black/20  placeholder:text-black/50 focus:border-primary focus:ring-primary/20"
                                         />
                                     </div>
                                     <Button
@@ -450,12 +550,20 @@ export default function ContentGeneratorUi() {
                                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
                                         size="lg"
                                         onClick={onSaveContent}
+                                        disabled={isSaving}
                                     >
-                                        Save Content
+                                        {isSaving ? (
+                                            <>
+                                                <Sparkles className="mr-2 h-4 w-4 animate-spin" />
+                                                Saving...
+                                            </>
+                                        ) : (
+                                            "Save Content"
+                                        )}
                                     </Button>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center h-[70vh] rounded-lg border-2 border-dashed border-primary/50 text-center p-8">
+                                <div className="flex flex-col items-center justify-center h-[175vh] rounded-lg border-2 border-dashed border-primary/50 text-center p-8">
                                     <Wand2 className="h-16 w-16 text-primary mb-4" />
                                     <p className="text-primary text-lg font-medium">Fill out the form to generate your content.</p>
                                     <p className="text-white/70 mt-2">Your AI-powered content will appear here</p>

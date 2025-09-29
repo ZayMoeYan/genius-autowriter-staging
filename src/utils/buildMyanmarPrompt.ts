@@ -19,7 +19,8 @@ export function buildMyanmarPrompt(values: FormValues): string {
         imageDescriptions,
         cta,
         negativeConstraints,
-        hashtags
+        hashtags,
+        outputLanguage
     } = values;
 
     let prompt = ` 
@@ -39,7 +40,7 @@ export function buildMyanmarPrompt(values: FormValues): string {
     - အကြောင်းအရာ (Topic): ${clean(topic)}
     - ရည်ရွယ်ချက် (Purpose): ${clean(purpose)}
     - Target Audience: ${clean(audience)}
-    - Writing Style/Tone: ${clean(writingStyle)}
+    - Writing Style/Tone: ${writingStyle[0]}, ${writingStyle[1]}, ${writingStyle[2]}
     - Target Length: around ${wordCount} words 
     - Image Description: ${clean(imageDescriptions)}
     ${addSection("Keywords (အဓိကစကားလုံးများ)", keywords)}
@@ -62,7 +63,7 @@ export function buildMyanmarPrompt(values: FormValues): string {
                 - စကားလုံးအသုံးချမှု သာယာလွယ်ကူပြီး နားလည်ရလွယ်အောင် ရေးပါ။  
                 - သေချာပြီး စွမ်းဆောင်ရည်ပြည့်မီတဲ့ အကြောင်းအရာတစ်ပုဒ် ထုတ်ပေးပါ။
                 
-                Content ကို မြန်မာလို ရေးပေးပါ။  
+                Content ကို ${outputLanguage} ရေးပေးပါ။  
                 သို့ပေမယ့် content, marketing, SEO စတဲ့ English words တွေကို သဘာဝကျစွာ English အဖြစ် အသုံးချပါ။  
                 Phonetic Translation (ဥပမာ - "content" ကို "ကွန်းတန့်" လိုမျိုး) လုံးဝ မပြုလုပ်ပါနှင့်။  
                 

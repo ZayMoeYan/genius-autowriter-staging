@@ -61,7 +61,7 @@ export default function LoginPage() {
                         <h2 className="text-gray-800 mb-2">
                             Welcome Back
                         </h2>
-                        <p className="text-red-600 tracking-wider">
+                        <p className="text-red-600 tracking-wider font-bold">
                             GENIUS AUTOWRITER
                         </p>
                     </div>
@@ -131,7 +131,7 @@ export default function LoginPage() {
                     {/* Footer */}
                     <div className="mt-8 text-center">
                         <p className="text-gray-500">
-                            Secure login powered by MOT AI
+                            Powered by Myanmar Online Technology
                         </p>
                     </div>
                 </form>
