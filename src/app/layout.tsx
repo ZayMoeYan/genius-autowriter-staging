@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import {Nav} from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: 'Content Crafter',
+  title: 'GENIUS AUTOWRITER',
   description: 'Generate high-quality content in Myanmar with AI.',
 };
 
