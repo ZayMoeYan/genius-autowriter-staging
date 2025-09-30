@@ -149,7 +149,8 @@ export default function AdminDashboard() {
     const adminUsers = users.filter(u => u.role === "Admin").length;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
+
             <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20">
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">

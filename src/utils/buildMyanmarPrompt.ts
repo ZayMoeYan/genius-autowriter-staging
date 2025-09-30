@@ -20,11 +20,13 @@ export function buildMyanmarPrompt(values: FormValues): string {
         cta,
         negativeConstraints,
         hashtags,
-        outputLanguage
+        outputLanguage,
+        copyWritingModel
     } = values;
 
     let prompt = ` 
-    သင်ဟာ Digital Marketing နယ်ပယ်မှာ အတွေ့အကြုံ ၁၀ နှစ်ကျော်ရှိတဲ့ Content Copywriting Expert တစ်ယောက် ဖြစ်ပါတယ်။
+    သင်ဟာ Digital Marketing နယ်ပယ်မှာ အတွေ့အကြုံ ၁၀ နှစ်ကျော်ရှိတဲ့ Content Copywriting Expert တစ်ယောက် ဖြစ်ပါတယ်။ 
+    သင့်ရဲ့ copy writing model ကတော့ ${copyWritingModel} ဖြစ်ပါတယ်။
     သင့်ရဲ့ အဓိကအားသာချက်တွေကတော့ Target Audience ကို နက်နက်နဲနဲနားလည်ပြီး သူတို့စိတ်ကိုဆွဲဆောင်နိုင်တဲ့၊ စိတ်လှုပ်ရှားစေတဲ့၊
     ရည်ရွယ်ချက်ထိထိရောက်ရောက်အောင်မြင်စေတဲ့ စာသားတွေ ဖန်တီးနိုင်တာ ဖြစ်ပါတယ်။ 
     
@@ -53,6 +55,7 @@ export function buildMyanmarPrompt(values: FormValues): string {
                 2. **Value & Connection** – ပေးထားသော input နဲ့ ချိတ်ဆက်ပြီး တန်ဖိုးရှိသော အကြောင်းအရာ၊ ခံစားချက်၊ သတင်းအချက်အလက်များကို ပေါင်းစပ်ပါ။
                 3. **Keywords** – သဘာဝကျကျထည့်သွင်းပါ။
                 4. **Call-to-Action** – ပြတ်သားတဲ့ CTA နဲ့ အဆုံးသတ်ပါ။
+                5. **Hashtags & Emojis** - Hashtags နဲ့ Emojis တွေကို content ${topic} နဲ့ သက်ဆိုင်တဲ့ Hashtags & Emojis တွေကိုသုံးပြီး ဖန်တီးပါ။
                 5. **Review** – Word count, style, negative constraints ကို စစ်ဆေးပြီး မြန်မာစာ လုံးပေါင်းသတ်ပုံမှန်အောင် ဖန်တီးပါ။
 
                 ---

@@ -44,10 +44,10 @@ export default function LoginPage() {
             {/* Background pattern overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
 
-            <div className="relative z-10 w-full max-w-md">
+            <div className="relative z-10 w-full max-w-md mt-20">
                 <form
                     onSubmit={handleLogin}
-                    className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-gray-200"
+                    className="bg-black backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-red-800"
                 >
                     {/* Logo and Header */}
                     <div className="text-center mb-8">
@@ -55,10 +55,10 @@ export default function LoginPage() {
                             <img
                                 src={motLogo.src}
                                 alt="MOT Logo"
-                                className="h-12 w-auto"
+                                className="h-20 w-auto"
                             />
                         </div>
-                        <h2 className="text-gray-800 mb-2">
+                        <h2 className="text-white text-3xl font-bold mb-2">
                             Welcome Back
                         </h2>
                         <p className="text-red-600 tracking-wider font-bold">
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-gray-700 mb-2">Email</label>
+                            <label className="block text-white mb-2">Email</label>
                             <input
                                 type="email"
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
@@ -88,7 +88,7 @@ export default function LoginPage() {
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 mb-2">Password</label>
+                            <label className="block text-white mb-2">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}

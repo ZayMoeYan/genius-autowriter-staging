@@ -22,6 +22,7 @@ export default function Dashboard() {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [viewingContent, setViewingContent] = useState<any | null>(null);
+    const [togglingId, setTogglingId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,14 +57,36 @@ export default function Dashboard() {
     };
 
     const handleTogglePosted = async (content: any) => {
-        const updated = await updateContent(content.id, {
-            is_posted: !content.is_posted,
-        });
-        setContents(
-            contents.map((c) =>
-                c.id === content.id ? { ...c, is_posted: updated.is_posted, updated_at: updated.updated_at } : c
+        const newStatus = !content.is_posted;
+        setContents((prev) =>
+            prev.map((c) =>
+                c.id === content.id
+                    ? { ...c, is_posted: newStatus, updated_at: new Date().toISOString() }
+                    : c
             )
         );
+        setTogglingId(content.id);
+        try {
+            const updated = await updateContent(content.id, { is_posted: newStatus });
+
+            setContents((prev) =>
+                prev.map((c) =>
+                    c.id === content.id
+                        ? { ...c, is_posted: updated.is_posted, updated_at: updated.updated_at }
+                        : c
+                )
+            );
+        } catch (error) {
+            console.error("Failed to update:", error);
+
+            setContents((prev) =>
+                prev.map((c) =>
+                    c.id === content.id ? { ...c, is_posted: content.is_posted } : c
+                )
+            );
+        } finally {
+            setTogglingId(null);
+        }
     };
 
     const onViewCloseHandler = () => setViewingContent(null);
@@ -108,8 +131,8 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 mx-20">
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
@@ -119,48 +142,48 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto px-6 py-8">
+            <div className="max-w-7xl mx-20 py-8">
                 {/* Statistics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 p-6">
+                    <Card className="bg-black/95 backdrop-blur-sm border-red-800 border-[0.5px] p-6">
                         <div className="flex items-center space-x-4">
                             <div className="bg-red-100 p-3 rounded-lg">
                                 <FileText className="h-6 w-6 text-red-600" />
                             </div>
                             <div>
-                                <p className="text-gray-600">Total Contents</p>
-                                <p className="text-gray-900">{totalContents}</p>
+                                <p className="text-white">Total Contents</p>
+                                <p className="text-gray-400">{totalContents}</p>
                             </div>
                         </div>
                     </Card>
 
-                    <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 p-6">
+                    <Card className="bg-black/95 backdrop-blur-sm  border-red-800 border-[0.5px]  p-6">
                         <div className="flex items-center space-x-4">
                             <div className="bg-green-100 p-3 rounded-lg">
                                 <Eye className="h-6 w-6 text-green-600" />
                             </div>
                             <div>
-                                <p className="text-gray-600">Published</p>
-                                <p className="text-gray-900">{publishedContents}</p>
+                                <p className="text-white">Published</p>
+                                <p className="text-gray-400">{publishedContents}</p>
                             </div>
                         </div>
                     </Card>
 
-                    <Card className="bg-white/95 backdrop-blur-sm border border-gray-200 p-6">
+                    <Card className="bg-black/95 backdrop-blur-sm border-red-800 border-[0.5px] p-6">
                         <div className="flex items-center space-x-4">
                             <div className="bg-yellow-100 p-3 rounded-lg">
                                 <EyeOff className="h-6 w-6 text-yellow-600" />
                             </div>
                             <div>
-                                <p className="text-gray-600">Drafts</p>
-                                <p className="text-gray-900">{draftContents}</p>
+                                <p className="text-white">Drafts</p>
+                                <p className="text-gray-400">{draftContents}</p>
                             </div>
                         </div>
                     </Card>
                 </div>
 
                 {/* Search and Filter Section */}
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 p-6 mb-8">
+                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800 border-[0.5px] p-6 mb-8">
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                         <div className="flex flex-col sm:flex-row gap-4 flex-1">
                             <div className="relative flex-1 max-w-md">
@@ -186,18 +209,18 @@ export default function Dashboard() {
                             </Select>
                         </div>
 
-                        <div className="flex items-center space-x-2">
-                            <p className="text-gray-600">
+                        <div className="flex items-center space-x-2 ">
+                            <p className="text-gray-400">
                                 Showing {filteredContents.length} of {totalContents} contents
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                    <div className="p-6 border-b border-gray-200">
-                        <h2 className="text-gray-800">📑 Contents Dashboard</h2>
-                        <p className="text-gray-600">Manage your content library</p>
+                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800 border-[0.5px] overflow-hidden">
+                    <div className="p-6 border-b border-red-800">
+                        <h2 className="text-white text-2xl">Contents Dashboard</h2>
+                        <p className="text-gray-400">Manage your content library</p>
                     </div>
 
                     {loading ? (
@@ -219,12 +242,12 @@ export default function Dashboard() {
                             {filteredContents.map((content) => (
                                 <div
                                     key={content.id}
-                                    className="p-6 hover:bg-gray-50 transition-colors"
+                                    className="p-6 bg-white/20 hover:bg-white/40 transition-colors"
                                 >
                                     <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
                                         <div className="flex-1 space-y-3">
                                             <div className="flex items-center space-x-3">
-                                                <h3 className="text-gray-900">{content.title}</h3>
+                                                <h3 className="text-white text-xl">{content.title}</h3>
                                                 <Badge
                                                     variant={content.is_posted ? "default" : "secondary"}
                                                     className={
@@ -245,13 +268,40 @@ export default function Dashboard() {
                                                         </>
                                                     )}
                                                 </Badge>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={content.is_posted}
+                                                            disabled={togglingId === content.id} // disable while syncing
+                                                            onChange={() => handleTogglePosted(content)}
+                                                            className="sr-only"
+                                                        />
+                                                        <div
+                                                            className={`relative w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
+                                                                content.is_posted ? "bg-green-500" : "bg-gray-300"
+                                                            } ${togglingId === content.id ? "opacity-50 cursor-not-allowed" : ""}`}
+                                                        >
+                                                            <div
+                                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                                                                    content.is_posted ? "translate-x-5" : "translate-x-0"
+                                                                }`}
+                                                            ></div>
+                                                            {togglingId === content.id && (
+                                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </label>
+                                                </div>
                                             </div>
 
-                                            <p className="text-gray-600 line-clamp-2">
+                                            <p className="text-white line-clamp-2">
                                                 {content.content}
                                             </p>
 
-                                            <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                            <div className="flex items-center space-x-4 text-xs text-white">
                                                 <div className="flex items-center space-x-1">
                                                     <Calendar className="h-3 w-3" />
                                                     <span>Created: {formatDate(content.created_at)}</span>
@@ -266,30 +316,7 @@ export default function Dashboard() {
                                         </div>
 
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                                            <div className="flex items-center space-x-3">
-                                                <label className="flex items-center cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={content.is_posted}
-                                                        onChange={() => handleTogglePosted(content)}
-                                                        className="sr-only"
-                                                    />
-                                                    <div
-                                                        className={`relative w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
-                                                            content.is_posted ? "bg-green-500" : "bg-gray-300"
-                                                        }`}
-                                                    >
-                                                        <div
-                                                            className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                                                                content.is_posted ? "translate-x-5" : "translate-x-0"
-                                                            }`}
-                                                        ></div>
-                                                    </div>
-                                                </label>
-                                                <span className="text-gray-600">
-                                                    {content.is_posted ? "တင်ပြီး" : "မတင်ရသေး"}
-                                                </span>
-                                            </div>
+
 
                                             {/* Action Buttons */}
                                             <div className="flex space-x-2">
@@ -297,7 +324,7 @@ export default function Dashboard() {
                                                     onClick={() => handleView(content)}
                                                     variant="outline"
                                                     size="sm"
-                                                    className="border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-500 hover:bg-blue-600"
+                                                    className="border-blue-300 text-blue-600  hover:border-blue-500 hover:bg-blue-600"
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Button>

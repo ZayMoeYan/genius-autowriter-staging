@@ -44,7 +44,7 @@ export const Nav = () => {
     };
 
     return (
-        <nav className={'shadow-lg w-full justify-center flex bg-black text-white relative'}>
+        <nav className={'shadow-lg w-full justify-center flex bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]'}>
             {/* Subtle red accent line */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600"></div>
 
@@ -57,7 +57,8 @@ export const Nav = () => {
                         className="h-12 w-auto"
                     />
                     <div className="flex flex-col">
-                        <span className="text-red-500 tracking-wider font-bold">GENIUS AUTOWRITER</span>
+                        <span className="text-red-500 text-2xl tracking-wider font-bold m-0 p-0">Genius Autowriter</span>
+                        <span className={'m-0 p-0'} >AI CONTENT GENERATOR</span>
                     </div>
                 </div>
 
