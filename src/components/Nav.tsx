@@ -58,7 +58,6 @@ export const Nav = () => {
                     />
                     <div className="flex flex-col">
                         <span className="text-red-500 text-2xl tracking-wider font-bold m-0 p-0">Genius Autowriter</span>
-                        <span className={'m-0 p-0'} >AI CONTENT GENERATOR</span>
                     </div>
                 </div>
 

@@ -164,7 +164,7 @@ export default function ContentGeneratorUi() {
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
                             <h1 className="text-3xl font-bold text-white mb-1">GENIUS AUTOWRITER</h1>
-                            <p className="text-primary tracking-wider font-medium">AI-POWERED CONTENT CREATION</p>
+                            <p className="text-primary tracking-wider font-medium">CONTENT CREATION</p>
                         </div>
                     </div>
                 </div>
@@ -512,7 +512,7 @@ export default function ContentGeneratorUi() {
                                                         className="border-input focus:border-primary focus:ring-primary/20"
                                                     />
                                                 </FormControl>
-                                                <FormDescription className="text-muted-foreground">Things the AI should not mention.</FormDescription>
+                                                <FormDescription className="text-muted-foreground">Things that content should not include.</FormDescription>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -546,7 +546,7 @@ export default function ContentGeneratorUi() {
                 <CardHeader className="space-y-2 ">
                     <CardTitle className="text-white font-bold text-3xl">Generated Content</CardTitle>
                     <CardDescription className="text-primary">
-                        Review and edit your AI-generated content here.
+                        Review and edit your generated content here.
                     </CardDescription>
                 </CardHeader>
                 <CardContent >
@@ -600,7 +600,7 @@ export default function ContentGeneratorUi() {
                         <div className="flex flex-col h-[50vh]  items-center justify-center rounded-lg border-2 border-dashed border-primary/50 text-center p-8">
                             <Wand2 className="h-16 w-16 text-primary mb-4" />
                             <p className="text-primary text-lg font-medium">Fill out the form to generate your content.</p>
-                            <p className="text-white/70 mt-2">Your AI-powered content will appear here</p>
+                            <p className="text-white/70 mt-2">Your content will appear here</p>
                         </div>
                     )}
                 </CardContent>
