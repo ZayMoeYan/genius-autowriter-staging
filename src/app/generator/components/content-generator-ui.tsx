@@ -564,7 +564,7 @@ export default function ContentGeneratorUi() {
                     ) : generatedContent ? (
                         <div className="space-y-6">
                             <Textarea
-                                className="h-96 min-h-[24rem]  bg-white/10 border-white/20 text-white  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
+                                className="h-96 min-h-[24rem]  bg-white border-white/20 text-black  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
                                 value={generatedContent}
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
