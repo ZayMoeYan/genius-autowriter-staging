@@ -135,6 +135,7 @@ export default function ContentGeneratorUi() {
         try {
             const result = await saveContent(title, generatedContent);
             form.reset();
+            setUploadedImages([]);
 
             toast({
                 title: "✅ Content Created",
