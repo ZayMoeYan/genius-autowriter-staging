@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import {
     Users,
     UserCheck,
@@ -13,7 +13,6 @@ import {
     X,
     ChevronLeft,
     ChevronRight,
-    Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,13 +21,15 @@ import { Card } from "@/components/ui/card";
 import {deleteUserOrAdmin, getUsers, save, updateUserOrAdmin} from "@/app/actions/usersAction";
 import UserDeleteModal from "@/app/admin/components/UserDeleteModal";
 import {useToast} from "@/hooks/use-toast";
+import { useAuth} from "@/app/context/AuthProvider";
+import {getLoginUser} from "@/app/actions/getLoginUser";
+
 
 const ITEMS_PER_PAGE = 10;
 
 export default function AdminDashboard() {
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
     const [editUser, setEditUser] = useState<any | null>(null);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -40,6 +41,15 @@ export default function AdminDashboard() {
     const [userToDelete, setUserToDelete] = useState<any | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const { toast } = useToast();
+    const { currentUser, setCurrentUser } = useAuth();
+
+    useEffect(() => {
+        if (!currentUser) {
+            getLoginUser().then(user => {
+                if (user) setCurrentUser(user);
+            });
+        }
+    }, [currentUser, setCurrentUser]);
 
 
     useEffect(() => {
@@ -49,7 +59,7 @@ export default function AdminDashboard() {
                 setLoading(true)
                 setUsers(data);
             } catch (err: any) {
-                setMessage(`❌ ${err.message}`);
+
             } finally {
                 setLoading(false);
             }
@@ -63,24 +73,22 @@ export default function AdminDashboard() {
         try {
             const newUser = { username, email, password, role };
             const data = await save(newUser);
-
             toast({
-                title: `✅ ${data.role} Created`,
-                description: `${data.role} ${data.username} has been successfully saved.`,
-            });
-
+                title: "Success",
+                description: `${role} ${username} has been created successfully.`,
+                status: "success",
+            })
             setUsers([...users, data]);
-            setMessage(`✅ Created user: ${data.username}`);
         } catch (err: any) {
-            setMessage(`❌ ${err.message}`);
             toast({
-                title: "❌ Error",
+                title: "Error",
                 description: "Failed to save user. Please try again.",
+                status: "error"
             });
-            throw err; // important, so form doesn’t close if failed
-        } finally {
-            setIsSaving(false);
+            throw err;
         }
+            setIsSaving(false);
+
     };
 
 
@@ -97,32 +105,50 @@ export default function AdminDashboard() {
         setIsDeleting(true);
         try {
             const res = await deleteUserOrAdmin(id);
+            toast({
+                title: "Success",
+                description: `${res.role} ${res.username} has been deleted successfully.`,
+                status: "success",
+            })
             if (res.message) {
                 setUsers(users.filter((u) => u.id !== id));
             }
         } catch (err: any) {
-            setMessage(`❌ ${err.message}`);
-        }
 
+        }
         setIsDeleting(false);
         setIsUserDeleteModalOpen(false);
+
+
     };
 
 
     const saveEdit = async () => {
+        setIsSaving(true)
         if (!editUser) return;
         try {
 
             delete(editUser.created_at);
 
             const data = await updateUserOrAdmin(editUser.id, editUser);
+            toast({
+                title: "Success",
+                description: `${editUser.role} ${editUser.username} has been updated successfully.`,
+                status: "success",
+            })
 
             setUsers(users.map((u) => (u.id === data.id ? data : u)));
             setEditUser(null);
-            setMessage(`✏️ Updated user: ${data.username}`);
+
         } catch (err: any) {
-            setMessage(`❌ ${err.message}`);
+            toast({
+                title: "Error",
+                description: "Failed to edit user. Please try again.",
+                status: "error"
+            });
         }
+            setIsSaving(false)
+
     };
 
     const filteredUsers = users.filter((u) => {
@@ -213,13 +239,6 @@ export default function AdminDashboard() {
                         </div>
                     </Card>
                 </div>
-
-                {/* Message Display */}
-                {message && (
-                    <div className="mb-6 p-4 bg-black/90 backdrop-blur-sm border border-red-600/20 rounded-xl">
-                        <p className="text-white">{message}</p>
-                    </div>
-                )}
 
                 {/* Search and Filter Section */}
                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 p-6 mb-8">
@@ -541,15 +560,23 @@ export default function AdminDashboard() {
                                     <Button
                                         onClick={() => setEditUser(null)}
                                         variant="outline"
-                                        className="border-gray-300  hover:bg-gray-100 hover:text-black"
+                                        disabled={isSaving}
+                                        className="border-gray-300  hover:bg-gray-100 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         Cancel
                                     </Button>
                                     <Button
+                                        disabled={isSaving}
                                         onClick={saveEdit}
-                                        className="bg-red-600 hover:bg-red-700 text-white"
+                                        className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Save Changes
+                                        {isSaving && (
+                                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        )}
+                                        {isSaving ? 'Updating...' : 'Update'}
                                     </Button>
                                 </div>
                             </div>
@@ -652,7 +679,7 @@ function UserForm({
                     type="button"
                     onClick={onCancel}
                     variant="outline"
-                    className="border-gray-300 hover:bg-gray-100 hover:text-black"
+                    className="border-gray-300 hover:bg-gray-100 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={isSaving}
                 >
                     Cancel
@@ -660,7 +687,7 @@ function UserForm({
 
                 <Button
                     type="submit"
-                    className="bg-red-600 hover:bg-red-700 text-white"
+                    className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={isSaving}
                 >
                     {isSaving ? (

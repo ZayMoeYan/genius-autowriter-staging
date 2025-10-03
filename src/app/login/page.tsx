@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from "react";
+import { useState} from "react";
 import {login} from "@/app/actions/loginAction";
-import {useRouter} from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-
 import motLogo from '@/app/images/MOT.png';
-import {getLoginUser} from "@/app/actions/getLoginUser";
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/app/context/AuthProvider";
+import {useToast} from "@/hooks/use-toast";
 
 export default function LoginPage() {
 
@@ -16,6 +16,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+    const {toast } = useToast();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,14 +24,13 @@ export default function LoginPage() {
         setError("");
 
         try{
-            const role = await login(email, password);
-
-            if(role === "Admin") {
-                window.location.href = "/admin";
-            }else {
-                window.location.href = "/generator";
-            }
-
+            const user = await login(email, password);
+            toast({
+                title: "Success",
+                description: `${user.role} ${user.username} logged in successfully.`,
+                status: "success",
+            });
+            user.role === "Admin" ?  router.push('/admin') : router.push('/generator')
         }finally {
             setLoading(false)
             setEmail("");

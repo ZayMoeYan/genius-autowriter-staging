@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 
 async function Page() {
 
-    const isAdmin = await getLoginUser();
+    const user = await getLoginUser();
 
-    if (!isAdmin) {
-        redirect("/"); // or /login, /403, etc.
+    if (user.role !== "Admin") {
+        redirect("/");
     }
 
     return (

@@ -7,11 +7,11 @@ import WithAuth from "@/app/HOC/WithAuth";
 function Page() {
 
     return (
-        <main className="min-h-screen bg-background text-foreground">
-            <div className="">
+        <div className="min-h-screen bg-background text-foreground">
+
                 <ContentGeneratorUi />
-            </div>
-        </main>
+
+        </div>
     );
 }
 

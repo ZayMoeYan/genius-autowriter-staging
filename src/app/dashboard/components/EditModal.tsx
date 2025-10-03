@@ -9,10 +9,9 @@ export default function EditModal({ content, onClose, onSave }: any) {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         setIsSaving(true);
-
         try {
             await onSave(content.id, { title, content: body });
-            onClose(); // ✅ close modal after success
+            onClose()
         } catch (err) {
             console.error("Failed to save:", err);
         } finally {
@@ -23,7 +22,6 @@ export default function EditModal({ content, onClose, onSave }: any) {
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
-                {/* Header */}
                 <div className="px-8 py-6 border-b border-gray-100">
                     <div className="flex items-center justify-between">
                         <div>
@@ -54,9 +52,7 @@ export default function EditModal({ content, onClose, onSave }: any) {
                     </div>
                 </div>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6">
-                    {/* Title Field */}
                     <div className="space-y-2">
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                             Title
@@ -73,7 +69,6 @@ export default function EditModal({ content, onClose, onSave }: any) {
                         />
                     </div>
 
-                    {/* Content Field */}
                     <div className="space-y-2">
                         <label htmlFor="content" className="block text-sm font-medium text-gray-700">
                             Content
@@ -90,19 +85,18 @@ export default function EditModal({ content, onClose, onSave }: any) {
                         />
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                            className="px-6 py-2.5 text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSaving}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-6 py-2.5 text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl flex items-center"
+                            className="px-6 py-2.5 text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSaving}
                         >
                             {isSaving ? (
@@ -111,10 +105,10 @@ export default function EditModal({ content, onClose, onSave }: any) {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Saving...
+                                    Updating...
                                 </>
                             ) : (
-                                "Save Changes"
+                                "Update"
                             )}
                         </button>
                     </div>

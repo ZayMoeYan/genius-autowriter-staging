@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { Users, Wand2, BarChart3, LogOut, User, Shield, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar } from "./ui/avatar";
@@ -8,10 +8,10 @@ import { Badge } from "./ui/badge";
 import Link from "next/link";
 import {usePathname, useRouter} from "next/navigation";
 import {logout} from "@/app/actions/logoutAction";
-import {getLoginUser} from "@/app/actions/getLoginUser";
 
 import motLogo from '@/app/images/MOT.png';
-import getToken from "@/app/actions/getToken";
+import {useToast} from "@/hooks/use-toast";
+import { useAuth} from "@/app/context/AuthProvider";
 
 export type CurrentUserType = {
     username: string | undefined,
@@ -24,19 +24,18 @@ export const Nav = () => {
 
     const router = useRouter();
     const pathname = usePathname();
-    const [currentUser, setCurrentUser] = useState<CurrentUserType>();
-
-    useEffect(() => {
-        getLoginUser().then(user => {
-            setCurrentUser(user)
-        })
-    }, []);
+    const { toast } = useToast();
+    const { currentUser, setCurrentUser } = useAuth();
 
     const handleLogout = async () => {
         await logout();
-        window.location.reload();
+        toast({
+            title: "Success",
+            description: `${currentUser?.role} ${currentUser?.username} logged out successfully.`,
+            status: "success",
+        });
+        setCurrentUser(null);
         router.push('/login');
-        console.log('Logout clicked');
     }
 
     const isActive = (page: string) => {
@@ -64,7 +63,7 @@ export const Nav = () => {
                 <div className={'flex flex-row items-center space-x-6'}>
                     <div className="flex items-center space-x-1">
                         {currentUser?.isLoggedIn && currentUser?.role === "Admin" && (
-                            <Link href={"/admin"} >
+                            <Link href={currentUser?.role === "Admin" ? "/admin" : "/generator"} >
                                 <Button
                                     variant="ghost"
                                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${

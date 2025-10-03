@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { FileText, Edit, Trash2, Eye, EyeOff, Calendar, Search, Filter, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,9 @@ import EditModal from "@/app/dashboard/components/EditModal";
 import {getContents, deleteContent, updateContent} from "@/app/actions/contentsAction";
 import ViewModal from "@/app/dashboard/components/ViewModal";
 import DeleteModal from "@/app/dashboard/components/DeleteModal";
+import {useToast} from "@/hooks/use-toast";
+import {useAuth} from "@/app/context/AuthProvider";
+import {getLoginUser} from "@/app/actions/getLoginUser";
 
 export default function Dashboard() {
     const [contents, setContents] = useState<any[]>([]);
@@ -23,6 +26,29 @@ export default function Dashboard() {
     const [statusFilter, setStatusFilter] = useState("all");
     const [viewingContent, setViewingContent] = useState<any | null>(null);
     const [togglingId, setTogglingId] = useState<number | null>(null);
+    const { toast } = useToast();
+
+    const { currentUser, setCurrentUser } = useAuth();
+    const toastShown = useRef(false);
+
+    useEffect(() => {
+        if (!currentUser && !toastShown.current) {
+            getLoginUser().then(user => {
+                if (user) {
+                    setCurrentUser(user);
+                }
+                if (!localStorage.getItem("loginToastShown")) {
+                    toast({
+                        title: "Success",
+                        description: `${user.role} ${user.username} logged in successfully.`,
+                        status: "success",
+                    });
+                    localStorage.setItem("loginToastShown", "true");
+                }
+            });
+        }
+    }, [currentUser, setCurrentUser]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,6 +77,11 @@ export default function Dashboard() {
         setIsDeleting(true);
 
         await deleteContent(id)
+        toast({
+            title: "Success",
+            description: "Your content has been deleted successfully.",
+            status: "success",
+        })
         setContents((prev) => prev.filter((c) => c.id !== id));
         setIsDeleting(false);
         setIsDeleteModalOpen(false);
@@ -94,6 +125,11 @@ export default function Dashboard() {
 
     const onSaveHandler = async (id: number, { title, content: body }: any) => {
         const updated = await updateContent(id, { title, content: body });
+        toast({
+            title: "Success",
+            description: "Your content has been updated successfully.",
+            status: "success",
+        })
         setContents(
             contents.map((c) => (c.id === id ? { ...c, ...updated } : c))
         );

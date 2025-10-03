@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
 import {Nav} from "@/components/Nav";
+import {Toaster} from "@/components/Toaster";
+import {AuthProvider} from "@/app/context/AuthProvider";
 
 export const metadata: Metadata = {
   title: 'GENIUS AUTOWRITER',
@@ -25,12 +26,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-black">
-        <Nav/>
-        {children}
-        <Toaster />
-        <footer className="text-center text-sm text-muted-foreground bg-black p-4">
-            <p>Copyright &copy; 2025 Myanmar Online Technology</p>
-        </footer>
+      <AuthProvider>
+          <Nav />
+          <main>{children}</main>
+          <Toaster />
+          <footer className="text-center text-sm text-muted-foreground bg-black p-4">
+              <p>Copyright &copy; 2025 Myanmar Online Technology</p>
+          </footer>
+      </AuthProvider>
       </body>
 
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -12,9 +12,7 @@ import {
 } from "@/components/ui/popover";
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
@@ -44,6 +42,8 @@ import { buildMyanmarPrompt } from "@/utils/buildMyanmarPrompt";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dropzone} from "@/components/ui/Dropzone";
 import { cn } from "@/lib/utils";
+import {useAuth} from "@/app/context/AuthProvider";
+import {getLoginUser} from "@/app/actions/getLoginUser";
 
 const formSchema = z.object({
     topic: z.string().min(3, "Content ရဲ့ အဓိက အကြာင်းအရာကို ရေးသားပေးပါ"),
@@ -73,6 +73,27 @@ export default function ContentGeneratorUi() {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [title, setTitle] = useState("");
     const { toast } = useToast();
+
+    const { currentUser, setCurrentUser } = useAuth();
+    const toastShown = useRef(false);
+
+    useEffect(() => {
+        if (!currentUser && !toastShown.current) {
+            getLoginUser().then(user => {
+                if (user) {
+                    setCurrentUser(user);
+                }
+                if (!localStorage.getItem("loginToastShown")) {
+                    toast({
+                        title: "Success",
+                        description: `${user.role} ${user.username} logged in successfully.`,
+                        status: "success",
+                    });
+                    localStorage.setItem("loginToastShown", "true");
+                }
+            });
+        }
+    }, [currentUser, setCurrentUser]);
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -113,7 +134,13 @@ export default function ContentGeneratorUi() {
 
         try {
             const result = await generateContentAction(prompt, base64Images);
+
             setGeneratedContent(result.content);
+            toast({
+                title: "Success",
+                description: "Your content has been generated successfully.",
+                status: "success",
+            })
         } finally {
             setIsGenerating(false);
         }
@@ -138,14 +165,16 @@ export default function ContentGeneratorUi() {
             setUploadedImages([]);
 
             toast({
-                title: "✅ Content Created",
-                description: "Your content has been successfully saved.",
-            });
+                title: "Success",
+                description: "Your content has been saved successfully.",
+                status: "success",
+            })
         } catch (error) {
             toast({
-                title: "❌ Error",
-                description: "Failed to save content. Please try again.",
-            });
+                title: "Error",
+                description: "Something went wrong while saving.",
+                status: "error",
+            })
         } finally {
             setTitle("");
             setGeneratedContent("");
@@ -567,6 +596,7 @@ export default function ContentGeneratorUi() {
                             <Textarea
                                 className="h-96 min-h-[24rem]  bg-white border-white/20 text-black  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
                                 value={generatedContent}
+                                disabled={isSaving}
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />

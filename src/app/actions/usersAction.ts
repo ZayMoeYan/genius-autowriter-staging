@@ -17,6 +17,22 @@ export async function getUsers() {
     }
 }
 
+export async function getUser(user_id: number) {
+    try {
+
+        const res = await axiosInstance.get(`/users/${user_id}`);
+
+        if (!res.data) {
+            throw new Error(`Failed: ${res.status}`);
+        }
+
+        return await res.data;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
 export async function save(newUser: any) {
     try {
         const res = await axiosInstance.post("/auth/register", newUser);
