@@ -18,8 +18,8 @@ export async function login(username: string, password: string) {
 
         const data = await res.json();
         const userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
-        const name = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
-        const userEmail = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
+        const name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
+        const userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
 
         if(data.access_token) {
             const cookieStore = await cookies();
