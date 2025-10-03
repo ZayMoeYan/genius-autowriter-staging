@@ -197,7 +197,7 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 mx-20">
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 "  >
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
@@ -207,7 +207,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl mx-20 py-8">
+            <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5">
                 {/* Statistics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <Card className="bg-black/95 backdrop-blur-sm border-red-800 border-[0.5px] p-6">
@@ -423,12 +423,12 @@ export default function Dashboard() {
                         <p className="text-sm text-gray-400">
                             Showing{" "}
                             <span className="font-semibold">
-        {(currentPage - 1) * contentsPerPage + 1}
-      </span>{" "}
+                                {(currentPage - 1) * contentsPerPage + 1}
+                              </span>{" "}
                             to{" "}
                             <span className="font-semibold">
-        {Math.min(currentPage * contentsPerPage, filteredContents.length)}
-      </span>{" "}
+                                {Math.min(currentPage * contentsPerPage, filteredContents.length)}
+                              </span>{" "}
                             of <span className="font-semibold">{filteredContents.length}</span>{" "}
                             contents
                         </p>
