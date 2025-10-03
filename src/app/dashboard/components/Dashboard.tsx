@@ -197,7 +197,7 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 "  >
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 mb-8 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 "  >
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>

@@ -193,7 +193,7 @@ export default function ContentGeneratorUi() {
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
 
             {/* Header */}
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 mx-4 sm:mx-8 md:mx-16 lg:mx-20">
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <div>
@@ -203,7 +203,7 @@ export default function ContentGeneratorUi() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl border-red-800 border-[0.5px] rounded-xl mx-4 sm:mx-8 md:mx-16 lg:mx-20 mt-10">
+            <div className="max-w-7xl border-red-800 border-[0.5px] rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
                 <div className="flex flex-col gap-8">
                     <Card className="shadow-mot border-0 backdrop-blur-sm bg-black">
                         <CardHeader className="space-y-2">
@@ -581,7 +581,7 @@ export default function ContentGeneratorUi() {
                 </div>
             </div>
 
-            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] mx-4 sm:mx-8 md:mx-16 lg:mx-20 mt-10 mb-10 rounded-xl">
+            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] lg:mx-20 md:mx-10 mx-5 mt-10 rounded-xl">
                 <CardHeader className="space-y-2 ">
                     <CardTitle className="text-white font-bold text-3xl">Generated Content</CardTitle>
                     <CardDescription className="text-primary">
