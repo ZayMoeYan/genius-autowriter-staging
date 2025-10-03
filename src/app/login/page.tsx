@@ -1,52 +1,66 @@
 'use client';
 
-import { useState} from "react";
-import {login} from "@/app/actions/loginAction";
+import { useState } from "react";
+import { login } from "@/app/actions/loginAction";
 import { Eye, EyeOff } from "lucide-react";
 import motLogo from '@/app/images/MOT.png';
-import {useRouter} from "next/navigation";
-import {useAuth} from "@/app/context/AuthProvider";
-import {useToast} from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthProvider";
+import { useToast } from "@/hooks/use-toast";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const loginSchema = z.object({
+    email: z.string().min(1, "Email is required").email("Invalid email address"),
+    password: z.string().min(1, "Password is required."),
+});
+
+export type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
-    const {toast } = useToast();
+    const { toast } = useToast();
+    const { setCurrentUser } = useAuth();
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset,} = useForm<LoginSchema>({
+        resolver: zodResolver(loginSchema),
+    });
 
-        try{
-            const user = await login(email, password);
+    const handleLogin = async (data: LoginSchema) => {
+        try {
+            const user = await login(data.email, data.password);
+            user.role === "Admin"
+                ? router.push('/admin')
+                : router.push('/generator');
+
             toast({
-                title: "Success",
-                description: `${user.role} ${user.username} logged in successfully.`,
+                title: `Login Success! Welcome back, ${user.username}`,
+                description: `${user.role} ${user.username}၊ သင့်ရဲ့ Account ထဲကို ရောက်ရှိပါပြီ။`,
                 status: "success",
             });
-            user.role === "Admin" ?  router.push('/admin') : router.push('/generator')
-        }finally {
-            setLoading(false)
-            setEmail("");
-            setPassword("")
-        }
 
+
+
+            reset();
+        } catch (error: any) {
+            toast({
+                title: "Login Failed",
+                description: "ကျေးဇူးပြု၍ ပြန်လည်စစ်ဆေးပါ။ သင်ထည့်သွင်းသော email သို့မဟုတ် password သည် မှားယွင်းနေပါသည်။",
+                status: "error",
+            });
+        }
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4">
-            {/* Background pattern overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
 
             <div className="relative z-10 w-full max-w-md mt-20">
                 <form
-                    onSubmit={handleLogin}
+                    onSubmit={handleSubmit(handleLogin)}
                     className="bg-black backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-red-800"
                 >
                     {/* Logo and Header */}
@@ -66,37 +80,30 @@ export default function LoginPage() {
                         </p>
                     </div>
 
-                    {error && (
-                        <div className="mb-6">
-                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
-                                {error}
-                            </div>
-                        </div>
-                    )}
-
                     <div className="space-y-6">
+
                         <div>
                             <label className="block text-white mb-2">Email</label>
                             <input
-                                type="email"
+                                type="text"
+                                {...register("email")}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter your email"
-                                required
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                            )}
                         </div>
 
+                        {/* Password */}
                         <div>
                             <label className="block text-white mb-2">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
+                                    {...register("password")}
                                     className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password"
-                                    required
                                 />
                                 <button
                                     type="button"
@@ -110,14 +117,18 @@ export default function LoginPage() {
                                     )}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                            )}
                         </div>
 
+                        {/* Submit */}
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={isSubmitting}
                             className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
                         >
-                            {loading ? (
+                            {isSubmitting ? (
                                 <div className="flex items-center justify-center">
                                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                                     Logging in...
@@ -128,17 +139,10 @@ export default function LoginPage() {
                         </button>
                     </div>
 
-                    {/* Footer */}
                     <div className="mt-8 text-center">
-                        <p className="text-gray-500">
-                            Powered by Myanmar Online Technology
-                        </p>
+                        <p className="text-gray-500">Powered by Myanmar Online Technology</p>
                     </div>
                 </form>
-
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -left-4 w-24 h-24 bg-red-600/10 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-red-600/5 rounded-full blur-xl"></div>
             </div>
         </div>
     );

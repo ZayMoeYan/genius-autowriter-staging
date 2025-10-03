@@ -23,6 +23,7 @@ import UserDeleteModal from "@/app/admin/components/UserDeleteModal";
 import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
+import {CurrentUserType} from "@/components/Nav";
 
 
 const ITEMS_PER_PAGE = 10;
@@ -45,8 +46,10 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         if (!currentUser) {
-            getLoginUser().then(user => {
-                if (user) setCurrentUser(user);
+            getLoginUser().then((user) => {
+                if (user) { // @ts-ignore
+                    setCurrentUser(user);
+                }
             });
         }
     }, [currentUser, setCurrentUser]);

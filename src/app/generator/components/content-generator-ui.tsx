@@ -44,6 +44,7 @@ import { Dropzone} from "@/components/ui/Dropzone";
 import { cn } from "@/lib/utils";
 import {useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
+import {CurrentUserType} from "@/components/Nav";
 
 const formSchema = z.object({
     topic: z.string().min(3, "Content ရဲ့ အဓိက အကြာင်းအရာကို ရေးသားပေးပါ"),
@@ -52,8 +53,8 @@ const formSchema = z.object({
     writingStyle: z.array(z.string())
         .min(1, "Writing Style / Tone ကို တစ်ခုအနည်းဆုံးရွေးပေးပါ")
         .max(3, "၃ ခုအထိများဆုံးရွေးချယ်နိုင်ပါတယ်"),
-    outputLanguage: z.string(),
-    copyWritingModel: z.string(),
+    outputLanguage: z.string().min(1, "Output Language ကိုရွေးပေးပါ"),
+    copyWritingModel: z.string().min(1, "CopyWriting Model ကိုရွေးပေးပါ"),
     wordCount: z.number().min(50).max(2000),
     imageDescriptions: z.string().optional(),
     keywords: z.string().optional(),
@@ -74,19 +75,20 @@ export default function ContentGeneratorUi() {
     const [title, setTitle] = useState("");
     const { toast } = useToast();
 
-    const { currentUser, setCurrentUser } = useAuth();
-    const toastShown = useRef(false);
+    // @ts-ignore
+    const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
 
+    const toastShown = useRef(false);
     useEffect(() => {
         if (!currentUser && !toastShown.current) {
             getLoginUser().then(user => {
-                if (user) {
+                if (user) {     // @ts-ignore
                     setCurrentUser(user);
                 }
                 if (!localStorage.getItem("loginToastShown")) {
                     toast({
-                        title: "Success",
-                        description: `${user.role} ${user.username} logged in successfully.`,
+                        title: `Login Success! Welcome back, ${user.username}`,
+                        description: `${user.role} ${user.username}၊ သင့်ရဲ့ Account ထဲကို ရောက်ရှိပါပြီ။.`,
                         status: "success",
                     });
                     localStorage.setItem("loginToastShown", "true");
@@ -131,6 +133,7 @@ export default function ContentGeneratorUi() {
         );
 
         const prompt = buildMyanmarPrompt(values);
+        console.log(prompt)
 
         try {
             const result = await generateContentAction(prompt, base64Images);
@@ -189,22 +192,22 @@ export default function ContentGeneratorUi() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
 
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 mx-20">
-                <div className="max-w-7xl mx-auto px-6 py-8">
-                    <div className="flex items-center space-x-4 mb-4">
+            {/* Header */}
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 mx-4 sm:mx-8 md:mx-16 lg:mx-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-white mb-1">GENIUS AUTOWRITER</h1>
-                            <p className="text-primary tracking-wider font-medium">CONTENT CREATION</p>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">GENIUS AUTOWRITER</h1>
+                            <p className="text-primary tracking-wider font-medium text-sm sm:text-base">CONTENT CREATION</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div className="max-w-7xl   border-red-800 border-[0.5px] rounded-xl mx-20 mt-10">
+            <div className="max-w-7xl border-red-800 border-[0.5px] rounded-xl mx-4 sm:mx-8 md:mx-16 lg:mx-20 mt-10">
                 <div className="flex flex-col gap-8">
-                    <Card className="shadow-mot border-0  backdrop-blur-sm bg-black ">
+                    <Card className="shadow-mot border-0 backdrop-blur-sm bg-black">
                         <CardHeader className="space-y-2">
-                            <CardTitle className="text-3xl font-bold text-white">Content Details Form</CardTitle>
+                            <CardTitle className="text-2xl sm:text-3xl font-bold text-white">Content Details Form</CardTitle>
                             <CardDescription className="text-muted-foreground">
                                 Provide the details for the content you want to generate in Myanmar.
                             </CardDescription>
@@ -212,12 +215,14 @@ export default function ContentGeneratorUi() {
                         <CardContent>
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+                                    {/* Topic */}
                                     <FormField
                                         control={form.control}
                                         name="topic"
                                         render={({ field }) => (
-                                            <FormItem className={'flex-1'} >
-                                                <FormLabel className="text-white font-bold text-[1.2rem]">Topic</FormLabel>
+                                            <FormItem className="flex-1">
+                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">Topic</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         placeholder="ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာကို ရေးပါ"
@@ -230,13 +235,14 @@ export default function ContentGeneratorUi() {
                                         )}
                                     />
 
-                                    <div className={'flex flex-row gap-3'} >
+                                    {/* Purpose + Audience */}
+                                    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
                                         <FormField
                                             control={form.control}
                                             name="purpose"
                                             render={({ field }) => (
-                                                <FormItem className={'flex-1'} >
-                                                    <FormLabel className="text-white font-bold text-[1.2rem]">Purpose</FormLabel>
+                                                <FormItem className="flex-1">
+                                                    <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">Purpose</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             placeholder="ဥပမာ - ပညာပေးရန်၊ Engagement ရရှိရန်၊ ရောင်းအားမြှင့်တင်ရန်"
@@ -253,8 +259,8 @@ export default function ContentGeneratorUi() {
                                             control={form.control}
                                             name="audience"
                                             render={({ field }) => (
-                                                <FormItem className={'flex-1'} >
-                                                    <FormLabel className="text-white font-bold text-[1.2rem]">Audience</FormLabel>
+                                                <FormItem className="flex-1">
+                                                    <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">Audience</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             placeholder="ဥပမာ - အသက် ၂၀ မှ ၃၀ ကြား လူငယ်တွေ"
@@ -268,13 +274,14 @@ export default function ContentGeneratorUi() {
                                         />
                                     </div>
 
-                                    <div className={'flex flex-row gap-3'} >
+                                    {/* Copywriting Model + Language */}
+                                    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
                                         <FormField
                                             control={form.control}
                                             name="copyWritingModel"
                                             render={({ field }) => (
-                                                <FormItem className={'flex-1'} >
-                                                    <FormLabel className="text-white font-bold text-[1.2rem]">CopyWriting Model</FormLabel>
+                                                <FormItem className="flex-1">
+                                                    <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">CopyWriting Model</FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
@@ -294,13 +301,12 @@ export default function ContentGeneratorUi() {
                                             )}
                                         />
 
-
                                         <FormField
                                             control={form.control}
                                             name="outputLanguage"
                                             render={({ field }) => (
-                                                <FormItem className={'flex-1'} >
-                                                    <FormLabel className="text-white font-bold text-[1.2rem]">Output Language</FormLabel>
+                                                <FormItem className="flex-1">
+                                                    <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">Output Language</FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
@@ -309,13 +315,16 @@ export default function ContentGeneratorUi() {
                                                         </FormControl>
                                                         <SelectContent>
                                                             <SelectItem value="မြန်မာ">မြန်မာ (Myanmar)</SelectItem>
-                                                            <SelectItem value="English">အင်္ဂလိပ် (English)</SelectItem>
+                                                            <SelectItem value="English">English</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
+
+
+
                                     </div>
 
                                     <FormField
@@ -339,8 +348,6 @@ export default function ContentGeneratorUi() {
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] ">
                                                         <Command className={'w-full'} >
-                                                            {/*<CommandInput placeholder="Search tone..."  />*/}
-                                                            {/*<CommandEmpty>No tone found.</CommandEmpty>*/}
                                                             <CommandGroup>
                                                                 {[
                                                                     "ဖော်ရွေသော (Friendly)",
@@ -566,13 +573,15 @@ export default function ContentGeneratorUi() {
                                             </>
                                         )}
                                     </Button>
+
                                 </form>
                             </Form>
                         </CardContent>
                     </Card>
                 </div>
             </div>
-            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] mx-20 mt-10 mb-10 rounded-xl">
+
+            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] mx-4 sm:mx-8 md:mx-16 lg:mx-20 mt-10 mb-10 rounded-xl">
                 <CardHeader className="space-y-2 ">
                     <CardTitle className="text-white font-bold text-3xl">Generated Content</CardTitle>
                     <CardDescription className="text-primary">

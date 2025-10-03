@@ -1,7 +1,17 @@
 'use client';
 
-import {useEffect, useRef, useState} from "react";
-import { FileText, Edit, Trash2, Eye, EyeOff, Calendar, Search, Filter, Plus } from "lucide-react";
+import {useEffect, useMemo, useRef, useState} from "react";
+import {
+    FileText,
+    Edit,
+    Trash2,
+    Eye,
+    EyeOff,
+    Calendar,
+    Search,
+    ChevronLeft,
+    ChevronRight
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,6 +24,9 @@ import DeleteModal from "@/app/dashboard/components/DeleteModal";
 import {useToast} from "@/hooks/use-toast";
 import {useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
+import {CurrentUserType} from "@/components/Nav";
+
+const contentsPerPage = 8;
 
 export default function Dashboard() {
     const [contents, setContents] = useState<any[]>([]);
@@ -27,23 +40,15 @@ export default function Dashboard() {
     const [viewingContent, setViewingContent] = useState<any | null>(null);
     const [togglingId, setTogglingId] = useState<number | null>(null);
     const { toast } = useToast();
-
+    const [currentPage, setCurrentPage] = useState(1);
     const { currentUser, setCurrentUser } = useAuth();
-    const toastShown = useRef(false);
+
 
     useEffect(() => {
-        if (!currentUser && !toastShown.current) {
-            getLoginUser().then(user => {
-                if (user) {
+        if (!currentUser) {
+            getLoginUser().then((user) => {
+                if (user) { // @ts-ignore
                     setCurrentUser(user);
-                }
-                if (!localStorage.getItem("loginToastShown")) {
-                    toast({
-                        title: "Success",
-                        description: `${user.role} ${user.username} logged in successfully.`,
-                        status: "success",
-                    });
-                    localStorage.setItem("loginToastShown", "true");
                 }
             });
         }
@@ -144,15 +149,39 @@ export default function Dashboard() {
         setIsDeleteModalOpen(false);
     };
 
-    const filteredContents = contents.filter((content) => {
-        const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
-        const matchesStatus = statusFilter === "all" ||
-            (statusFilter === "posted" && content.is_posted) ||
-            (statusFilter === "draft" && !content.is_posted);
-        return matchesSearch && matchesStatus;
-    });
+    // const filteredContents = contents.filter((content) => {
+    //     const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
+    //     const matchesStatus = statusFilter === "all" ||
+    //         (statusFilter === "posted" && content.is_posted) ||
+    //         (statusFilter === "draft" && !content.is_posted);
+    //     return matchesSearch && matchesStatus;
+    // });
 
-    const totalContents = contents.length;
+    const filteredContents = useMemo(() => {
+        return contents.filter((content) => {
+            const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
+            const matchesStatus = statusFilter === "all" ||
+                (statusFilter === "posted" && content.is_posted) ||
+                (statusFilter === "draft" && !content.is_posted);
+            return matchesSearch && matchesStatus;
+        });
+    }, [contents, search, statusFilter]);
+
+    // Pagination
+    const totalContents = filteredContents.length;
+    const totalPages = Math.ceil(totalContents / contentsPerPage);
+    const startIndex = (currentPage - 1) * contentsPerPage;
+    const paginatedContents = filteredContents.slice(
+        (currentPage - 1) * contentsPerPage,
+        currentPage * contentsPerPage
+    );
+
+    const goToPage = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     const publishedContents = contents.filter(c => c.is_posted).length;
     const draftContents = contents.filter(c => !c.is_posted).length;
 
@@ -247,7 +276,7 @@ export default function Dashboard() {
 
                         <div className="flex items-center space-x-2 ">
                             <p className="text-gray-400">
-                                Showing {filteredContents.length} of {totalContents} contents
+                                Showing {paginatedContents.length} of {totalContents}
                             </p>
                         </div>
                     </div>
@@ -264,7 +293,7 @@ export default function Dashboard() {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
                             <p className="text-gray-600">Loading contents...</p>
                         </div>
-                    ) : filteredContents.length === 0 ? (
+                    ) : paginatedContents.length === 0 ? (
                         <div className="p-8 text-center">
                             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600">
@@ -275,7 +304,7 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         <div className="divide-y divide-gray-200">
-                            {filteredContents.map((content) => (
+                            {paginatedContents.map((content) => (
                                 <div
                                     key={content.id}
                                     className="p-6 bg-white/20 hover:bg-white/40 transition-colors"
@@ -388,6 +417,65 @@ export default function Dashboard() {
                         </div>
                     )}
                 </div>
+
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-between p-4 border-t border-red-800">
+                        <p className="text-sm text-gray-400">
+                            Showing{" "}
+                            <span className="font-semibold">
+        {(currentPage - 1) * contentsPerPage + 1}
+      </span>{" "}
+                            to{" "}
+                            <span className="font-semibold">
+        {Math.min(currentPage * contentsPerPage, filteredContents.length)}
+      </span>{" "}
+                            of <span className="font-semibold">{filteredContents.length}</span>{" "}
+                            contents
+                        </p>
+
+                        <div className="flex items-center space-x-2">
+                            {/* Previous */}
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={currentPage === 1}
+                                onClick={() => goToPage(currentPage - 1)}
+                                className="border-gray-300"
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                                Previous
+                            </Button>
+
+                            {/* Page Numbers */}
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                <Button
+                                    key={page}
+                                    onClick={() => goToPage(page)}
+                                    size="sm"
+                                    className={`${
+                                        page === currentPage
+                                            ? "bg-red-900 text-white"
+                                            : "border-gray-300 hover:bg-gray-200 hover:text-red-600"
+                                    }`}
+                                >
+                                    {page}
+                                </Button>
+                            ))}
+
+                            {/* Next */}
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={currentPage === totalPages}
+                                onClick={() => goToPage(currentPage + 1)}
+                                className="border-gray-300"
+                            >
+                                Next
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
 
                 {viewingContent && (
                     <ViewModal
