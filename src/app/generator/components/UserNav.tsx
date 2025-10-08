@@ -84,7 +84,7 @@ export const UserNav = () => {
                         ${menuOpen ? "flex" : "hidden"}`}
                     >
 
-                    <div className="flex flex-row md:flex-row md:space-x-2">
+                    <div className="flex flex-row md:flex-row md:space-x-2 gap-2">
                                 <Link href="/generator">
                                     <Button
                                         variant="ghost"
@@ -114,44 +114,55 @@ export const UserNav = () => {
                                 </Link>
                     </div>
 
-
-                    <div className="flex flex-row justify-between items-center md:flex-row md:items-center md:space-x-4  md:border-l lg:pl-6 lg:border-l md:pl-6 border-gray-700 pt-4 md:pt-0">
-                            <div className="flex items-center space-x-3">
-                                <Avatar className="h-9 w-9 bg-gray-700 border border-gray-600">
-                                    <div className="flex items-center justify-center h-full w-full">
-                                        <User className="h-5 w-5 text-gray-300" />
-                                    </div>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-white font-medium">{currentUser?.username}</span>
-                                        <Badge
-                                            variant={currentUser?.role === 'Admin' ? 'default' : 'secondary'}
-                                            className={`text-xs ${
-                                                currentUser?.role === 'Admin'
-                                                    ? 'bg-red-600 text-white hover:bg-red-700'
-                                                    : 'bg-gray-600 text-gray-200 hover:bg-gray-700'
-                                            }`}
-                                        >
-                                            {currentUser?.role === 'Admin' && <Shield className="h-3 w-3 mr-1" />}
-                                            {currentUser?.role}
-                                        </Badge>
-                                    </div>
-                                    <span className="text-gray-400 text-xs">{currentUser?.email}</span>
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
+                        {/* User Info */}
+                        <div className="flex items-center space-x-3">
+                            <Avatar className="h-9 w-9 bg-gray-700 border border-gray-600">
+                                <div className="flex items-center justify-center h-full w-full">
+                                    <User className="h-5 w-5 text-gray-300" />
                                 </div>
-                            </div>
+                            </Avatar>
 
+                            <div className="flex flex-col">
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-white font-medium">{currentUser?.username}</span>
+                                    <Badge
+                                        variant={currentUser?.role === "Admin" ? "default" : "secondary"}
+                                        className={`text-xs ${
+                                            currentUser?.role === "Admin"
+                                                ? "bg-red-600 text-white hover:bg-red-700"
+                                                : "bg-gray-600 text-gray-200 hover:bg-gray-700"
+                                        }`}
+                                    >
+                                        {currentUser?.role === "Admin" && <Shield className="h-3 w-3 mr-1" />}
+                                        {currentUser?.role}
+                                    </Badge>
+                                </div>
+                                <span className="text-gray-400 text-xs">{currentUser?.email}</span>
+                            </div>
+                        </div>
+
+                        {/* Logout + Language Switcher */}
+                        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3 w-full md:w-auto">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="mt-4 md:mt-0 border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all"
+                                className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all w-full md:w-auto"
                                 onClick={handleLogout}
                             >
                                 <LogOut className="h-4 w-4 mr-2" />
                                 {t("logout")}
                             </Button>
-                            <LanguageSwitcher/>
+
+                            <div className="w-full md:w-auto">
+                                <LanguageSwitcher />
+                            </div>
                         </div>
+                    </div>
+
+
+
+
                 </div>
             </div>
         </nav>

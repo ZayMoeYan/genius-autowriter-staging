@@ -48,9 +48,6 @@ const formSchema = z.object({
     negativeConstraints: z.string().optional(),
     hashtags: z.string().optional(),
     emoji: z.boolean().default(false),
-    referenceLinks: z.array(z.object({
-        url: z.string().url().min(5),
-    })).optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -64,9 +61,6 @@ export default function ContentGeneratorUi() {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [title, setTitle] = useState("");
     const { toast } = useToast();
-    const [newLink, setNewLink] = useState("");
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editValue, setEditValue] = useState("");
 
     // @ts-ignore
     const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
@@ -96,7 +90,6 @@ export default function ContentGeneratorUi() {
             negativeConstraints: "",
             hashtags: "",
             emoji: false,
-            referenceLinks: [],
         },
     });
 
@@ -110,38 +103,6 @@ export default function ContentGeneratorUi() {
         // @ts-ignore
         name: "imageDescriptions",
     });
-
-    const {
-        fields: referenceFields,
-        append: appendReference,
-        remove: removeReference,
-        update: updateReference,
-    } = useFieldArray({
-        control,
-        // @ts-ignore
-        name: "referenceLinks",
-    });
-
-    useEffect(() => {
-        // @ts-ignore
-        if (form.formState.errors.referenceLinks?.some((e) => e?.url)) {
-            toast({
-                title: t("contentDashboard.toast.error"),
-                description: "One or more Reference Links are invalid.",
-                status: "error",
-            });
-        }
-    }, [form.formState.errors.referenceLinks]);
-
-    const handleEdit = (index:number, url:string) => {
-        setEditValue(url);
-        setEditingIndex(index);
-    };
-
-    const handleSave = (index:number) => {
-        updateReference(index, { ...referenceFields[index], url: editValue });
-        setEditingIndex(null);
-    };
 
     const fileToBase64 = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
@@ -397,90 +358,6 @@ export default function ContentGeneratorUi() {
                                             {form.formState.errors.outputLanguage && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.outputLanguage")}</p> }
                                         </div>
                                     </div>
-
-                                    <div className="space-y-3 ">
-                                        <label className="block text-white font-semibold text-lg">
-                                            {t("referenceLinks")}
-                                        </label>
-
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="url"
-                                                value={newLink}
-                                                onChange={(e) => setNewLink(e.target.value)}
-                                                placeholder={t("enterReferenceLink")}
-                                                className="flex-1 px-3 py-2 rounded-lg bg-gray-50 focus:ring-2 focus:ring-red-600 outline-none"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    if (newLink.trim()) {
-                                                        appendReference({ url: newLink })
-                                                        setNewLink("");
-                                                    }
-                                                }}
-                                                className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                                            >
-                                                Add
-                                            </button>
-                                        </div>
-
-                                        <ul className="space-y-2">
-                                            {referenceFields.map((field, index) => (
-                                                <li
-                                                    key={field.id}
-                                                    className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-3 py-2"
-                                                >
-                                                    {editingIndex === index ? (
-                                                        <input
-                                                            type="text"
-                                                            value={editValue}
-                                                            onChange={(e) => setEditValue(e.target.value)}
-                                                            className="flex-1 px-2 py-1 rounded-lg bg-gray-100 focus:ring-1 focus:ring-red-600 outline-none"
-                                                        />
-                                                    ) : (
-                                                        <a
-                                                            href={field.url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-blue-300 underline break-all flex-1"
-                                                        >
-                                                            {field.url}
-                                                        </a>
-                                                    )}
-
-                                                    <div className="flex gap-2 ml-2">
-                                                        {editingIndex === index ? (
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleSave(index)}
-                                                                className="text-green-400 hover:text-green-500"
-                                                            >
-                                                                <SaveIcon/>
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleEdit(index, field.url)}
-                                                                className="text-yellow-400 hover:text-yellow-500"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        )}
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => removeReference(index)}
-                                                            className="text-red-400 hover:text-red-500"
-                                                        >
-                                                            Remove
-                                                        </button>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-
-                                    </div>
-
 
                                     <FormItem>
                                         <FormLabel className="text-white font-bold text-[1.2rem]">

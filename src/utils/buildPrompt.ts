@@ -29,22 +29,6 @@ export function formatDescriptions(imageDescriptions?: string[]): string {
     return formatted;
 }
 
-export function buildPromptWithReferences(referenceLinks: { url: string }[]) {
-    const validLinks = referenceLinks
-        .map(link => link?.url?.trim())
-        .filter(url => url && url.startsWith("http"));
-
-    if (validLinks.length === 0) {
-        return "";
-    }
-
-    const referencesText = validLinks
-        .map((url, i) => `${i + 1}. ${url}`)
-        .join("\n");
-
-    return `Improve the following article quality and coherence.\n${referencesText}\n\nPlease analyze or summarize using the above sources to improve content quality.`;
-}
-
 export function buildPrompt(values: FormValues): string {
     const {
         topic,
@@ -57,15 +41,12 @@ export function buildPrompt(values: FormValues): string {
         negativeConstraints,
         outputLanguage,
         hashtags,
-        emoji,
-        referenceLinks
+        emoji
     } = values;
 
 
     // @ts-ignore
     const descriptions = formatDescriptions(imageDescriptions);
-    // @ts-ignore
-    const refeLinks = buildPromptWithReferences(referenceLinks);
 
     let prompt = ` ${outputLanguage === "English" ?
         `You are a Content Copywriting Expert with over 10 years of experience in the Digital Marketing field.
@@ -82,14 +63,13 @@ export function buildPrompt(values: FormValues): string {
         Target Audience: ${clean(audience)}
         Writing Style/Tone: ${writingStyle}
         Target Length: around ${wordContent(contentLength)} words
-        Reference Links: ${refeLinks ? refeLinks : "None"}
         ${descriptions && descriptions}
         ${addSection("Keywords", keywords)}
         ${addSection("Hashtags (to be included at the end)", hashtags)}
         ${addSection("Negative Constraints (Things to avoid)", negativeConstraints)}
         
         📝 Output Requirements:        
-        -Hook – Initially captivate the reader.        
+        -Hook – Initially captivate the reader. Be include Tagline related to the ${topic} at the start of the content.      
         -Value & Connection – Connect with the given input and integrate valuable content, feelings, or information.      
         -Keywords – Integrate naturally.      
         -Call-to-Action – End with a clear CTA.   
@@ -127,14 +107,13 @@ export function buildPrompt(values: FormValues): string {
         - Target Audience: ${clean(audience)}
         - Writing Style/Tone: ${writingStyle}
         - Content Length: around ${wordContent(contentLength)} words
-        - ကိုကား Links များ: ${refeLinks ? refeLinks : "None"}
         ${descriptions}
         ${addSection("Keywords (အဓိကစကားလုံးများ)", keywords)}
         ${addSection("Hashtags (အဆုံးတွင် ထည့်သွင်းရန်)", hashtags)}
         ${addSection("Negative Constraints (ရှောင်ရန်အချက်များ)", negativeConstraints)}
     
         📝 Output Requirements:
-        1. **Hook** – စာဖတ်သူကို စတင်ချင်းဆွဲဆောင်ပါ။
+        1. **Hook** – စာဖတ်သူကို စတင်ချင်းဆွဲဆောင်ပါ။ စာဖတ်သူစိတ်ဝင်စားစေမယ့် ${topic} နဲ့ သက်ဆိုင်တဲ့ Tagline ကိုလည်း content အစမှာ ထည့်ပေးပါ
         2. **Value & Connection** – ပေးထားသော input နဲ့ ချိတ်ဆက်ပြီး တန်ဖိုးရှိသော အကြောင်းအရာ၊ ခံစားချက်၊ သတင်းအချက်အလက်များကို ပေါင်းစပ်ပါ။
         3. **Keywords** – သဘာဝကျကျထည့်သွင်းပါ။
         4. **Call-to-Action** – ပြတ်သားတဲ့ CTA နဲ့ အဆုံးသတ်ပါ။
