@@ -32,7 +32,7 @@
   "topicPlaceholder": "ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာ သို့မဟုတ် Idea အကြမ်းကို ရေးပါ",
   "purpose": "ရည်ရွယ်ချက်",
   "purposePlaceholder": "ဥပမာ - ပညာပေးရန်၊ Engagement ရရှိရန်၊ ရောင်းအားမြှင့်ရန်",
-  "audience": "သုံးစွဲသူအုပ်စု",
+  "audience": "ပစတ်မှတ်ထားသော သုံးစွဲသူအုပ်စု",
   "audiencePlaceholder": "ဥပမာ - အသက် ၂၀ မှ ၃၀ ကြား လူငယ်များ",
   "writingStyle": "စာရေးပုံစံ / အသံ ပုံစံ",
   "writingStylePlaceholder": "စာရေးပုံစံ (သို့) အသံ ပုံစံကို ရွေးချယ်ပါ",
@@ -86,9 +86,9 @@
     "persuasive": "စည်းရုံးဆွဲဆောင်ပုံစံ"
   },
   "contentLengthOptions": {
-    "short": "တို",
+    "short": "အတို",
     "medium": "အလယ်အလတ်",
-    "long": "ရှည်"
+    "long": "အရှည်"
   },
   "outputLanguageOptions": {
     "myanmar": "မြန်မာ (Myanmar)",
