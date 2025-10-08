@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function login(username: string, password: string, apikey: string) {
     try {
-        const res = await fetch("https://genius-autowriter-backend.vercel.app/auth/login", {
+        const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + 'auth/login', {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -17,6 +17,7 @@ export async function login(username: string, password: string, apikey: string) 
         });
 
         const data = await res.json();
+
         const userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
         const name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
         const userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
