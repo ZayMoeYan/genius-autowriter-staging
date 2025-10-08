@@ -4,7 +4,7 @@ import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {Wand2, X, Sparkles, SaveIcon} from "lucide-react";
+import {Wand2, X, Sparkles, SaveIcon, Copy} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -61,6 +61,7 @@ export default function ContentGeneratorUi() {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [title, setTitle] = useState("");
     const { toast } = useToast();
+    const [copied, setCopied] = useState(false);
 
     // @ts-ignore
     const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
@@ -75,6 +76,21 @@ export default function ContentGeneratorUi() {
             });
         }
     }, [currentUser, setCurrentUser]);
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(generatedContent);
+            toast({
+                title: t("viewModal.copy_success"),
+                description: t("viewModal.copy_success_desc"),
+                status: "success",
+            })
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+        }
+    };
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -560,7 +576,7 @@ export default function ContentGeneratorUi() {
                             </div>
                             <Button
                                 type="button"
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
+                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
                                 size="lg"
                                 onClick={onSaveContent}
                                 disabled={isSaving}
@@ -573,6 +589,14 @@ export default function ContentGeneratorUi() {
                                 ) : (
                                     t("saveContent")
                                 )}
+                            </Button>
+                            <Button
+                                onClick={handleCopy}
+                                variant="outline"
+                                className="px-4 py-2 sm:px-6 sm:py-2.5 border-none text-white bg-primary hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
+                            >
+                                <Copy className="h-4 w-4" />
+                                <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
                             </Button>
                         </div>
                     ) : (
