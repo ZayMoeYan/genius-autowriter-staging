@@ -84,8 +84,8 @@ export default function Dashboard() {
 
         await deleteContent(id)
         toast({
-            title: t("toast.success"),
-            description: t("toast.deleteSuccess"),
+            title: t("contentDashboard.toast.success"),
+            description: t("contentDashboard.toast.deleteSuccess"),
             status: "success",
         })
         setContents((prev) => prev.filter((c) => c.id !== id));
