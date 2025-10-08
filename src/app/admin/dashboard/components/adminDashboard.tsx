@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {
     Users,
     UserCheck,
@@ -19,12 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import {deleteUserOrAdmin, getUsers, save, updateUserOrAdmin} from "@/app/actions/usersAction";
-import UserDeleteModal from "@/app/admin/components/UserDeleteModal";
+import UserDeleteModal from "@/app/admin/dashboard/components/UserDeleteModal";
 import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
-import {CurrentUserType} from "@/components/Nav";
-
 
 const ITEMS_PER_PAGE = 10;
 

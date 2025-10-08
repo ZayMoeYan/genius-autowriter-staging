@@ -1,20 +1,28 @@
 'use server';
 
 import {cookies} from "next/headers";
-import {CurrentUserType} from "@/components/Nav";
 import jwt from "jsonwebtoken";
+
+export async function getValueFromCookies(key: string) {
+    const cookieStore = await cookies();
+    return cookieStore.get(key)?.value!;
+}
 
 export async function getLoginUser() {
 
-    const cookieStore = await cookies();
-    const role = jwt.verify(cookieStore.get('role')?.value!, process.env.NEXT_SECRET_KEY!)
-    const username = jwt.verify(cookieStore.get('username')?.value!, process.env.NEXT_SECRET_KEY!)
-    const email = jwt.verify(cookieStore.get('email')?.value!, process.env.NEXT_SECRET_KEY!)
+    const roleFromCookie = await getValueFromCookies('role_token');
+    const usernameFromCookie = await getValueFromCookies('username_token');
+    const emailFromCookie = await getValueFromCookies('email_token');
+
+    const role =  jwt.verify(roleFromCookie, process.env.NEXT_SECRET_KEY!)
+    const username = jwt.verify(usernameFromCookie, process.env.NEXT_SECRET_KEY!)
+    const email = jwt.verify(emailFromCookie, process.env.NEXT_SECRET_KEY!)
+
     const currentUser = {
-        "username" : username,
+        "username": username,
         "role": role,
         "email": email,
-        "isLoggedIn": cookieStore.get('access-token')?.value
+        "isLoggedIn": getValueFromCookies('access_token')
     }
     return currentUser;
 }

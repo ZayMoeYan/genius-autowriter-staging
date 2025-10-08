@@ -3,10 +3,10 @@
 import {revalidatePath} from "next/cache";
 import axiosInstance from "@/app/axiosInstance";
 
-export async function generateContentAction(prompt: string, images: any) {
+export async function generateContentAction(prompt: string, images: any, apikey: string) {
     try {
         const req = {
-            prompt, images
+            prompt, images, apikey
         }
         const res = await axiosInstance.post("/contents/api/generate", req);
 

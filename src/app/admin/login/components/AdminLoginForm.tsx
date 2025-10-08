@@ -16,12 +16,12 @@ import { useTranslation } from "react-i18next";
 const loginSchema = z.object({
     email: z.string().min(1).email(),
     password: z.string().min(1),
-    apikey: z.string().min(1)
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
     const { toast } = useToast();
@@ -34,13 +34,8 @@ export default function LoginPage() {
     const handleLogin = async (data: LoginSchema) => {
         try {
 
-            const res = await testApiKey(data.apikey);
-
-            if(res) {
-                const user = await login(data.email, data.password, data.apikey);
-                user.role === "Admin"
-                    ? router.push('/admin')
-                    : router.push('/generator');
+                const user = await login(data.email, data.password, "");
+                user.role === "Admin" && router.push('/admin/dashboard');
 
                 toast({
                     title: t("loginSuccessTitle", {username : user?.username}),
@@ -52,13 +47,6 @@ export default function LoginPage() {
                 });
 
                 reset();
-            }else {
-                toast({
-                    title: `${t("loginFailedTitle")}`,
-                    description: `${t("loginFailedDescription")}`,
-                    status: "error",
-                });
-            }
         } catch (error: any) {
             toast({
                 title: `${t("loginFailedTitle")}`,
@@ -91,7 +79,7 @@ export default function LoginPage() {
                             {t("welcomeBack")}
                         </h2>
                         <p className="text-red-600 tracking-wider font-bold">
-                            GENIUS AUTOWRITER
+                            GENIUS AUTOWRITER ADMIN LOGIN
                         </p>
                     </div>
 
@@ -134,19 +122,6 @@ export default function LoginPage() {
                             </div>
                             {errors.password && (
                                 <p className="text-red-500 text-sm mt-1">{t("passwordRequired")}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-white mb-2">{t("apikey")}</label>
-                            <input
-                                type="text"
-                                {...register("apikey")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                                placeholder={t("enterApiKey")}
-                            />
-                            {errors.apikey && (
-                                <p className="text-red-500 text-sm mt-1">{t("apiKeyRequired")}</p>
                             )}
                         </div>
 

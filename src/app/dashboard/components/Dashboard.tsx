@@ -25,6 +25,7 @@ import {useToast} from "@/hooks/use-toast";
 import {useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
 import {CurrentUserType} from "@/components/Nav";
+import {useTranslation} from "react-i18next";
 
 const contentsPerPage = 8;
 
@@ -42,7 +43,7 @@ export default function Dashboard() {
     const { toast } = useToast();
     const [currentPage, setCurrentPage] = useState(1);
     const { currentUser, setCurrentUser } = useAuth();
-
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         if (!currentUser) {
@@ -83,8 +84,8 @@ export default function Dashboard() {
 
         await deleteContent(id)
         toast({
-            title: "Success",
-            description: "Your content has been deleted successfully.",
+            title: t("toast.success"),
+            description: t("toast.deleteSuccess"),
             status: "success",
         })
         setContents((prev) => prev.filter((c) => c.id !== id));
@@ -129,10 +130,13 @@ export default function Dashboard() {
     const onCloseHandler = () => setEditingContent(null);
 
     const onSaveHandler = async (id: number, { title, content: body }: any) => {
+
+        console.log(title, body)
+
         const updated = await updateContent(id, { title, content: body });
         toast({
-            title: "Success",
-            description: "Your content has been updated successfully.",
+            title: t("contentDashboard.toast.success"),
+            description: t("contentDashboard.toast.updateSuccess"),
             status: "success",
         })
         setContents(
@@ -149,14 +153,6 @@ export default function Dashboard() {
         setIsDeleteModalOpen(false);
     };
 
-    // const filteredContents = contents.filter((content) => {
-    //     const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
-    //     const matchesStatus = statusFilter === "all" ||
-    //         (statusFilter === "posted" && content.is_posted) ||
-    //         (statusFilter === "draft" && !content.is_posted);
-    //     return matchesSearch && matchesStatus;
-    // });
-
     const filteredContents = useMemo(() => {
         return contents.filter((content) => {
             const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
@@ -167,7 +163,6 @@ export default function Dashboard() {
         });
     }, [contents, search, statusFilter]);
 
-    // Pagination
     const totalContents = filteredContents.length;
     const totalPages = Math.ceil(totalContents / contentsPerPage);
     const startIndex = (currentPage - 1) * contentsPerPage;
@@ -201,14 +196,14 @@ export default function Dashboard() {
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-white mb-1">CONTENTS DASHBOARD</h1>
-                            <p className="text-primary tracking-wider font-medium">CONTENTS MANAGEMENT</p>
+                            <h1 className={`font-bold text-white mb-1 text-3xl`}>{t('contentDashboard.title')}</h1>
+                            <p className={`tracking-wider font-medium  text-red-600 ${i18n.language === "mm" ? "text-sm" : "text-primary"}`}>{t('contentDashboard.subtitle')}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5">
-                {/* Statistics Cards */}
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <Card className="bg-black/95 backdrop-blur-sm border-red-800 border-[0.5px] p-6">
                         <div className="flex items-center space-x-4">
@@ -216,7 +211,7 @@ export default function Dashboard() {
                                 <FileText className="h-6 w-6 text-red-600" />
                             </div>
                             <div>
-                                <p className="text-white">Total Contents</p>
+                                <p className="text-white">{t("contentDashboard.stats.total")}</p>
                                 <p className="text-gray-400">{totalContents}</p>
                             </div>
                         </div>
@@ -228,7 +223,7 @@ export default function Dashboard() {
                                 <Eye className="h-6 w-6 text-green-600" />
                             </div>
                             <div>
-                                <p className="text-white">Published</p>
+                                <p className="text-white">{t("contentDashboard.stats.published")}</p>
                                 <p className="text-gray-400">{publishedContents}</p>
                             </div>
                         </div>
@@ -240,7 +235,7 @@ export default function Dashboard() {
                                 <EyeOff className="h-6 w-6 text-yellow-600" />
                             </div>
                             <div>
-                                <p className="text-white">Drafts</p>
+                                <p className="text-white">{t("contentDashboard.stats.drafts")}</p>
                                 <p className="text-gray-400">{draftContents}</p>
                             </div>
                         </div>
@@ -255,28 +250,28 @@ export default function Dashboard() {
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                                 <Input
                                     type="text"
-                                    placeholder="Search contents..."
-                                    className="pl-10 border-gray-300 focus:border-red-500 focus:ring-red-500"
+                                    placeholder={t("contentDashboard.searchPlaceholder")}
+                                    className="pl-10 border-none"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
                             </div>
 
                             <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="w-full sm:w-48 border-gray-300 focus:border-red-500 focus:ring-red-500">
-                                    <SelectValue placeholder="Filter by status" />
+                                <SelectTrigger className="w-full sm:w-48 border-none">
+                                    <SelectValue placeholder={t("contentDashboard.filterPlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Contents</SelectItem>
-                                    <SelectItem value="posted">Published</SelectItem>
-                                    <SelectItem value="draft">Drafts</SelectItem>
+                                    <SelectItem value="all">{t("contentDashboard.filter.all")}</SelectItem>
+                                    <SelectItem value="posted">{t("contentDashboard.filter.posted")}</SelectItem>
+                                    <SelectItem value="draft">{t("contentDashboard.filter.draft")}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         <div className="flex items-center space-x-2 ">
                             <p className="text-gray-400">
-                                Showing {paginatedContents.length} of {totalContents}
+                                {t("contentDashboard.showing")} {paginatedContents.length} of {totalContents}
                             </p>
                         </div>
                     </div>
@@ -284,22 +279,22 @@ export default function Dashboard() {
 
                 <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800 border-[0.5px] overflow-hidden">
                     <div className="p-6 border-b border-red-800">
-                        <h2 className="text-white text-2xl">Contents Dashboard</h2>
-                        <p className="text-gray-400">Manage your content library</p>
+                        <h2 className={`text-white text-2xl`}>{t("contentDashboard.table.title")}</h2>
+                        <p className={`text-gray-400 ${i18n.language === "mm" ? "text-sm mt-2" : ""}`}>{t("contentDashboard.table.description")}</p>
                     </div>
 
                     {loading ? (
                         <div className="p-8 text-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto mb-4"></div>
-                            <p className="text-gray-600">Loading contents...</p>
+                            <p className="text-gray-600">{t("contentDashboard.loading.title")}</p>
                         </div>
                     ) : paginatedContents.length === 0 ? (
                         <div className="p-8 text-center">
                             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600">
                                 {search || statusFilter !== "all"
-                                    ? "No contents found matching your criteria."
-                                    : "No contents found."}
+                                    ? t("contentDashboard.loading.emptyFiltered")
+                                    : t("contentDashboard.loading.emptyTitle")}
                             </p>
                         </div>
                     ) : (
@@ -324,12 +319,12 @@ export default function Dashboard() {
                                                     {content.is_posted ? (
                                                         <>
                                                             <Eye className="h-3 w-3 mr-1" />
-                                                            တင်ပြီး
+                                                            {t("contentDashboard.status.posted")}
                                                         </>
                                                     ) : (
                                                         <>
                                                             <EyeOff className="h-3 w-3 mr-1" />
-                                                            မတင်ရသေး
+                                                            {t("contentDashboard.status.draft")}
                                                         </>
                                                     )}
                                                 </Badge>
@@ -338,7 +333,7 @@ export default function Dashboard() {
                                                         <input
                                                             type="checkbox"
                                                             checked={content.is_posted}
-                                                            disabled={togglingId === content.id} // disable while syncing
+                                                            disabled={togglingId === content.id}
                                                             onChange={() => handleTogglePosted(content)}
                                                             className="sr-only"
                                                         />
@@ -369,12 +364,12 @@ export default function Dashboard() {
                                             <div className="flex items-center space-x-4 text-xs text-white">
                                                 <div className="flex items-center space-x-1">
                                                     <Calendar className="h-3 w-3" />
-                                                    <span>Created: {formatDate(content.created_at)}</span>
+                                                    <span>{t("contentDashboard.table.created")} {formatDate(content.created_at)}</span>
                                                 </div>
                                                 {content.updated_at && (
                                                     <div className="flex items-center space-x-1">
                                                         <Calendar className="h-3 w-3" />
-                                                        <span>Updated: {formatDate(content.updated_at)}</span>
+                                                        <span>{t("contentDashboard.table.updated")} {formatDate(content.updated_at)}</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -421,16 +416,23 @@ export default function Dashboard() {
                 {totalPages > 1 && (
                     <div className="flex items-center justify-between p-4 border-t border-red-800">
                         <p className="text-sm text-gray-400">
-                            Showing{" "}
+                            { i18n.language === "en" ? 'Showing ' : (
+                                <>
+                                    Content စာမျက်နှာ{" "}
+                                    <span className="font-semibold">{filteredContents.length}</span>
+                                    {" "} ခုထဲမှ {" "}
+                                </>
+                            )}
                             <span className="font-semibold">
                                 {(currentPage - 1) * contentsPerPage + 1}
                               </span>{" "}
-                            to{" "}
+                            { i18n.language === "en" ? "to " : "မှ " }
                             <span className="font-semibold">
                                 {Math.min(currentPage * contentsPerPage, filteredContents.length)}
                               </span>{" "}
-                            of <span className="font-semibold">{filteredContents.length}</span>{" "}
-                            contents
+                            { i18n.language === "en" ? "of " : "အထိ" }
+                            <span className="font-semibold">{i18n.language === "en" && filteredContents.length}</span>{" "}
+                            { i18n.language === "en" ? "contents" : "ပြသနေပါသည်" }
                         </p>
 
                         <div className="flex items-center space-x-2">
@@ -443,10 +445,9 @@ export default function Dashboard() {
                                 className="border-gray-300"
                             >
                                 <ChevronLeft className="h-4 w-4" />
-                                Previous
+                                {t("contentDashboard.buttons.previous")}
                             </Button>
 
-                            {/* Page Numbers */}
                             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                                 <Button
                                     key={page}
@@ -470,7 +471,7 @@ export default function Dashboard() {
                                 onClick={() => goToPage(currentPage + 1)}
                                 className="border-gray-300"
                             >
-                                Next
+                                {t("contentDashboard.buttons.next")}
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
                         </div>

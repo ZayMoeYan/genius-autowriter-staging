@@ -8,25 +8,67 @@ function addSection(label: string, value?: string): string {
     return value && value.trim().length > 0 ? `${label}: ${value}\n` : "";
 }
 
-export function buildMyanmarPrompt(values: FormValues): string {
+function wordContent(value: string): string {
+    if(value === "short") {
+        return "300";
+    }else if(value === "medium") {
+        return "500";
+    }else {
+        return "700";
+    }
+}
+
+export function formatDescriptions(imageDescriptions?: string[]): string {
+    if (!imageDescriptions || imageDescriptions.length === 0) {
+        return "";
+    }
+    const formatted = imageDescriptions
+        .map((desc, index) => `Description of Image ${index + 1}: ${desc?.trim() || ""}`)
+        .join("\n");
+
+    return formatted;
+}
+
+export function buildPromptWithReferences(referenceLinks: { url: string }[]) {
+    const validLinks = referenceLinks
+        .map(link => link?.url?.trim())
+        .filter(url => url && url.startsWith("http"));
+
+    if (validLinks.length === 0) {
+        return "";
+    }
+
+    const referencesText = validLinks
+        .map((url, i) => `${i + 1}. ${url}`)
+        .join("\n");
+
+    return `Improve the following article quality and coherence.\n${referencesText}\n\nPlease analyze or summarize using the above sources to improve content quality.`;
+}
+
+export function buildPrompt(values: FormValues): string {
     const {
         topic,
         purpose,
         audience,
         writingStyle,
-        wordCount,
+        contentLength,
         keywords,
         imageDescriptions,
-        cta,
         negativeConstraints,
-        hashtags,
         outputLanguage,
-        copyWritingModel
+        hashtags,
+        emoji,
+        referenceLinks
     } = values;
+
+
+    // @ts-ignore
+    const descriptions = formatDescriptions(imageDescriptions);
+    // @ts-ignore
+    const refeLinks = buildPromptWithReferences(referenceLinks);
 
     let prompt = ` ${outputLanguage === "English" ?
         `You are a Content Copywriting Expert with over 10 years of experience in the Digital Marketing field.
-        Your copywriting model is: ${copyWritingModel}.
         Your main strengths are: Deeply understanding the Target Audience and being able to create texts that are captivating, exciting, and effectively achieve the intended goal.
         
         Special Instructions
@@ -38,20 +80,21 @@ export function buildMyanmarPrompt(values: FormValues): string {
         Topic: ${clean(topic)}  
         Purpose: ${clean(purpose)}
         Target Audience: ${clean(audience)}
-        Writing Style/Tone: ${writingStyle[0]}, ${writingStyle[1]}, ${writingStyle[2]}
-        Target Length: around ${wordCount} words
-        Image Description: ${clean(imageDescriptions)}
+        Writing Style/Tone: ${writingStyle}
+        Target Length: around ${wordContent(contentLength)} words
+        Reference Links: ${refeLinks ? refeLinks : "None"}
+        ${descriptions && descriptions}
         ${addSection("Keywords", keywords)}
         ${addSection("Hashtags (to be included at the end)", hashtags)}
-        ${addSection("Call-to-Action (CTA)", cta)}
         ${addSection("Negative Constraints (Things to avoid)", negativeConstraints)}
         
         📝 Output Requirements:        
         -Hook – Initially captivate the reader.        
         -Value & Connection – Connect with the given input and integrate valuable content, feelings, or information.      
         -Keywords – Integrate naturally.      
-        -Call-to-Action – End with a clear CTA.     
-        -Hashtags & Emojis - Create hashtags and emojis relevant to the content ${topic}, using the provided hashtags and emojis.     
+        -Call-to-Action – End with a clear CTA.   
+        -Emojis - ${emoji ? `Use the relevant emojis to the content ${topic}.` : "Don't use the emojis at all in entire content. "}  
+        -Hashtags - Create hashtags relevant to the content ${topic}, using the provided hashtags.    
         -Review – Check the word count, style, and negative constraints, and ensure correct Myanmar spelling.
         
         📌 Output Format: 
@@ -67,7 +110,6 @@ export function buildMyanmarPrompt(values: FormValues): string {
         Warning: Remember the "Special Instructions" above and only return the final Content.`
         :
         `သင်ဟာ Digital Marketing နယ်ပယ်မှာ အတွေ့အကြုံ ၁၀ နှစ်ကျော်ရှိတဲ့ Content Copywriting Expert တစ်ယောက် ဖြစ်ပါတယ်။
-        သင့်ရဲ့ copy writing model ကတော့ ${copyWritingModel} ဖြစ်ပါတယ်။
         သင့်ရဲ့ အဓိကအားသာချက်တွေကတော့ Target Audience ကို နက်နက်နဲနဲနားလည်ပြီး သူတို့စိတ်ကိုဆွဲဆောင်နိုင်တဲ့၊ စိတ်လှုပ်ရှားစေတဲ့၊
         ရည်ရွယ်ချက်ထိထိရောက်ရောက်အောင်မြင်စေတဲ့ စာသားတွေ ဖန်တီးနိုင်တာ ဖြစ်ပါတယ်။
     
@@ -83,12 +125,12 @@ export function buildMyanmarPrompt(values: FormValues): string {
         - အကြောင်းအရာ (Topic): ${clean(topic)}
         - ရည်ရွယ်ချက် (Purpose): ${clean(purpose)}
         - Target Audience: ${clean(audience)}
-        - Writing Style/Tone: ${writingStyle[0]}, ${writingStyle[1]}, ${writingStyle[2]}
-        - Target Length: around ${wordCount} words
-        - Image Description: ${clean(imageDescriptions)}
+        - Writing Style/Tone: ${writingStyle}
+        - Content Length: around ${wordContent(contentLength)} words
+        - ကိုကား Links များ: ${refeLinks ? refeLinks : "None"}
+        ${descriptions}
         ${addSection("Keywords (အဓိကစကားလုံးများ)", keywords)}
         ${addSection("Hashtags (အဆုံးတွင် ထည့်သွင်းရန်)", hashtags)}
-        ${addSection("Call-to-Action (CTA)", cta)}
         ${addSection("Negative Constraints (ရှောင်ရန်အချက်များ)", negativeConstraints)}
     
         📝 Output Requirements:
@@ -96,11 +138,10 @@ export function buildMyanmarPrompt(values: FormValues): string {
         2. **Value & Connection** – ပေးထားသော input နဲ့ ချိတ်ဆက်ပြီး တန်ဖိုးရှိသော အကြောင်းအရာ၊ ခံစားချက်၊ သတင်းအချက်အလက်များကို ပေါင်းစပ်ပါ။
         3. **Keywords** – သဘာဝကျကျထည့်သွင်းပါ။
         4. **Call-to-Action** – ပြတ်သားတဲ့ CTA နဲ့ အဆုံးသတ်ပါ။
-        5. **Hashtags & Emojis** - Hashtags နဲ့ Emojis တွေကို content ${topic} နဲ့ သက်ဆိုင်တဲ့ Hashtags & Emojis တွေကိုသုံးပြီး ဖန်တီးပါ။
-        5. **Review** – Word count, style, negative constraints ကို စစ်ဆေးပြီး မြန်မာစာ လုံးပေါင်းသတ်ပုံမှန်အောင် ဖန်တီးပါ။
-    
+        5. **Emojis** - ${emoji ? `Emojis တွေကို content ${topic} နဲ့ သက်ဆိုင်တဲ့ Emojis တွေကိုသုံးပါ။` : 'Content မှာ Emojis တွေကိုလုံးဝ မသုံးပါနဲ့'}
+        6. **Hashtags** - Hashtags တွေကို content ${topic} နဲ့ သက်ဆိုင်တဲ့ Hashtags တွေကိုသုံးပါ။
+        7. **Review** – Word count, style, negative constraints ကို စစ်ဆေးပြီး မြန်မာစာ လုံးပေါင်းသတ်ပုံမှန်အောင် ဖန်တီးပါ။
         ---
-    
         📌 Output Format:
         - **Final Content only** (no notes, no section labels, no explanations).
         - Written in Myanmar language.

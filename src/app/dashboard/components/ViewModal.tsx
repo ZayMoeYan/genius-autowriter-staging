@@ -2,6 +2,8 @@ import { X, Calendar, Eye, EyeOff, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import {useTranslation} from "react-i18next";
+import {useToast} from "@/hooks/use-toast";
 
 interface ViewModalProps {
     content: {
@@ -17,6 +19,7 @@ interface ViewModalProps {
 
 export default function ViewModal({ content, onClose }: ViewModalProps) {
     const [copied, setCopied] = useState(false);
+    const { toast } = useToast();
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -28,11 +31,18 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
         });
     };
 
+    const { t } = useTranslation();
+
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(content.content);
+            toast({
+                title: t("viewModal.copy_success"),
+                description: t("viewModal.copy_success_desc"),
+                status: "success",
+            })
             setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
+            setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error("Failed to copy:", err);
         }
@@ -59,12 +69,12 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                                 {content.is_posted ? (
                                     <>
                                         <Eye className="h-3 w-3 mr-1" />
-                                        တင်ပြီး
+                                        {t("viewModal.status_posted")}
                                     </>
                                 ) : (
                                     <>
                                         <EyeOff className="h-3 w-3 mr-1" />
-                                        မတင်ရသေး
+                                        {t("viewModal.status_not_posted")}
                                     </>
                                 )}
                             </Badge>
@@ -72,14 +82,14 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                                 <div className="flex items-center space-x-1">
                                     <Calendar className="h-4 w-4" />
                                     <span className="truncate">
-                                        Created: {formatDate(content.created_at)}
+                                        {t("viewModal.created_at")}: {formatDate(content.created_at)}
                                     </span>
                                 </div>
                                 {content.updated_at && (
                                     <div className="flex items-center space-x-1">
                                         <Calendar className="h-4 w-4" />
                                         <span className="truncate">
-                                            Updated: {formatDate(content.updated_at)}
+                                            {t("viewModal.updated_at")}: {formatDate(content.updated_at)}
                                         </span>
                                     </div>
                                 )}
@@ -96,7 +106,6 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                     </Button>
                 </div>
 
-                {/* Content */}
                 <div className="p-4 sm:p-8 overflow-y-auto max-h-[calc(90vh-140px)]">
                     <div className="prose prose-sm sm:prose-lg max-w-none">
                         <div className="whitespace-pre-wrap text-gray-700 leading-relaxed break-words">
@@ -105,21 +114,20 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="flex flex-col sm:flex-row justify-end gap-3 p-4 sm:p-6 border-t border-gray-200 bg-gray-50/50">
+                    <Button
+                        onClick={onClose}
+                        className="px-4 py-2 sm:px-6 sm:py-2.5 text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    >
+                        {t("viewModal.button_close")}
+                    </Button>
                     <Button
                         onClick={handleCopy}
                         variant="outline"
-                        className="flex items-center justify-center space-x-2 hover:bg-red-900"
+                        className="px-4 py-2 sm:px-6 sm:py-2.5 text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
                     >
                         <Copy className="h-4 w-4" />
-                        <span>{copied ? "Copied!" : "Copy"}</span>
-                    </Button>
-                    <Button
-                        onClick={onClose}
-                        className="bg-red-600 hover:bg-red-900 text-white w-full sm:w-auto"
-                    >
-                        Close
+                        <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
                     </Button>
                 </div>
             </div>

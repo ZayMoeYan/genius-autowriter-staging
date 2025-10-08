@@ -1,0 +1,182 @@
+{
+  "welcomeBack": "ပြန်လည် ကြိုဆိုပါသည်",
+  "email": "အီးမေးလ်",
+  "password": "စကားဝှက်",
+  "apikey": "Gemini API Key",
+  "login": "လော့ဂ်အင်ဝင်ရန်",
+  "enterEmail": "သင်၏အီးမေးလ်ကို ထည့်ပါ",
+  "enterPassword": "သင်၏စကားဝှက် ကိုထည့်ပါ",
+  "enterApiKey": "သင်၏Gemini API Key ကိုထည့်ပါ",
+  "loginSuccessTitle": "လော့ဂ်အင်ဝင်ပြီးပါပြီ! ပြန်လည်ကြိုဆိုပါသည်၊ {{username}}",
+  "loginSuccessDescription": "{{role}} {{username}}၊ သင့်အကောင့်ထဲသို့ဝင်ရောက််ပြီးပါပြီ။",
+  "loginFailedTitle": "ဝင်ရောက်မှုမအောင်မြင်ပါ",
+  "loginFailedDescription": "ကျေးဇူးပြု၍ သင်ထည့်သွင်းသော အီးမေးလ်၊ စကားဝှက် သို့မဟုတ် API Key ကို ပြန်လည်စစ်ဆေးပါ။",
+  "poweredBy": "Myanmar Online Technology မှ ထောက်ပံ့ထားပါသည်",
+  "loggingIn": "လော့ဂ်အင်ဝင်နေသည်...",
+  "emailRequired": "အီးမေးလ်လိုအပ်ပါသည်",
+  "invalidEmail": "အီးမေးလ်ဖော်မတ်မှားနေပါသည်",
+  "passwordRequired": "စကားဝှက်လိုအပ်ပါသည်",
+  "apiKeyRequired": "Gemini API Key လိုအပ်ပါသည်",
+  "logoutSuccess": "အောင်မြင်စွာ logout ပြီးပါပြီ!",
+  "logoutSuccessMessage": "သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ။",
+  "appTitle": "Genius Autowriter",
+  "generator": "Content ဖန်တီးမှု",
+  "dashboard": "စာမျက်နှာများ",
+  "logout": "ထွက်မည်",
+  "logoutSuccessTitle": "အောင်မြင်စွာ ထွက်ပြီးပါပြီ။",
+  "logoutSuccessDescription": "{{role}} {{username}}၊ သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ။",
+  "contentCreation": "Content ဖန်တီးခြင်း",
+  "contentDetailsForm": "Content အသေးစိတ် ဖောင်",
+  "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ။",
+  "topic": "Content ၏ အဓိကအကြောင်းအရာ",
+  "topicPlaceholder": "ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာ သို့မဟုတ် Idea အကြမ်းကို ရေးပါ",
+  "purpose": "ရည်ရွယ်ချက်",
+  "purposePlaceholder": "ဥပမာ - ပညာပေးရန်၊ Engagement ရရှိရန်၊ ရောင်းအားမြှင့်ရန်",
+  "audience": "သုံးစွဲသူအုပ်စု",
+  "audiencePlaceholder": "ဥပမာ - အသက် ၂၀ မှ ၃၀ ကြား လူငယ်များ",
+  "writingStyle": "စာရေးပုံစံ / အသံ ပုံစံ",
+  "writingStylePlaceholder": "စာရေးပုံစံ (သို့) အသံ ပုံစံကို ရွေးချယ်ပါ",
+  "outputLanguage": "Output ဘာသာစကား",
+  "outputLanguagePlaceholder": "Output Language ကိုရွေးချယ်ပါ",
+  "contentLength": "အကြောင်းအရာ အရှည်",
+  "contentLengthPlaceholder": "Content Length ကိုရွေးချယ်ပါ",
+  "uploadImage": "ပုံတင်ရန်",
+  "referenceLinks": "ကိုးကား Links များ",
+  "enterReferenceLink": "ကိုးကား Link ထည့်ပါ",
+  "hashtags": "Hashtags (မဖြစ်မနေထည့်ရန်မလို)",
+  "hashtagsPlaceholder": "ဥပမာ - #DigitalMarketingMyanmar #OnlineBusinessTips",
+  "hashtagsDescription": "comma ဖြင့် ခွဲရေးပါ။",
+  "negativeConstraints": "တားမြစ်ချက်များ (မဖြစ်မနေထည့်ရန်မလို)",
+  "negativeConstraintsPlaceholder": "ဥပမာ - ဈေးနှုန်း မဖော်ပြရ၊ မသင့်လျော်သော စကားလုံး မသုံးရ",
+  "negativeConstraintsDescription": "Content ထဲတွင် မပါဝင်စေချင််သော အကြောင်းအရာများ။",
+  "includeEmojis": "Emojis ထည့်မှာလား",
+  "generateContent": "Content ဖန်တီးမည်",
+  "generating": "ဖန်တီးနေပါသည်...",
+  "success": "အောင်မြင်ပါသည်",
+  "successGenerated": "သင်၏ Content ကို အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။",
+  "successSaved": "သင်၏ Content ကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။",
+  "error": "အမှား",
+  "errorSaving": "သိမ်းဆည်းနေစဉ် အမှားဖြစ်ပွားခဲ့ပါသည်။",
+  "generatedContent": "ဖန်တီးပြီးသော Cotnent",
+  "generatedContentDescription": "ဖန်တီးထားသော Content ကို ဦးစွာ ကြည့်ပြီး ပြင်ဆင်နိုင်ပါသည်။",
+  "titleOfContent": "Content ခေါင်းစဉ်",
+  "titlePlaceholder": "ဥပမာ - ဒစ်ဂျစ်တယ် မားကတင်း",
+  "saving": "သိမ်းဆည်းနေပါသည်...",
+  "saveContent": "Content သိမ်းဆည်းမည်",
+  "emptyStateTitle": "ဖောင်ကို ဖြည့်ပြီး Content ဖန်တီးပါ။",
+  "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်။",
+  "formErrors": {
+    "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ။",
+    "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရေးပေးပါ။",
+    "audience": "Target Audience ကို ရေးပေးပါ။",
+    "writingStyle": "စာပုံစံ (သို့) အသံသွင်းသံ တစ်ခုခန့် ရွေးပေးပါ။",
+    "outputLanguage": "Output Language ကို ရွေးပေးပါ။",
+    "contentLength": "Content Length ကို ရွေးပေးပါ။"
+  },
+  "writingStyleOptions": {
+    "friendly": "ဖော်ရွေသော",
+    "formal": "တရားဝင်",
+    "humorous": "ဟာသ",
+    "confident": "ယုံကြည်မှုရှိသော",
+    "motivational": "စိတ်အားထက်သန်သော",
+    "professional": "ပရော်ဖက်ရှင်နယ်",
+    "conversational": "စကားပြောပုံစံ",
+    "storytelling": "ဇာတ်လမ်းပြောပုံစံ",
+    "informative": "အသိပေးရှင်းပြပုံစံ",
+    "persuasive": "စည်းရုံးဆွဲဆောင်ပုံစံ"
+  },
+  "contentLengthOptions": {
+    "short": "တို",
+    "medium": "အလယ်အလတ်",
+    "long": "ရှည်"
+  },
+  "outputLanguageOptions": {
+    "myanmar": "မြန်မာ (Myanmar)",
+    "english": "အင်္ဂလိပ် (English)"
+  },
+  "contentDashboard": {
+    "title": "Content စာမျက်နှာများ",
+    "subtitle": "Content စီမံခန့်ခွဲခြင်း",
+    "stats": {
+      "total": "အကြောင်းအရာ စုစုပေါင်း",
+      "published": "တင်ပြီးသော",
+      "drafts": "မတင်ရသေးသော"
+    },
+    "searchPlaceholder": "Content များကို ရှာဖွေပါ...",
+    "filterPlaceholder": "အခြေအနေဖြင့် စစ်ထုတ်ပါ",
+    "filter": {
+      "all": "Content အားလုံး",
+      "posted": "တင်ပြီးသော",
+      "draft": "မတင်ရသေးသော"
+    },
+    "showing": "ပြသနေသည်",
+    "contents": "Content များ",
+    "loading": {
+      "title": "Content များကိုရှာနေပါသည်...",
+      "emptyTitle": "အကြောင်းအရာမရှိပါ။",
+      "emptyFiltered": "သင်ရွေးချယ်ထားသော အချက်အလက်နှင့် ကိုက်ညီသော Content မတွေ့ရှိပါ။"
+    },
+    "table": {
+      "title": "Content စာမျက်နှာများ",
+      "description": "သင်၏ Content များကို စီမံခန့်ခွဲပါ",
+      "created": "ဖန်တီးခဲ့သောနေ့:",
+      "updated": "ပြင်ဆင်ခဲ့သောနေ့:"
+    },
+    "status": {
+      "posted": "တင်ပြီး",
+      "draft": "မတင်ရသေး",
+      "toggleTooltip": "တင်ထား/မတင်ထား အခြေအနေ ပြောင်းပါ"
+    },
+    "buttons": {
+      "previous": "နောက်သို့",
+      "next": "ရှေ့သို့",
+      "view": "ကြည့်မည်",
+      "edit": "ပြင်မည်",
+      "delete": "ဖျက်မည်"
+    },
+    "toast": {
+      "success": "အောင်မြင်ပါသည်",
+      "deleteSuccess": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။",
+      "updateSuccess": "Content ကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ။",
+      "error": "အမှား"
+    },
+    "modals": {
+      "viewTitle": "အကြောင်းအရာကြည့်ရှုခြင်း",
+      "editTitle": "အကြောင်းအရာ ပြင်ဆင်ခြင်း",
+      "deleteTitle": "ဖျက်ခြင်း အတည်ပြုခြင်း",
+      "deleteDescription": "ဤအကြောင်းအရာကို ဖျက်ချင်တာ သေချာပါသလား?"
+    }
+  },
+  "editModal": {
+    "title": "Content ပြင်ဆင်ခြင်း",
+    "subtitle": "Content ၏ အသေးစိတ်များကို အောက်တွင် ပြင်ဆင်ပါ။",
+    "label_title": "ခေါင်းစဉ်",
+    "label_content": "အကြောင်းအရာ",
+    "placeholder_title": "Content ခေါင်းစဉ်ကို ထည့်ပါ...",
+    "placeholder_content": "သင့်၏ Content ကို ဤနေရာတွင် ရိုက်ထည့်ပါ...",
+    "button_cancel": "မပြင်ဆင်တော့ပါ",
+    "button_update": "ပြင်ဆင်မည်",
+    "button_updating": "ပြင်ဆင်နေပါသည်..."
+  },
+  "viewModal": {
+    "status_posted": "တင်ပြီး",
+    "status_not_posted": "မတင်ရသေး",
+    "created_at": "ဖန်တီးခဲ့သည့်နေ့",
+    "updated_at": "ပြင်ဆင်ခဲ့သည့်နေ့",
+    "button_close": "ပိတ်မည်",
+    "button_copy": "ကူးယူမည်",
+    "button_copied": "ကူးပြီးပါပြီ!",
+    "copy_success": "ကူးယူမှု အောင်မြင်ပါပြီ",
+    "copy_success_desc": "အကြောင်းအရာကို clipboard ထဲသို့ ကူးပြီးပါပြီ။",
+    "copy_error": "အကြောင်းအရာကို ကူးယူရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+  },
+  "deleteModal": {
+    "title": "Content ဖျက်ခြင်း",
+    "description": "ဤ Content ကို ဖျက်ရန် သင်အတည်ပြုပါသလား။ ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရပါ။",
+    "button_cancel": "မဖျက်တော့ပါ",
+    "button_delete": "ဖျက်မည်",
+    "button_deleting": "ဖျက်နေသည်...",
+    "success_message": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။",
+    "error_message": "Content ကို ဖျက်ရာတွင် ပြသာနာတစ်ခုဖြစ်ပါသည်။ ထပ်မံကြိုးစားပါ။"
+  }
+}

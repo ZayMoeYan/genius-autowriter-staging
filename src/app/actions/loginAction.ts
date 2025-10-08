@@ -3,7 +3,7 @@
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 
-export async function login(username: string, password: string) {
+export async function login(username: string, password: string, apikey: string) {
     try {
         const res = await fetch("https://genius-autowriter-backend.vercel.app/auth/login", {
             method: "POST",
@@ -20,13 +20,15 @@ export async function login(username: string, password: string) {
         const userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
         const name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
         const userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
+        const apikeyToken = jwt.sign(apikey, process.env.NEXT_SECRET_KEY!);
 
         if(data.access_token) {
             const cookieStore = await cookies();
-            cookieStore.set('access-token', data.access_token, { httpOnly: true});
-            cookieStore.set('role', userRole, { httpOnly: true})
-            cookieStore.set('username', name, { httpOnly: true})
-            cookieStore.set('email', userEmail, { httpOnly: true})
+            cookieStore.set('access-token', data.access_token, { httpOnly: true, secure: true});
+            cookieStore.set('apikey-token', apikeyToken, { httpOnly: true, secure: true});
+            cookieStore.set('role_token', userRole, { httpOnly: true, secure: true})
+            cookieStore.set('username_token', name, { httpOnly: true, secure: true})
+            cookieStore.set('email_token', userEmail, { httpOnly: true, secure: true})
         }
 
         return data;

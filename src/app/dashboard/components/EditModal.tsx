@@ -1,12 +1,15 @@
 "use client";
 import { useState } from "react";
+import {useTranslation} from "react-i18next";
 
 export default function EditModal({ content, onClose, onSave }: any) {
     const [title, setTitle] = useState(content.title);
     const [body, setBody] = useState(content.content);
     const [isSaving, setIsSaving] = useState(false);
+    const { t, i18n } = useTranslation();
 
     const handleSubmit = async (e: any) => {
+        console.log('submit')
         e.preventDefault();
         setIsSaving(true);
         try {
@@ -22,12 +25,11 @@ export default function EditModal({ content, onClose, onSave }: any) {
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
-                {/* Header */}
                 <div className="px-6 py-4 sm:px-8 sm:py-6 border-b border-gray-100 shrink-0">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h2 className="text-lg sm:text-2xl font-semibold text-gray-900">Edit Content</h2>
-                            <p className="text-xs sm:text-sm text-gray-500 mt-1">Update your content details below</p>
+                            <h2 className="text-lg sm:text-2xl font-semibold text-gray-900">{t("editModal.title")}</h2>
+                            <p className={`text-xs sm:text-sm text-gray-500 mt-1 ${i18n.language === "mm" && 'mt-2'} `}>{t("editModal.subtitle")}</p>
                         </div>
                         <button
                             type="button"
@@ -53,14 +55,14 @@ export default function EditModal({ content, onClose, onSave }: any) {
                     </div>
                 </div>
 
-                {/* Body */}
                 <form
                     onSubmit={handleSubmit}
+                    id={'edit-form'}
                     className="px-6 py-4 sm:px-8 sm:py-6 space-y-4 sm:space-y-6 overflow-y-auto flex-1"
                 >
                     <div className="space-y-2">
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                            Title
+                            {t("editModal.label_title")}
                         </label>
                         <input
                             id="title"
@@ -68,7 +70,7 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 bg-gray-50 hover:bg-white text-sm sm:text-base"
-                            placeholder="Enter content title..."
+                            placeholder={t("editModal.placeholder_title")}
                             required
                             disabled={isSaving}
                         />
@@ -76,7 +78,7 @@ export default function EditModal({ content, onClose, onSave }: any) {
 
                     <div className="space-y-2">
                         <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                            Content
+                            {t("editModal.label_content")}
                         </label>
                         <textarea
                             id="content"
@@ -84,14 +86,13 @@ export default function EditModal({ content, onClose, onSave }: any) {
                             onChange={(e) => setBody(e.target.value)}
                             className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-400 bg-gray-50 hover:bg-white resize-none text-sm sm:text-base"
                             rows={10}
-                            placeholder="Enter your content here..."
+                            placeholder={t("editModal.placeholder_content")}
                             required
                             disabled={isSaving}
                         />
                     </div>
                 </form>
 
-                {/* Footer */}
                 <div className="flex items-center justify-end gap-3 px-6 py-4 sm:px-8 sm:py-6 border-t border-gray-100 shrink-0">
                     <button
                         type="button"
@@ -99,7 +100,7 @@ export default function EditModal({ content, onClose, onSave }: any) {
                         className="px-4 py-2 sm:px-6 sm:py-2.5 text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                         disabled={isSaving}
                     >
-                        Cancel
+                        {t("editModal.button_cancel")}
                     </button>
                     <button
                         type="submit"
@@ -130,10 +131,10 @@ export default function EditModal({ content, onClose, onSave }: any) {
                                         3.042 1.135 5.824 3 7.938l3-2.647z"
                                     ></path>
                                 </svg>
-                                Updating...
+                                {t("editModal.button_updating")}
                             </>
                         ) : (
-                            "Update"
+                            t("editModal.button_update")
                         )}
                     </button>
                 </div>
