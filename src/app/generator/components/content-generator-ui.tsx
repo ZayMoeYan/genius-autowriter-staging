@@ -170,6 +170,7 @@ export default function ContentGeneratorUi() {
                 status: "error",
             })
         } finally {
+            setPreviewUrls([])
             setTitle("");
             setGeneratedContent("");
             setIsSaving(false);
