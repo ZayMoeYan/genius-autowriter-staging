@@ -34,6 +34,8 @@ export async function getUser(user_id: number) {
 }
 
 export async function save(newUser: any) {
+
+    console.log(newUser)
     try {
         const res = await axiosInstance.post("/auth/register", newUser);
 
