@@ -97,14 +97,14 @@ export const AdminNav = () => {
                                     <div className="flex items-center space-x-2">
                                         <span className="text-white font-medium">{currentUser?.username}</span>
                                         <Badge
-                                            variant={currentUser?.role === 'Admin' ? 'default' : 'secondary'}
+                                            variant={currentUser?.role === 'ADMIN' ? 'default' : 'secondary'}
                                             className={`text-xs ${
-                                                currentUser?.role === 'Admin'
+                                                currentUser?.role === 'ADMIN'
                                                     ? 'bg-red-600 text-white hover:bg-red-700'
                                                     : 'bg-gray-600 text-gray-200 hover:bg-gray-700'
                                             }`}
                                         >
-                                            {currentUser?.role === 'Admin' && <Shield className="h-3 w-3 mr-1" />}
+                                            {currentUser?.role === 'ADMIN' && <Shield className="h-3 w-3 mr-1" />}
                                             {currentUser?.role}
                                         </Badge>
                                     </div>
