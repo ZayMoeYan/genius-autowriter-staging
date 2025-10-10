@@ -23,6 +23,8 @@ import UserDeleteModal from "@/app/admin/dashboard/components/UserDeleteModal";
 import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
+import {useRouter} from "next/navigation";
+import {logout} from "@/app/actions/logoutAction";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -41,6 +43,8 @@ export default function AdminDashboard() {
     const [isSaving, setIsSaving] = useState(false);
     const { toast } = useToast();
     const { currentUser, setCurrentUser } = useAuth();
+    const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (!currentUser) {
@@ -119,8 +123,6 @@ export default function AdminDashboard() {
         }
         setIsDeleting(false);
         setIsUserDeleteModalOpen(false);
-
-
     };
 
 
@@ -130,7 +132,17 @@ export default function AdminDashboard() {
         try {
 
             delete(editUser.created_at);
-
+            if(editUser.password) {
+                await updateUserOrAdmin(editUser.id, editUser);
+                toast({
+                    title: "Success",
+                    description: `${editUser.role} ${editUser.username} has been updated successfully.`,
+                    status: "success",
+                })
+                await logout();
+                setCurrentUser(null);
+                router.push('/admin/login');
+            }
             const data = await updateUserOrAdmin(editUser.id, editUser);
             toast({
                 title: "Success",
@@ -492,37 +504,50 @@ export default function AdminDashboard() {
 
                             <div className="space-y-4">
                                 <div>
-                                    <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
-                                    <Input
+                                    <label className="block text-gray-700 mb-2">Username</label>
+                                    <input
                                         id="username"
                                         type="text"
                                         value={editUser.username}
                                         onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
-                                        className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                     />
                                 </div>
 
                                 <div>
-                                    <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
-                                    <Input
+                                    <label className="block text-gray-700 mb-2">Email</label>
+                                    <input
                                         id="email"
                                         type="email"
                                         value={editUser.email}
                                         onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-                                        className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                     />
                                 </div>
 
                                 <div>
-                                    <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Optional (new password)"
-                                        value={editUser.password || ""}
-                                        onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
-                                        className="border-gray-300 focus:border-red-500 focus:ring-red-500"
-                                    />
+                                    <label className="block text-gray-700 mb-2">Password</label>
+                                    <div className="relative">
+                                        <input
+                                            id="password"
+                                            placeholder="Optional (new password)"
+                                            value={editUser.password || ""}
+                                            onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
+                                            type={showPassword ? "text" : "password"}
+                                            className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-5 w-5" />
+                                            ) : (
+                                                <Eye className="h-5 w-5" />
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div>
@@ -531,7 +556,7 @@ export default function AdminDashboard() {
                                         value={editUser.role}
                                         onValueChange={(value) => setEditUser({ ...editUser, role: value })}
                                     >
-                                        <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                                        <SelectTrigger className="border border-gray-300 focus:border-none focus:border-red-500 focus:ring-red-500">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -548,7 +573,7 @@ export default function AdminDashboard() {
                                         value={editUser.status}
                                         onValueChange={(value) => setEditUser({ ...editUser, status: value })}
                                     >
-                                        <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                                        <SelectTrigger className="border border-gray-300 focus:border-none focus:border-red-500 focus:ring-red-500">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
