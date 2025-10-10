@@ -325,10 +325,10 @@ export default function AdminDashboard() {
                                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs ${
                                                         u.role === 'ADMIN'
                                                             ? 'bg-blue-100 text-blue-800'
-                                                            : 'bg-gray-100 text-gray-800'
+                                                            : 'bg-gray-100 text-gray-800 font-bold'
                                                     }`}>
                                                         {u.role === 'ADMIN' && <Shield className="h-3 w-3 mr-1" />}
-                                                        {u.role}
+                                                        {u.role === 'TRIAL' ? `${u.role} Credit - ${u.generated_count}` : u.role}
                                                     </span>
                                             </td>
                                             <td className="px-6 py-4 text-gray-900">{u.username}</td>
