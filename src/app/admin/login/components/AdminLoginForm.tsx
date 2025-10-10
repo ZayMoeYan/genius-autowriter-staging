@@ -35,7 +35,7 @@ export default function LoginPage() {
         try {
 
                 const user = await login(data.email, data.password, "");
-                user.role === "Admin" && router.push('/admin/dashboard');
+                user.role === "ADMIN" && router.push('/admin/dashboard');
 
                 toast({
                     title: t("loginSuccessTitle", {username : user?.username}),

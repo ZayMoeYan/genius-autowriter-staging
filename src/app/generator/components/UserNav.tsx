@@ -14,13 +14,7 @@ import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {useTranslation} from "react-i18next";
-
-export type CurrentUserType = {
-    username: string | undefined,
-    role: string | undefined,
-    isLoggedIn: string | undefined
-    email: string | undefined
-}
+import {getUser} from "@/app/actions/usersAction";
 
 export const UserNav = () => {
 
@@ -29,7 +23,14 @@ export const UserNav = () => {
     const { toast } = useToast();
     const { currentUser, setCurrentUser } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [generatedCount, setGeneratedCount] = useState();
     const { t } = useTranslation();
+
+    useEffect(() => {
+        if(currentUser?.id) {
+            getUser(currentUser?.id).then(user => setGeneratedCount(user.generated_count))
+        }
+    }, [currentUser, setCurrentUser]);
 
     const handleLogout = async () => {
         await logout();
@@ -114,7 +115,7 @@ export const UserNav = () => {
                                 </Link>
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="flex flex-col gap-5 md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
                         {/* User Info */}
                         <div className="flex items-center space-x-3">
                             <Avatar className="h-9 w-9 bg-gray-700 border border-gray-600">
@@ -123,20 +124,18 @@ export const UserNav = () => {
                                 </div>
                             </Avatar>
 
-                            <div className="flex flex-col">
+                            <div className="flex flex-col ">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-white font-medium">{currentUser?.username}</span>
                                     <Badge
-                                        variant={currentUser?.role === "Admin" ? "default" : "secondary"}
-                                        className={`text-xs ${
-                                            currentUser?.role === "Admin"
-                                                ? "bg-red-600 text-white hover:bg-red-700"
-                                                : "bg-gray-600 text-gray-200 hover:bg-gray-700"
-                                        }`}
+                                        variant={"secondary"}
+                                        className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
                                     >
-                                        {currentUser?.role === "Admin" && <Shield className="h-3 w-3 mr-1" />}
                                         {currentUser?.role}
                                     </Badge>
+                                    {
+                                        currentUser?.role === "TRIAL" && <span>Credit <span className={'bg-gray-700 rounded-xl px-1'} >{generatedCount}</span></span>
+                                    }
                                 </div>
                                 <span className="text-gray-400 text-xs">{currentUser?.email}</span>
                             </div>

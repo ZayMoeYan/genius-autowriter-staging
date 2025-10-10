@@ -14,7 +14,9 @@ export async function generateContentAction(prompt: string, images: any, apikey:
             throw new Error(`Failed: ${res.status}`);
         }
 
-        return await res.data;
+        const result = await res.data;
+
+        return result;
 
     } catch (err) {
         console.error("Error generating content:", err);

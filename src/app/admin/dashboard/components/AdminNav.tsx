@@ -13,13 +13,6 @@ import motLogo from '@/app/images/MOT.png';
 import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 
-export type CurrentUserType = {
-    username: string | undefined,
-    role: string | undefined,
-    isLoggedIn: string | undefined
-    email: string | undefined
-}
-
 export const AdminNav = () => {
     const router = useRouter();
     const pathname = usePathname();
@@ -82,7 +75,7 @@ export const AdminNav = () => {
                                 <Button
                                     variant="ghost"
                                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                                        isActive('/admin')
+                                        isActive('/admin/dashboard')
                                             ? 'bg-red-600 text-white hover:bg-red-700'
                                             : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                                     }`}

@@ -35,10 +35,9 @@ export default function LoginPage() {
         try {
 
             const res = await testApiKey(data.apikey);
-
             if(res) {
                 const user = await login(data.email, data.password, data.apikey);
-                user.role === "Admin"
+                user.role === "ADMIN"
                     ? router.push('/admin')
                     : router.push('/generator');
 

@@ -35,6 +35,9 @@ import {getLoginUser} from "@/app/actions/getLoginUser";
 import {CurrentUserType} from "@/components/Nav";
 import getApikey from "@/app/actions/getApikey";
 import { useTranslation } from "next-i18next";
+import {useRouter} from "next/navigation";
+import {getUser} from "@/app/actions/usersAction";
+
 
 const formSchema = z.object({
     topic: z.string().min(3, ""),
@@ -62,6 +65,7 @@ export default function ContentGeneratorUi() {
     const [title, setTitle] = useState("");
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
+    const router = useRouter();
 
     // @ts-ignore
     const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
@@ -155,14 +159,21 @@ export default function ContentGeneratorUi() {
 
             //@ts-ignore
             const result = await generateContentAction(prompt, base64Images, apikey!);
-
             setGeneratedContent(result.content);
+            currentUser?.id && getUser(currentUser?.id).then(user => setCurrentUser(user))
             toast({
               title: t("success"),
               description: t("successGenerated"),
               status: "success",
             });
-        } finally {
+
+        } catch {
+            toast({
+                title: t("error"),
+                description: t("errorGenerated"),
+                status: "error",
+            });
+        } finally{
             setIsGenerating(false);
         }
     };

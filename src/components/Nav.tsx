@@ -15,6 +15,7 @@ import { useAuth} from "@/app/context/AuthProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export type CurrentUserType = {
+    id: number | undefined
     username: string | undefined,
     role: string | undefined,
     isLoggedIn: string | undefined

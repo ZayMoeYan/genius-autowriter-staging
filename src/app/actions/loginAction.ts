@@ -30,6 +30,7 @@ export async function login(username: string, password: string, apikey: string) 
             cookieStore.set('role_token', userRole, { httpOnly: true, secure: true})
             cookieStore.set('username_token', name, { httpOnly: true, secure: true})
             cookieStore.set('email_token', userEmail, { httpOnly: true, secure: true})
+            cookieStore.set('id', data.id, { httpOnly: true, secure: true})
         }
 
         return data;

@@ -9,10 +9,11 @@ export async function getValueFromCookies(key: string) {
 }
 
 export async function getLoginUser() {
+    const cookieStore = await cookies();
 
-    const roleFromCookie = await getValueFromCookies('role_token');
-    const usernameFromCookie = await getValueFromCookies('username_token');
-    const emailFromCookie = await getValueFromCookies('email_token');
+    const roleFromCookie = cookieStore.get('role_token')?.value!;
+    const usernameFromCookie = cookieStore.get('role_token')?.value!;
+    const emailFromCookie = cookieStore.get('role_token')?.value!;
 
     const role =  jwt.verify(roleFromCookie, process.env.NEXT_SECRET_KEY!)
     const username = jwt.verify(usernameFromCookie, process.env.NEXT_SECRET_KEY!)
@@ -22,7 +23,8 @@ export async function getLoginUser() {
         "username": username,
         "role": role,
         "email": email,
-        "isLoggedIn": getValueFromCookies('access_token')
+        "isLoggedIn": cookieStore.get('access_token')?.value,
+        "id": cookieStore.get('id')?.value
     }
     return currentUser;
 }

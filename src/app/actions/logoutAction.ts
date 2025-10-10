@@ -9,5 +9,6 @@ export async function logout() {
     cookieStore.delete('apikey-token');
     cookieStore.delete('role_token');
     cookieStore.delete('username_token');
-    cookieStore.delete('email_tokenx');
+    cookieStore.delete('email_token');
+    cookieStore.delete('id')
 }

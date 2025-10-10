@@ -12,7 +12,7 @@ import {
     Plus,
     X,
     ChevronLeft,
-    ChevronRight,
+    ChevronRight, EyeOff, Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -323,11 +323,11 @@ export default function AdminDashboard() {
                                         <tr key={u.id} className="hover:bg-gray-50 transition-colors">
                                             <td className="px-6 py-4">
                                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs ${
-                                                        u.role === 'Admin'
+                                                        u.role === 'ADMIN'
                                                             ? 'bg-blue-100 text-blue-800'
                                                             : 'bg-gray-100 text-gray-800'
                                                     }`}>
-                                                        {u.role === 'Admin' && <Shield className="h-3 w-3 mr-1" />}
+                                                        {u.role === 'ADMIN' && <Shield className="h-3 w-3 mr-1" />}
                                                         {u.role}
                                                     </span>
                                             </td>
@@ -535,8 +535,9 @@ export default function AdminDashboard() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="User">User</SelectItem>
-                                            <SelectItem value="Admin">Admin</SelectItem>
+                                            <SelectItem value="USER">User</SelectItem>
+                                            <SelectItem value="ADMIN">Admin</SelectItem>
+                                            <SelectItem value="TRIAL">TRIAL</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -612,7 +613,8 @@ function UserForm({
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("User");
+    const [role, setRole] = useState("USER");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -620,7 +622,7 @@ function UserForm({
         setUsername("");
         setEmail("");
         setPassword("");
-        setRole("User");
+        setRole("USER");
         onSuccess();
     };
 
@@ -628,10 +630,10 @@ function UserForm({
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
                 <label className="block text-gray-700 mb-2">Username</label>
-                <Input
+                <input
                     type="text"
                     placeholder="Enter username"
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -640,10 +642,10 @@ function UserForm({
 
             <div>
                 <label className="block text-gray-700 mb-2">Email</label>
-                <Input
+                <input
                     type="email"
                     placeholder="Enter email"
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -652,25 +654,38 @@ function UserForm({
 
             <div>
                 <label className="block text-gray-700 mb-2">Password</label>
-                <Input
-                    type="password"
-                    placeholder="Enter password"
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                        placeholder={"Enter Password"}
+                    />
+                    <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                        ) : (
+                            <Eye className="h-5 w-5" />
+                        )}
+                    </button>
+                </div>
             </div>
 
             <div>
                 <label className="block text-gray-700 mb-2">Role</label>
                 <Select value={role} onValueChange={setRole}>
-                    <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                    <SelectTrigger className="border border-gray-300 focus:border-none focus:border-red-500 focus:ring-red-500">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="User">User</SelectItem>
-                        <SelectItem value="Admin">Admin</SelectItem>
+                        <SelectItem value="USER">USER</SelectItem>
+                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                        <SelectItem value="TRIAL">TRIAL</SelectItem>
                     </SelectContent>
                 </Select>
             </div>

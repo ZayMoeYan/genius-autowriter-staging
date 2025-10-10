@@ -9,6 +9,7 @@ export async function testApiKey(apiKey: string) {
         });
 
         const data = await res.json();
+
         return !!data.valid;
     } catch (err) {
         throw err;
