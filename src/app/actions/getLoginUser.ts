@@ -12,8 +12,8 @@ export async function getLoginUser() {
     const cookieStore = await cookies();
 
     const roleFromCookie = cookieStore.get('role_token')?.value!;
-    const usernameFromCookie = cookieStore.get('role_token')?.value!;
-    const emailFromCookie = cookieStore.get('role_token')?.value!;
+    const usernameFromCookie = cookieStore.get('username_token')?.value!;
+    const emailFromCookie = cookieStore.get('email_token')?.value!;
 
     const role =  jwt.verify(roleFromCookie, process.env.NEXT_SECRET_KEY!)
     const username = jwt.verify(usernameFromCookie, process.env.NEXT_SECRET_KEY!)
