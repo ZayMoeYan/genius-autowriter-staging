@@ -45,7 +45,7 @@
   "enterReferenceLink": "Enter Reference Link",
   "hashtags": "Hashtags",
   "hashtagsPlaceholder": "e.g. #DigitalMarketing #OnlineBusiness",
-  "hashtagsDescription": "You can add the hashtags they want to include.",
+  "hashtagsDescription": "You can add the hashtags.",
   "negativeConstraints": "Negative Constraints",
   "negativeConstraintsPlaceholder": "e.g. Do not mention price, avoid offensive words",
   "negativeConstraintsDescription": "Things that content should not include.",
