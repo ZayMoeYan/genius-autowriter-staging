@@ -255,7 +255,7 @@ export default function ContentGeneratorUi() {
                                     </div>
 
 
-                                    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
+                                    <div className="flex flex-col md:flex-row gap-8 md:gap-6 sm:flex">
                                         <div className={'relative flex-1'} >
                                             <FormField
                                                 control={form.control}
@@ -301,7 +301,7 @@ export default function ContentGeneratorUi() {
 
                                     </div>
 
-                                    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
+                                    <div className="flex flex-col md:flex-row gap-8 md:gap-6">
                                         <div className={'relative flex-1'} >
                                             <FormField
                                                 control={form.control}

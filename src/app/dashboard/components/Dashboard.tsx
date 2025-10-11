@@ -243,9 +243,9 @@ export default function Dashboard() {
                 </div>
 
                 {/* Search and Filter Section */}
-                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800 border-[0.5px] p-6 mb-8">
+                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800  border-[0.5px] p-6 mb-8">
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                        <div className="flex flex-col sm:flex-row gap-4 flex-1">
+                        <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">
                             <div className="relative flex-1 max-w-md">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                                 <Input
