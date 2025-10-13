@@ -30,7 +30,7 @@ export function Dropzone({ onFilesAccepted }: DropzoneProps) {
     return (
         <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition ${
+            className={`border-2 border-dashed rounded-xl p-20 text-center cursor-pointer transition ${
                 isDragActive ? "border-accent bg-accent/10" : "border-border/80"
             }`}
         >

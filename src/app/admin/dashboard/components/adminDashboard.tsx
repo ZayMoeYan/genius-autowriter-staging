@@ -132,7 +132,7 @@ export default function AdminDashboard() {
         try {
 
             delete(editUser.created_at);
-            if(editUser.password) {
+            if(editUser.role === "Admin" && editUser.password) {
                 await updateUserOrAdmin(editUser.id, editUser);
                 toast({
                     title: "Success",

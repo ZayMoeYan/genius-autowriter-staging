@@ -1,6 +1,6 @@
 "use client";
 
-import {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -495,8 +495,8 @@ export default function ContentGeneratorUi() {
                                         control={form.control}
                                         name="emoji"
                                         render={({ field }) => (
-                                            <FormItem className="flex items-center justify-between p-3 border-[0.2px] border-red-600 rounded-xl">
-                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">
+                                            <FormItem className="flex items-center justify-between pb-4 px-5 pt-2  border-[0.3px] border-red-600 rounded-xl">
+                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem] mt-1">
                                                     {t("includeEmojis")}
                                                 </FormLabel>
                                                 <FormControl>
@@ -505,7 +505,7 @@ export default function ContentGeneratorUi() {
                                                             type="checkbox"
                                                             checked={field.value}
                                                             onChange={(e) => field.onChange(e.target.checked)}
-                                                            className="sr-only peer"
+                                                            className="sr-only peer "
                                                         />
                                                         <div
                                                             className={`w-11 h-6 rounded-full transition-colors duration-300 

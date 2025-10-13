@@ -182,5 +182,10 @@
     "button_deleting": "Deleting...",
     "success_message": "Content deleted successfully.",
     "error_message": "Failed to delete content. Please try again."
+  },
+  "voiceRecord": {
+    "navTitle": "Generator With Voice",
+    "record": "Record the main topic of content as audio.",
+    "description": "Press the button to start or stop recording"
   }
 }

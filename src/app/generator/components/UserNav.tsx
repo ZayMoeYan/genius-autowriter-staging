@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useRef, useState} from "react";
-import { Users, Wand2, BarChart3, LogOut, User, Shield, Menu, X } from "lucide-react";
+import {Users, Wand2, BarChart3, LogOut, User, Shield, Menu, X, Mic} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -85,7 +85,7 @@ export const UserNav = () => {
                         ${menuOpen ? "flex" : "hidden"}`}
                     >
 
-                    <div className="flex flex-row md:flex-row md:space-x-2 gap-2">
+                    <div className="flex flex-row md:flex-row md:space-x-2 ">
                                 <Link href="/generator">
                                     <Button
                                         variant="ghost"
@@ -97,6 +97,20 @@ export const UserNav = () => {
                                     >
                                         <Wand2 className="h-4 w-4" />
                                         <span>{t("generator")}</span>
+                                    </Button>
+                                </Link>
+
+                                <Link href="/generator/voice">
+                                    <Button
+                                        variant="ghost"
+                                        className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                                            isActive('/generator/voice')
+                                                ? 'bg-red-600 text-white hover:bg-red-700'
+                                                : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                        }`}
+                                    >
+                                        <Mic className="h-4 w-4" />
+                                        <span>{t("voiceRecord.navTitle")}</span>
                                     </Button>
                                 </Link>
 
@@ -113,9 +127,11 @@ export const UserNav = () => {
                                         <span>{t("dashboard")}</span>
                                     </Button>
                                 </Link>
+
+
                     </div>
 
-                    <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
                         {/* User Info */}
                         <div className="flex items-center space-x-3">
                             <Avatar className="h-9 w-9 bg-gray-700 border border-gray-600">

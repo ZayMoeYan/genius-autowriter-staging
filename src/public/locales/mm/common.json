@@ -179,5 +179,10 @@
     "button_deleting": "ဖျက်နေသည်...",
     "success_message": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။",
     "error_message": "Content ကို ဖျက်ရာတွင် ပြသာနာတစ်ခုဖြစ်ပါသည်။ ထပ်မံကြိုးစားပါ။"
+  },
+  "voiceRecord": {
+    "navTitle": "အသံနှင့် content ဖန်တီးခြင်း",
+    "record": "Content ၏ အဓိကအကြောင်းအရာကို အသံသွင်းပါ",
+    "description": "အသံသွင်းရန် သို့မဟုတ် ရပ်တန့်ရန် button ကိုနှိပ်ပါ။"
   }
 }

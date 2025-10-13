@@ -65,6 +65,22 @@ export async function updateUserOrAdmin(id: number, data: any) {
     }
 }
 
+export async function updateTrialGeneratedCount(id: number) {
+    try {
+        const res = await axiosInstance.put(`/users/generatedCount/${id}`);
+
+        if (!res.data) {
+            throw new Error(`Failed: ${res.status}`);
+        }
+
+        return res.data;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 export async function deleteUserOrAdmin(id: number) {
     try {
         const res = await axiosInstance.delete(`/users/${id}`);
