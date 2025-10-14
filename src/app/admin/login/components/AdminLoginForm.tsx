@@ -34,23 +34,52 @@ export default function LoginPage() {
     const handleLogin = async (data: LoginSchema) => {
         try {
 
-                const user = await login(data.email, data.password, "");
-                user.role === "ADMIN" && router.push('/admin/dashboard');
+            const res = await login(data.email, data.password, "");
 
-                toast({
-                    title: t("loginSuccessTitle", {username : user?.username}),
-                    description: t("loginSuccessDescription", {
-                        role: user?.role,
-                        username: user?.username
-                    }),
-                    status: "success",
-                });
+            if (!res.ok && res.ok !== undefined) {
+                if (res.status === 403) {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.deactivate"),
+                        status: "error",
+                    });
+                } else if (res.status === 402) {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.expired"),
+                        status: "error",
+                    });
+                } else {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.incorrect"),
+                        status: "error",
+                    });
+                }
+                return;
+            }
 
-                reset();
-        } catch (error: any) {
+            const user = res;
+
+            if (user.role === "ADMIN") {
+                router.push("/admin/dashboard");
+            }
+
             toast({
-                title: `${t("loginFailedTitle")}`,
-                description: `${t("loginFailedDescription")}`,
+                title: t("loginSuccessTitle", { username: user.username }),
+                description: t("loginSuccessDescription", {
+                    role: user.role,
+                    username: user.username,
+                }),
+                status: "success",
+            });
+
+            reset();
+
+        } catch (err: any) {
+            toast({
+                title: t("loginFailedTitle"),
+                description: t("loginFailedDescription.incorrect"),
                 status: "error",
             });
         }

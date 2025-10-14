@@ -32,60 +32,74 @@ export default function LoginPage() {
     });
 
     const handleLogin = async (data: LoginSchema) => {
+        try {
 
-            const result = await testApiKey(data.apikey);
+            const keyValid = await testApiKey(data.apikey);
 
-            if(result) {
-                const res = await login(data.email, data.password, data.apikey);
-
-                if(res.ok && !res.ok) {
-                    if(res.status === 403) {
-                        toast({
-                            title: `${t("loginFailedTitle")}`,
-                            description: `${t("loginFailedDescription.deactivate")}`,
-                            status: "error",
-                        });
-                        return
-                    }else if(res.status === 402) {
-                        toast({
-                            title: `${t("loginFailedTitle")}`,
-                            description: `${t("loginFailedDescription.expired")}`,
-                            status: "error",
-                        });
-                        return
-                    }else {
-                        toast({
-                            title: `${t("loginFailedTitle")}`,
-                            description: `${t("loginFailedDescription.incorrect")}`,
-                            status: "error",
-                        });
-                        return
-                    }
-                }
-
-                const user = res;
-                user.role === "ADMIN"
-                    ? router.push('/admin')
-                    : router.push('/generator');
-
+            if (!keyValid) {
                 toast({
-                    title: t("loginSuccessTitle", {username : user?.username}),
-                    description: t("loginSuccessDescription", {
-                        role: user?.role,
-                        username: user?.username
-                    }),
-                    status: "success",
-                });
-
-                reset();
-            }else {
-                toast({
-                    title: `${t("loginFailedTitle")}`,
-                    description: `${t("loginFailedDescription.invalidKey")}`,
+                    title: t("loginFailedTitle"),
+                    description: t("loginFailedDescription.invalidKey"),
                     status: "error",
                 });
+                return;
             }
+
+            const res = await login(data.email, data.password, data.apikey);
+            console.log(res)
+
+            if (!res.ok && res.ok !== undefined) {
+                if (res.status === 403) {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.deactivate"),
+                        status: "error",
+                    });
+                } else if (res.status === 402) {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.expired"),
+                        status: "error",
+                    });
+                } else {
+                    toast({
+                        title: t("loginFailedTitle"),
+                        description: t("loginFailedDescription.incorrect"),
+                        status: "error",
+                    });
+                }
+                return;
+            }
+
+            const user = res;
+
+            if (user.role === "ADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/generator");
+            }
+
+            toast({
+                title: t("loginSuccessTitle", { username: user.username }),
+                description: t("loginSuccessDescription", {
+                    role: user.role,
+                    username: user.username,
+                }),
+                status: "success",
+            });
+
+            reset();
+
+        } catch (err: any) {
+            toast({
+                title: t("loginFailedTitle"),
+                description: t("loginFailedDescription.incorrect"),
+                status: "error",
+            });
+        }
     };
+
+
 
     return (
         <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center h-[120vh] z-0 p-4">
