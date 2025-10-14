@@ -96,7 +96,18 @@ export default function VoiceChatDemo() {
 
     const stopRecording = () => {
         // @ts-ignore
-        mediaRecorderRef.current?.stop();
+        const mediaRecorder = mediaRecorderRef.current;
+        if (mediaRecorder) {
+            // @ts-ignore
+            mediaRecorder.stop();
+        }
+
+        // @ts-ignore
+        if (mediaRecorder?.stream) {
+            // @ts-ignore
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+
         toast({
             title: t("voiceRecord.recordSuccessTitle"),
             description: t("voiceRecord.recordSuccessDesc"),
