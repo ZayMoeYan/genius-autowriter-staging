@@ -195,7 +195,9 @@
   "voiceRecord": {
     "navTitle": "အသံနှင့် content ဖန်တီးခြင်း",
     "record": "Content ၏ အဓိကအကြောင်းအရာကို အသံသွင်းပါ",
-    "description": "အသံသွင်းရန် သို့မဟုတ် ရပ်တန့်ရန် button ကိုနှိပ်ပါ။"
+    "description": "အသံသွင်းရန် သို့မဟုတ် ရပ်တန့်ရန် button ကိုနှိပ်ပါ။",
+    "recordSuccessTitle": "အောင်မြင်ပါပြီ။",
+    "recordSuccessDesc": "အသံသွင်းယူမှု အောင်မြင်စွာပြီးဆုံပါပြီ။"
   },
   "trialExpired": {
     "title": "အစမ်းသုံကာလ ကုန်ဆုံခြင်း",

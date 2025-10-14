@@ -198,7 +198,9 @@
   "voiceRecord": {
     "navTitle": "Generator With Voice",
     "record": "Record the main topic of content as audio.",
-    "description": "Press the button to start or stop recording"
+    "description": "Press the button to start or stop recording",
+    "recordSuccessTitle": "Success",
+    "recordSuccessDesc": "Recording successfully complete."
   },
   "trialExpired": {
     "title": "Trial expired",
