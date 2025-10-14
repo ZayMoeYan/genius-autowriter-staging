@@ -10,7 +10,12 @@
   "loginSuccessTitle": "လော့ဂ်အင်ဝင်ပြီးပါပြီ! ပြန်လည်ကြိုဆိုပါသည်၊ {{username}}",
   "loginSuccessDescription": "{{role}} {{username}}၊ သင့်အကောင့်ထဲသို့ဝင်ရောက််ပြီးပါပြီ။",
   "loginFailedTitle": "ဝင်ရောက်မှုမအောင်မြင်ပါ",
-  "loginFailedDescription": "ကျေးဇူးပြု၍ သင်ထည့်သွင်းသော အီးမေးလ်၊ စကားဝှက် သို့မဟုတ် API Key ကို ပြန်လည်စစ်ဆေးပါ။",
+  "loginFailedDescription": {
+    "incorrect": "ကျေးဇူးပြု၍ သင်ထည့်သွင်းသော အီးမေးလ် သို့မဟုတ် စကားဝှက် ကို ပြန်လည်စစ်ဆေးပါ။",
+    "deactivate": "သင်၏ အကောင့်ကို ယာယီ ပိတ်ထားပါသည်။",
+    "expired": "သင်၏ အစမ်းသုံးကာလ ကုန်ဆုံသွားပါပြီ။",
+    "invalidKey": "သင်၏ Gemini API key သည်မှားရွင်းနေပါသည်"
+  },
   "poweredBy": "Myanmar Online Technology မှ ထောက်ပံ့ထားပါသည်",
   "loggingIn": "လော့ဂ်အင်ဝင်နေသည်...",
   "emailRequired": "အီးမေးလ်လိုအပ်ပါသည်",
@@ -30,7 +35,14 @@
   "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ။",
   "topic": "Content ၏ အဓိကအကြောင်းအရာ",
   "topicPlaceholder": "ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာ သို့မဟုတ် Idea အကြမ်းကို ရေးပါ",
-  "purpose": "ရည်ရွယ်ချက်",
+  "purpose": {
+    "title": "ရည်ရွယ်ချက်",
+    "option-1": "အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း",
+    "option-2": "Audience တုံ့ပြန်မှုဖော်ခြင်း",
+    "option-3": "Product/Service ရောင်းချခြင်း",
+    "option-4": "ခံစားမှုဖန်တီးခြင်း",
+    "option-5": "Event/Update ကြေညာခြင်း "
+  },
   "purposePlaceholder": "ဥပမာ - ပညာပေးရန်၊ Engagement ရရှိရန်၊ ရောင်းအားမြှင့်ရန်",
   "audience": "ပစ်မှတ်ထားသော သုံးစွဲသူအုပ်စု",
   "audiencePlaceholder": "ဥပမာ - အသက် ၂၀ မှ ၃၀ ကြား လူငယ်များ",
@@ -68,7 +80,7 @@
   "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်။",
   "formErrors": {
     "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ။",
-    "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရေးပေးပါ။",
+    "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရွေးပေးပါ။",
     "audience": "Target Audience ကို ရေးပေးပါ။",
     "writingStyle": "စာပုံစံ (သို့) အသံသွင်းသံ တစ်ခုခန့် ရွေးပေးပါ။",
     "outputLanguage": "Output Language ကို ရွေးပေးပါ။",
@@ -184,5 +196,9 @@
     "navTitle": "အသံနှင့် content ဖန်တီးခြင်း",
     "record": "Content ၏ အဓိကအကြောင်းအရာကို အသံသွင်းပါ",
     "description": "အသံသွင်းရန် သို့မဟုတ် ရပ်တန့်ရန် button ကိုနှိပ်ပါ။"
+  },
+  "trialExpired": {
+    "title": "အစမ်းသုံကာလ ကုန်ဆုံခြင်း",
+    "description": "သင်၏ အစမ်းသုံးကာလ ကုန်ဆုံသွားပါပြီ။"
   }
 }

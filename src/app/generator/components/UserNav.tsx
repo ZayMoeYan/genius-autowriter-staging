@@ -1,7 +1,7 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
-import {Users, Wand2, BarChart3, LogOut, User, Shield, Menu, X, Mic} from "lucide-react";
+import {useEffect, useState} from "react";
+import {Wand2, BarChart3, LogOut, User, Menu, X, Mic} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,9 @@ import {useToast} from "@/hooks/use-toast";
 import { useAuth} from "@/app/context/AuthProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {useTranslation} from "react-i18next";
-import {getUser} from "@/app/actions/usersAction";
+//@ts-ignore
+import { DateTime } from "luxon";
+
 
 export const UserNav = () => {
 
@@ -24,13 +26,44 @@ export const UserNav = () => {
     const { currentUser, setCurrentUser } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [generatedCount, setGeneratedCount] = useState();
+    const [timeLeft, setTimeLeft] = useState<string | null>(null);
     const { t } = useTranslation();
 
     useEffect(() => {
-        if(currentUser?.id) {
-            getUser(currentUser?.id).then(user => setGeneratedCount(user.generated_count))
-        }
-    }, [currentUser, setCurrentUser]);
+        // @ts-ignore
+        setGeneratedCount(currentUser?.generatedCount!)
+        if (!currentUser?.expiredAt) return;
+
+        const interval = setInterval(() => {
+            const now = DateTime.now().setZone("Asia/Yangon");
+            const expiry = DateTime.fromISO(currentUser.expiredAt, { zone: "Asia/Yangon" });
+
+            const diff = expiry.diff(now, ["hours", "minutes", "seconds"]);
+
+            if (diff.valueOf() <= 0) {
+                clearInterval(interval);
+                handleLogout().then(r => {
+                    toast({
+                            title: t("trialExpired.title"),
+                            description: t("trialExpired.description"),
+                            status: "error"
+                        }
+                    );
+                    return;
+                });
+            }
+
+            const formatted = [
+                String(Math.floor(diff.hours)).padStart(2, "0"),
+                String(Math.floor(diff.minutes)).padStart(2, "0"),
+                String(Math.floor(diff.seconds)).padStart(2, "0"),
+            ].join(":");
+
+            setTimeLeft(formatted);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [currentUser]);
 
     const handleLogout = async () => {
         await logout();
@@ -51,7 +84,7 @@ export const UserNav = () => {
     };
 
     return (
-        <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]">
+        <nav className="shadow-lg w-full  bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]">
 
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600"></div>
 
@@ -178,6 +211,12 @@ export const UserNav = () => {
                                     }
                                 </div>
                                 <span className="text-gray-400 text-xs">{currentUser?.email}</span>
+                                {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
+                                    <span className="text-red-400 text-xs">
+                                        Expires in: {timeLeft ?? "Loading..."}
+                                      </span>
+                                )}
+
                             </div>
                         </div>
 

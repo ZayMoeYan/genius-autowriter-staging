@@ -16,10 +16,12 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export type CurrentUserType = {
     id: number | undefined
-    username: string | undefined,
-    role: string | undefined,
+    username: string | undefined
+    role: string | undefined
     isLoggedIn: string | undefined
     email: string | undefined
+    expiredAt: string | undefined
+    generatedCount: number
 }
 
 export const Nav = () => {

@@ -32,11 +32,38 @@ export default function LoginPage() {
     });
 
     const handleLogin = async (data: LoginSchema) => {
-        try {
 
-            const res = await testApiKey(data.apikey);
-            if(res) {
-                const user = await login(data.email, data.password, data.apikey);
+            const result = await testApiKey(data.apikey);
+
+            if(result) {
+                const res = await login(data.email, data.password, data.apikey);
+
+                if(res.ok && !res.ok) {
+                    if(res.status === 403) {
+                        toast({
+                            title: `${t("loginFailedTitle")}`,
+                            description: `${t("loginFailedDescription.deactivate")}`,
+                            status: "error",
+                        });
+                        return
+                    }else if(res.status === 402) {
+                        toast({
+                            title: `${t("loginFailedTitle")}`,
+                            description: `${t("loginFailedDescription.expired")}`,
+                            status: "error",
+                        });
+                        return
+                    }else {
+                        toast({
+                            title: `${t("loginFailedTitle")}`,
+                            description: `${t("loginFailedDescription.incorrect")}`,
+                            status: "error",
+                        });
+                        return
+                    }
+                }
+
+                const user = res;
                 user.role === "ADMIN"
                     ? router.push('/admin')
                     : router.push('/generator');
@@ -54,20 +81,12 @@ export default function LoginPage() {
             }else {
                 toast({
                     title: `${t("loginFailedTitle")}`,
-                    description: `${t("loginFailedDescription")}`,
+                    description: `${t("loginFailedDescription.invalidKey")}`,
                     status: "error",
                 });
             }
-        } catch (error: any) {
-            toast({
-                title: `${t("loginFailedTitle")}`,
-                description: `${t("loginFailedDescription")}`,
-                status: "error",
-            });
-        }
     };
 
-    // @ts-ignore
     return (
         <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center h-[120vh] z-0 p-4">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>

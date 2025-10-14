@@ -261,17 +261,30 @@ export default function ContentGeneratorUi() {
                                                 control={form.control}
                                                 name="purpose"
                                                 render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose')} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                placeholder={t("purposePlaceholder")}
-                                                                {...field}
-                                                                className="border-none"
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="purpose"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
+                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
+                                                                            <SelectValue placeholder={t("purposePlaceholder")} />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        <SelectItem value={t("purpose.option-1")}>{t("purpose.option-1")}</SelectItem>
+                                                                        <SelectItem value={t("purpose.option-2")}>{t("purpose.option-2")}</SelectItem>
+                                                                        <SelectItem value={t("purpose.option-3")}>{t("purpose.option-3")}</SelectItem>
+                                                                        <SelectItem value={t("purpose.option-4")}>{t("purpose.option-4")}</SelectItem>
+                                                                        <SelectItem value={t("purpose.option-5")}>{t("purpose.option-5")}</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
                                                 )}
                                             />
                                             {form.formState.errors.purpose && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.purpose")}</p> }

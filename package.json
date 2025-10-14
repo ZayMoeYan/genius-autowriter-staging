@@ -50,6 +50,7 @@
     "i18next": "^25.5.3",
     "i18next-http-backend": "^3.0.2",
     "lucide-react": "^0.475.0",
+    "luxon": "^3.7.2",
     "next": "15.3.3",
     "next-i18next": "^15.4.2",
     "next-intl": "^4.3.9",

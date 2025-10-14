@@ -7,8 +7,10 @@ export async function logout() {
     const cookieStore = await cookies();
     cookieStore.delete('access-token');
     cookieStore.delete('apikey-token');
-    cookieStore.delete('role_token');
-    cookieStore.delete('username_token');
-    cookieStore.delete('email_token');
-    cookieStore.delete('id')
+    cookieStore.delete('role-token');
+    cookieStore.delete('username-token');
+    cookieStore.delete('email-token');
+    cookieStore.delete('createdAt-token');
+    cookieStore.delete('expiredAt-token');
+    cookieStore.delete('count-token');
 }

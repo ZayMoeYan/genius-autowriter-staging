@@ -16,21 +16,51 @@ export async function login(username: string, password: string, apikey: string) 
             }),
         });
 
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            return {
+                ok: false,
+                status: res.status,
+                message: errorData.detail || "Unknown error",
+            };
+        }
+
         const data = await res.json();
 
-        const userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
-        const name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
-        const userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
-        const apikeyToken = jwt.sign(apikey, process.env.NEXT_SECRET_KEY!);
+        let userRole = "";
+        let name = "";
+        let userEmail = "";
+        let userCreatedAt = "";
+        let userExpiredAt = "";
+        let userGeneratedCount = "";
+        let apikeyToken = "";
+
+        if(data.role === "ADMIN") {
+            userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
+            name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
+            userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
+        }else {
+            userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
+            name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
+            userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
+             userCreatedAt = jwt.sign(data.created_at, process.env.NEXT_SECRET_KEY!);
+             userExpiredAt = jwt.sign(data.trial_expires_at, process.env.NEXT_SECRET_KEY!);
+             userGeneratedCount = jwt.sign(data.generated_count, process.env.NEXT_SECRET_KEY!);
+             apikeyToken = jwt.sign(apikey, process.env.NEXT_SECRET_KEY!);
+        }
+
+
 
         if(data.access_token) {
             const cookieStore = await cookies();
             cookieStore.set('access-token', data.access_token, { httpOnly: true, secure: true});
             cookieStore.set('apikey-token', apikeyToken, { httpOnly: true, secure: true});
-            cookieStore.set('role_token', userRole, { httpOnly: true, secure: true})
-            cookieStore.set('username_token', name, { httpOnly: true, secure: true})
-            cookieStore.set('email_token', userEmail, { httpOnly: true, secure: true})
-            cookieStore.set('id', data.id, { httpOnly: true, secure: true})
+            cookieStore.set('role-token', userRole, { httpOnly: true, secure: true})
+            cookieStore.set('username-token', name, { httpOnly: true, secure: true})
+            cookieStore.set('email-token', userEmail, { httpOnly: true, secure: true})
+            cookieStore.set('createdAt-token', userCreatedAt, { httpOnly: true, secure: true})
+            cookieStore.set('expiredAt-token', userExpiredAt, { httpOnly: true, secure: true})
+            cookieStore.set('count-token', userGeneratedCount, { httpOnly: true, secure: true})
         }
 
         return data;

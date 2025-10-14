@@ -12,7 +12,7 @@ import {
     Plus,
     X,
     ChevronLeft,
-    ChevronRight, EyeOff, Eye,
+    ChevronRight, EyeOff, Eye, Minus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,14 @@ import { useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
 import {useRouter} from "next/navigation";
 import {logout} from "@/app/actions/logoutAction";
+import UserForm from "@/app/admin/dashboard/components/UserForm";
+// @ts-ignore
+import { DateTime } from 'luxon';
+
+function formatDateTime(dateTime: any) {
+    return DateTime.fromISO(dateTime, { zone: "Asia/Yangon" })
+        .toFormat("yyyy-MM-dd HH:mm:ss");
+}
 
 const ITEMS_PER_PAGE = 10;
 
@@ -73,10 +81,10 @@ export default function AdminDashboard() {
     }, []);
 
 
-    const createUser = async (username: string, email: string, password: string, role: string) => {
+    const createUser = async (username: string, email: string, password: string, role: string, trial_expires_at: any) => {
         setIsSaving(true);
         try {
-            const newUser = { username, email, password, role };
+            const newUser = { username, email, password, role, trial_expires_at };
             const data = await save(newUser);
             toast({
                 title: "Success",
@@ -327,6 +335,8 @@ export default function AdminDashboard() {
                                         <th className="px-6 py-4 text-left text-gray-700">Username</th>
                                         <th className="px-6 py-4 text-left text-gray-700">Email</th>
                                         <th className="px-6 py-4 text-left text-gray-700">Status</th>
+                                        <th className="px-6 py-4 text-left text-gray-700">Created At</th>
+                                        <th className="px-6 py-4 text-left text-gray-700">Expired At</th>
                                         <th className="px-6 py-4 text-left text-gray-700">Actions</th>
                                     </tr>
                                     </thead>
@@ -359,6 +369,8 @@ export default function AdminDashboard() {
                                                         {u.status}
                                                     </span>
                                             </td>
+                                            <td className="px-6 py-4 text-gray-600">{u.created_at ? formatDateTime(u.created_at) : <Minus/> }</td>
+                                            <td className="px-6 py-4 text-gray-600">{u.trial_expires_at ? formatDateTime(u.trial_expires_at) : <Minus/> }</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex space-x-2">
                                                     <Button
@@ -582,6 +594,40 @@ export default function AdminDashboard() {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                                {
+                                    editUser.generated_count ? <div>
+                                        <label className="block text-gray-700 mb-2">Credit</label>
+                                        <input
+                                            id="credit"
+                                            type="number"
+                                            value={editUser.generated_count}
+                                            onChange={(e) => setEditUser({ ...editUser, generated_count: e.target.value })}
+                                            className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                        />
+                                    </div> : ''
+                                }
+
+                                {
+                                    editUser.trial_expires_at && <div>
+                                        <label className="block text-gray-700 mb-2">
+                                            Trial Expiration
+                                        </label>
+                                        <input
+                                            type="datetime-local"
+                                            className="w-full px-4 py-3 outline-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                                            value={formatDateTime(editUser.trial_expires_at)}
+                                            onChange={(e) =>
+                                                setEditUser({
+                                                    ...editUser,
+                                                    trial_expires_at: e.target.value,
+                                                })
+                                            }
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Time is interpreted as Asia/Yangon (UTC+6:30)
+                                        </p>
+                                    </div>
+                                }
 
                                 <div className="flex justify-end gap-3 pt-4">
                                     <Button
@@ -624,130 +670,5 @@ export default function AdminDashboard() {
     );
 }
 
-function UserForm({
-                      onSubmit,
-                      onCancel,
-                      isSaving,
-                      onSuccess,
-                  }: {
-    onSubmit: (username: string, email: string, password: string, role: string) => Promise<void>;
-    onCancel: () => void;
-    isSaving: boolean;
-    onSuccess: () => void;
-}) {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("USER");
-    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await onSubmit(username, email, password, role);
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        setRole("USER");
-        onSuccess();
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-gray-700 mb-2">Username</label>
-                <input
-                    type="text"
-                    placeholder="Enter username"
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label className="block text-gray-700 mb-2">Email</label>
-                <input
-                    type="email"
-                    placeholder="Enter email"
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label className="block text-gray-700 mb-2">Password</label>
-                <div className="relative">
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
-                        placeholder={"Enter Password"}
-                    />
-                    <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? (
-                            <EyeOff className="h-5 w-5" />
-                        ) : (
-                            <Eye className="h-5 w-5" />
-                        )}
-                    </button>
-                </div>
-            </div>
-
-            <div>
-                <label className="block text-gray-700 mb-2">Role</label>
-                <Select value={role} onValueChange={setRole}>
-                    <SelectTrigger className="border border-gray-300 focus:border-none focus:border-red-500 focus:ring-red-500">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="USER">USER</SelectItem>
-                        <SelectItem value="ADMIN">ADMIN</SelectItem>
-                        <SelectItem value="TRIAL">TRIAL</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4">
-                <Button
-                    type="button"
-                    onClick={onCancel}
-                    variant="outline"
-                    className="border-gray-300 hover:bg-gray-100 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={isSaving}
-                >
-                    Cancel
-                </Button>
-
-                <Button
-                    type="submit"
-                    className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={isSaving}
-                >
-                    {isSaving ? (
-                        <>
-                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Saving...
-                        </>
-                    ) : (
-                        <>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Create User
-                        </>
-                    )}
-                </Button>
-            </div>
-        </form>
-    );
-}
 

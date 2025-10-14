@@ -10,7 +10,12 @@
   "loginSuccessTitle": "Login Success! Welcome back, {{username}}",
   "loginSuccessDescription": "{{role}} {{username}}, you are now logged into your account.",
   "loginFailedTitle": "Login Failed",
-  "loginFailedDescription": "Please check your email, password, or API Key and try again.",
+  "loginFailedDescription": {
+    "incorrect": "Please check your email or password and try again.",
+    "deactivate": "Your account has been temporarily deactivated.",
+    "expired": "Trial period has expired",
+    "invalidKey": "Your Gemini API Key is invalid."
+  },
   "poweredBy": "Powered by Myanmar Online Technology",
   "loggingIn": "Logging in...",
   "emailRequired": "Email is required",
@@ -30,7 +35,14 @@
   "contentDetailsDescription": "Provide the details for the content you want to generate.",
   "topic": "Topic",
   "topicPlaceholder": "Write the main topic or draft idea of your content here",
-  "purpose": "Purpose",
+  "purpose": {
+    "title": "Purpose",
+    "option-1": "Providing Useful News/Information",
+    "option-2": "Generating Audience Engagement/Response",
+    "option-3": "Selling Products/Services",
+    "option-4": "Creating a Feeling/Emotion",
+    "option-5": "Announcing an Event/Update"
+  },
   "purposePlaceholder": "e.g. To educate, To increase engagement, To boost sales",
   "audience": "Target Audience",
   "audiencePlaceholder": "e.g. Young adults aged 20-30",
@@ -68,7 +80,7 @@
   "emptyStateDescription": "Your content will appear here.",
   "formErrors": {
     "topic": "Please write the main topic of the content.",
-    "purpose": "Please write the purpose of the content.",
+    "purpose": "Please select the purpose of the content.",
     "audience": "Please specify the target audience.",
     "writingStyle": "Please select at least one writing style or tone.",
     "outputLanguage": "Please select an output language.",
@@ -187,5 +199,9 @@
     "navTitle": "Generator With Voice",
     "record": "Record the main topic of content as audio.",
     "description": "Press the button to start or stop recording"
+  },
+  "trialExpired": {
+    "title": "Trial expired",
+    "description": "Your trial period has ended."
   }
 }
