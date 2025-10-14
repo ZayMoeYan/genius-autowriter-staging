@@ -477,7 +477,7 @@ export default function AdminDashboard() {
                     <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
                         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-gray-200">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-gray-800 font-bold">Create New User</h2>
+                                <h2 className="text-gray-800 text-xl font-bold">Create New User</h2>
                                 <Button
                                     onClick={() => setShowCreateForm(false)}
                                     variant="ghost"
@@ -503,7 +503,7 @@ export default function AdminDashboard() {
                     <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
                         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-gray-200">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-gray-800">Edit User</h2>
+                                <h2 className="text-gray-800 text-xl font-bold">Edit User</h2>
                                 <Button
                                     onClick={() => setEditUser(null)}
                                     variant="ghost"
