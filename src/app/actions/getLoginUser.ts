@@ -38,9 +38,6 @@ export async function getLoginUser() {
         }
     }
 
-
-
-
     const currentUser = {
         username,
         role,

@@ -44,6 +44,9 @@ export default function VoiceChatDemo() {
     // @ts-ignore
     const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
     const { t, i18n } = useTranslation();
+    const [audioSaved, setAudioSaved] = useState(false);
+    const [seconds, setSeconds] = useState(0);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         if (!currentUser) {
@@ -92,9 +95,16 @@ export default function VoiceChatDemo() {
         mediaRecorder.onstop = handleRecordingStop;
         mediaRecorder.start();
         setRecording(true);
+        setAudioSaved(false)
+        setSeconds(0);
+
+        timerRef.current = setInterval(() => {
+            setSeconds((prev) => prev + 1);
+        }, 1000);
     };
 
     const stopRecording = () => {
+        setAudioSaved(true)
         // @ts-ignore
         const mediaRecorder = mediaRecorderRef.current;
         if (mediaRecorder) {
@@ -108,13 +118,19 @@ export default function VoiceChatDemo() {
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
 
-        toast({
-            title: t("voiceRecord.recordSuccessTitle"),
-            description: t("voiceRecord.recordSuccessDesc"),
-            status: "success",
-        })
         setRecording(false);
+        if (timerRef.current) clearInterval(timerRef.current);
     };
+
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            if (mediaRecorderRef.current) {
+                // @ts-ignore
+                mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
+            }
+        };
+    }, []);
 
     const arrayBufferToBase64 = (buffer: any) => {
         let binary = "";
@@ -259,33 +275,71 @@ export default function VoiceChatDemo() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className={'pb-5 border-b mb-5'} >
-                                <label className="text-white font-bold text-[1.2rem]">
-                                    {t("voiceRecord.record")}
-                                </label>
+                            <div className="text-white p-6 rounded-xl shadow-lg border border-gray-700 mb-5">
+                                {/* Title */}
+                                <h2 className="text-2xl font-bold mb-2">{t("voiceRecord.inputTitle")}</h2>
+                                <p className="text-gray-400 mb-6">
+                                    {t("voiceRecord.inputDesc")}
+                                </p>
 
-                                <div className={'p-6 text-center text-white max-w-2xl mx-auto shadow-lg'} >
+                                {/* Recording Section */}
+                                <div className="bg-[#14171c] border border-red-900 rounded-lg p-4 flex justify-between items-center mb-5">
+                                    <div className="flex items-center gap-3">
+                                        <span className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></span>
+                                        <span className="text-red-400 font-semibold">
+                                            {recording ? t("voiceRecord.recording") : t("voiceRecord.notRecording")}
+                                          </span>
+                                    </div>
+                                    {recording && (
+                                        <span className="text-red-400 font-mono text-sm">
+                                        00:{String(seconds).padStart(2, "0")}
+                                      </span>
+                                    )}
+                                </div>
+
+                                {/* Success Message */}
+                                {audioSaved && (
+                                    <div className="bg-green-900/50 border border-green-700 text-green-400 rounded-lg px-4 py-3 flex items-center gap-2 mb-5">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5 text-green-400"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M5 13l4 4L19 7"
+                                            />
+                                        </svg>
+                                        {t("voiceRecord.recordSuccessDesc")}
+                                    </div>
+                                )}
+
+                                {/* Buttons */}
+                                <div className="flex justify-end">
                                     {!recording ? (
                                         <button
                                             onClick={startRecording}
-                                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors shadow-md flex items-center gap-2 mx-auto"
+                                            className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all"
                                         >
-                                            <Mic/>
-                                            Start Recording
+                                            <Mic className="w-5 h-5" />
+                                            {t("voiceRecord.startBtn")}
                                         </button>
                                     ) : (
                                         <button
                                             onClick={stopRecording}
-                                            className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-md flex items-center gap-2 mx-auto"
+                                            className="flex items-center gap-2 bg-[#49505f] hover:bg-[#5c6577] text-white px-6 py-3 rounded-lg transition-all shadow-md"
                                         >
-                                            <StopCircle className="h-4 w-4" />
-                                            Stop Recording
+                                            <StopCircle className="w-5 h-5 text-white" />
+                                            {t("voiceRecord.stopBtn")}
                                         </button>
                                     )}
-                                    <p className="text-sm text-gray-400 mt-2">🎧 {t("voiceRecord.description")}</p>
                                 </div>
-
                             </div>
+
 
                             <Form {...form}>
                                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
