@@ -13,7 +13,7 @@
   "loginFailedDescription": {
     "incorrect": "Please check your email or password and try again.",
     "deactivate": "Your account has been temporarily deactivated.",
-    "expired": "Trial period has expired",
+    "expired": "Your account access period has ended.",
     "invalidKey": "Your Gemini API Key is invalid."
   },
   "poweredBy": "Powered by Myanmar Online Technology",
