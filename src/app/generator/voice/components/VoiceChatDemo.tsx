@@ -217,6 +217,7 @@ export default function VoiceChatDemo() {
             });
         } finally{
             setIsGenerating(false);
+            setAudioSaved(false)
         }
     };
 

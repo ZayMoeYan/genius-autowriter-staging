@@ -21,7 +21,7 @@ export default function UserDeleteModal({ user, onClose, onDelete, isLoading = f
     };
 
     const getStatusColor = (status: string) => {
-        return status === 'active' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
+        return status === 'Activate' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
     };
 
     const getRoleIcon = (role: string) => {
@@ -110,8 +110,8 @@ export default function UserDeleteModal({ user, onClose, onDelete, isLoading = f
                                     <span className="text-sm font-medium text-gray-700">Status:</span>
                                 </div>
                                 <span className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${getStatusColor(user.status)}`}>
-                  {user.status}
-                </span>
+                                  {user.status}
+                                </span>
                             </div>
                         </div>
                     </div>

@@ -498,7 +498,6 @@ export default function AdminDashboard() {
                     </div>
                 )}
 
-                {/* Edit User Modal */}
                 {editUser && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
                         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl border border-gray-200">
@@ -608,7 +607,7 @@ export default function AdminDashboard() {
                                 }
 
                                 {
-                                    editUser.trial_expires_at && <div>
+                                    editUser.trial_expires_at || editUser.role === "USER" ? <div>
                                         <label className="block text-gray-700 mb-2">
                                             Trial Expiration
                                         </label>
@@ -623,10 +622,7 @@ export default function AdminDashboard() {
                                                 })
                                             }
                                         />
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            Time is interpreted as Asia/Yangon (UTC+6:30)
-                                        </p>
-                                    </div>
+                                    </div> : ''
                                 }
 
                                 <div className="flex justify-end gap-3 pt-4">

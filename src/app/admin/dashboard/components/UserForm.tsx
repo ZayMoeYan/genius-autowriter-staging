@@ -9,7 +9,7 @@ import {
     SelectItem,
 } from "@/components/ui/select";
 // @ts-ignore
-import { ZoneInfo, DateTime } from 'luxon';
+import { DateTime } from "luxon";
 
 function UserForm({
                       onSubmit,
@@ -35,14 +35,58 @@ function UserForm({
     const [showPassword, setShowPassword] = useState(false);
     const [trialExpiresAt, setTrialExpiresAt] = useState("");
 
+    // Validation errors
+    const [errors, setErrors] = useState({
+        username: "",
+        email: "",
+        password: "",
+        trialExpiresAt: "",
+    });
+
+    const validateForm = () => {
+        const newErrors = { username: "", email: "", password: "", trialExpiresAt: "" };
+        let isValid = true;
+
+        if (!username.trim()) {
+            newErrors.username = "Username is required.";
+            isValid = false;
+        }
+
+        if (!email.trim()) {
+            newErrors.email = "Email is required.";
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newErrors.email = "Please enter a valid email address.";
+            isValid = false;
+        }
+
+        if (!password.trim()) {
+            newErrors.password = "Password is required.";
+            isValid = false;
+        } else if (password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters.";
+            isValid = false;
+        }
+
+        if (role === "USER" && !trialExpiresAt) {
+            newErrors.trialExpiresAt = "Expiration date is required for users.";
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Convert local input to Asia/Yangon timezone ISO
+        if (!validateForm()) return;
+
+        // Convert to Asia/Yangon ISO string
         let yangonISO: string | undefined;
         if (trialExpiresAt) {
             const dt = DateTime.fromISO(trialExpiresAt, { zone: "Asia/Yangon" });
-            yangonISO = dt.toISO(); // e.g. "2025-10-13T12:30:00+06:30"
+            yangonISO = dt.toISO();
         }
 
         await onSubmit(username, email, password, role, yangonISO);
@@ -62,11 +106,13 @@ function UserForm({
                 <input
                     type="text"
                     placeholder="Enter username"
-                    className="w-full px-4 py-3 border outline-0 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                    className={`w-full px-4 py-3 border rounded-lg outline-0 focus:ring-2 ${
+                        errors.username ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-red-500"
+                    }`}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required
                 />
+                {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
             </div>
 
             {/* Email */}
@@ -75,11 +121,13 @@ function UserForm({
                 <input
                     type="email"
                     placeholder="Enter email"
-                    className="w-full px-4 py-3 border outline-0 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                    className={`w-full px-4 py-3 border rounded-lg outline-0 focus:ring-2 ${
+                        errors.email ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-red-500"
+                    }`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                 />
+                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             {/* Password */}
@@ -90,9 +138,10 @@ function UserForm({
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 border outline-0 border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                        className={`w-full px-4 py-3 border rounded-lg outline-0 focus:ring-2 ${
+                            errors.password ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-red-500"
+                        }`}
                         placeholder="Enter password"
-                        required
                     />
                     <button
                         type="button"
@@ -102,13 +151,14 @@ function UserForm({
                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                 </div>
+                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
             {/* Role */}
             <div>
                 <label className="block text-gray-700 mb-2">Role</label>
                 <Select value={role} onValueChange={setRole}>
-                    <SelectTrigger className="border outline-0 border-gray-300 focus:ring-red-500">
+                    <SelectTrigger className="border border-gray-300 outline-0 focus:ring-red-500">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -119,22 +169,22 @@ function UserForm({
                 </Select>
             </div>
 
-            {
-                role === "USER" && <div>
-                    <label className="block text-gray-700 mb-2">
-                        Trial Expiration
-                    </label>
+            {role === "USER" && (
+                <div>
+                    <label className="block text-gray-700 mb-2">Expiration</label>
                     <input
                         type="datetime-local"
-                        className="w-full px-4 py-3 outline-0 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                        className={`w-full px-4 py-3 border rounded-lg outline-0 focus:ring-2 ${
+                            errors.trialExpiresAt ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-red-500"
+                        }`}
                         value={trialExpiresAt}
                         onChange={(e) => setTrialExpiresAt(e.target.value)}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
-                        Time is interpreted as Asia/Yangon (UTC+6:30)
-                    </p>
+                    {errors.trialExpiresAt && (
+                        <p className="text-red-500 text-sm mt-1">{errors.trialExpiresAt}</p>
+                    )}
                 </div>
-            }
+            )}
 
             {/* Buttons */}
             <div className="flex justify-end gap-3 pt-4">
