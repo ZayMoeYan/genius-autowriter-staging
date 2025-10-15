@@ -25,6 +25,7 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
         - Focus on storytelling, emotion, and connection — not just information.
         - Use short, catchy sentences and creative expressions suited for Facebook audiences.
         - Content Words count must be between 300 and 400.
+        - Include hashtags relevant to the content.
          -Emojis - ${values.emoji ? `Use the relevant emojis to the content.` : "Don't use the emojis at all in entire content. "}  
         - Always make the content suitable for Facebook — conversational, modern, and easy to read.
         - Avoid overly formal tone unless the topic requires it (e.g., corporate content).
