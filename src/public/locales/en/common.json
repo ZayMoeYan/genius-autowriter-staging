@@ -33,6 +33,8 @@
   "contentCreation": "Content Creation",
   "contentDetailsForm": "Content Details Form",
   "contentDetailsDescription": "Provide the details for the content you want to generate.",
+  "pageName": "Page Name",
+  "pageNamePlaceholder": "Enter page name",
   "topic": "Topic",
   "topicPlaceholder": "Write the main topic or draft idea of your content here",
   "purpose": {
@@ -72,13 +74,18 @@
   "errorSaving": "Something went wrong while saving.",
   "generatedContent": "Generated Content",
   "generatedContentDescription": "Review and edit your generated content here.",
-  "titleOfContent": "Title of content",
+  "titleOfContent": {
+    "title": "Title of content",
+    "errorMsg": "Title of content is required."
+  },
   "titlePlaceholder": "e.g. Digital Marketing",
   "saving": "Saving...",
   "saveContent": "Save Content",
+  "cancel": "Cancel",
   "emptyStateTitle": "Fill out the form to generate your content.",
   "emptyStateDescription": "Your content will appear here.",
   "formErrors": {
+    "pageName": "Please write the page name.",
     "topic": "Please write the main topic of the content.",
     "purpose": "Please select the purpose of the content.",
     "audience": "Please specify the target audience.",

@@ -52,6 +52,7 @@ export default function AdminDashboard() {
     const { toast } = useToast();
     const { currentUser, setCurrentUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const [expiryFilter, setExpiryFilter] = useState("all");
     const router = useRouter();
 
     useEffect(() => {
@@ -172,12 +173,21 @@ export default function AdminDashboard() {
 
     };
 
+    const now = DateTime.now().setZone("Asia/Yangon");
+
     const filteredUsers = users.filter((u) => {
         const matchesSearch = u.username.toLowerCase().includes(search.toLowerCase()) ||
             u.email.toLowerCase().includes(search.toLowerCase());
         const matchesStatus = statusFilter === "all" || u.status.toLowerCase() === statusFilter.toLowerCase();
         const matchesRole = roleFilter === "all" || u.role.toLowerCase() === roleFilter.toLowerCase();
-        return matchesSearch && matchesStatus && matchesRole;
+
+        let matchesExpiry = true;
+        if (expiryFilter !== "all" && u.trial_expires_at) {
+            const daysLeft = DateTime.fromISO(u.trial_expires_at, { zone: "Asia/Yangon" }).diff(now, "days").days;
+            matchesExpiry = daysLeft <= parseInt(expiryFilter) && daysLeft >= 0;
+        }
+
+        return matchesSearch && matchesStatus && matchesRole && matchesExpiry;
     });
 
     const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
@@ -193,7 +203,7 @@ export default function AdminDashboard() {
     const totalUsers = users.length;
     const activatedUsers = users.filter(u => u.status.toLowerCase() === "Activate".toLowerCase()).length;
     const deactivatedUsers = users.filter(u => u.status.toLowerCase() === "Deactivate".toLowerCase()).length;
-    const adminUsers = users.filter(u => u.role === "Admin").length;
+    const adminUsers = users.filter(u => u.role === "ADMIN").length;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
@@ -270,14 +280,14 @@ export default function AdminDashboard() {
                                 <Input
                                     type="text"
                                     placeholder="Search by username or email..."
-                                    className="pl-10 border-gray-300 focus:border-red-500 focus:ring-red-500"
+                                    className="pl-10 border-none focus:border-red-500 focus:ring-red-500"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
                             </div>
 
                             <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="w-full sm:w-48 border-gray-300 focus:border-red-500 focus:ring-red-500">
+                                <SelectTrigger className="w-full sm:w-48 border-none focus:ring-red-500">
                                     <SelectValue placeholder="Filter by status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -288,7 +298,7 @@ export default function AdminDashboard() {
                             </Select>
 
                             <Select value={roleFilter} onValueChange={setRoleFilter}>
-                                <SelectTrigger className="w-full sm:w-48 border-gray-300 focus:border-red-500 focus:ring-red-500">
+                                <SelectTrigger className="w-full sm:w-48 border-none  focus:ring-red-500">
                                     <SelectValue placeholder="Filter by role" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -297,6 +307,19 @@ export default function AdminDashboard() {
                                     <SelectItem value="user">Users</SelectItem>
                                 </SelectContent>
                             </Select>
+
+                            <Select value={expiryFilter} onValueChange={setExpiryFilter}>
+                                <SelectTrigger className="w-full sm:w-56 border-none focus:ring-red-500">
+                                    <SelectValue placeholder="Filter by expiry" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Expiry</SelectItem>
+                                    <SelectItem value="7">Expiring in 7 days</SelectItem>
+                                    <SelectItem value="5">Expiring in 5 days</SelectItem>
+                                    <SelectItem value="3">Expiring in 3 days</SelectItem>
+                                </SelectContent>
+                            </Select>
+
                         </div>
 
                         <Button

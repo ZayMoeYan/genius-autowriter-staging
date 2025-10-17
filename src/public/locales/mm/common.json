@@ -33,15 +33,17 @@
   "contentCreation": "Content ဖန်တီးခြင်း",
   "contentDetailsForm": "Content အသေးစိတ် ဖောင်",
   "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ။",
+  "pageName": "Page နာမည်",
+  "pageNamePlaceholder": "Page နာမည်ကိုထည့်ပါ",
   "topic": "Content ၏ အဓိကအကြောင်းအရာ",
   "topicPlaceholder": "ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာ သို့မဟုတ် Idea အကြမ်းကို ရေးပါ",
   "purpose": {
     "title": "ရည်ရွယ်ချက်",
     "option-1": "အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း",
-    "option-2": "Audience တုံ့ပြန်မှုဖော်ခြင်း",
+    "option-2": "Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း",
     "option-3": "Product/Service ရောင်းချခြင်း",
     "option-4": "ခံစားမှုဖန်တီးခြင်း",
-    "option-5": "Event/Update ကြေညာခြင်း "
+    "option-5": "Event/Update ကြေညာခြင်း"
   },
   "purposePlaceholder": "Content ရည်ရွယ်ချက်ကိုရွေးပါ",
   "audience": "ပစ်မှတ်ထားသော သုံးစွဲသူအုပ်စု",
@@ -72,13 +74,18 @@
   "errorSaving": "သိမ်းဆည်းနေစဉ် အမှားဖြစ်ပွားခဲ့ပါသည်။",
   "generatedContent": "ဖန်တီးပြီးသော Content",
   "generatedContentDescription": "ဖန်တီးထားသော Content ကို ဦးစွာ ကြည့်ပြီး ပြင်ဆင်နိုင်ပါသည်။",
-  "titleOfContent": "Content ခေါင်းစဉ်",
+  "titleOfContent": {
+    "title": "Content ခေါင်းစဉ်",
+    "errorMsg": "Content ခေါင်းစဉ်ထည့်ရန်လိုပါသည်။"
+  },
   "titlePlaceholder": "ဥပမာ - ဒစ်ဂျစ်တယ် မားကတင်း",
   "saving": "သိမ်းဆည်းနေပါသည်...",
   "saveContent": "Content သိမ်းဆည်းမည်",
+  "cancel": "မလုပ်တော့ပါ",
   "emptyStateTitle": "ဖောင်ကို ဖြည့်ပြီး Content ဖန်တီးပါ။",
   "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်။",
   "formErrors": {
+    "pageName": "Page နာမည်ကို ရေးပေးပါ။",
     "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ။",
     "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရွေးပေးပါ။",
     "audience": "Target Audience ကို ရေးပေးပါ။",

@@ -1,7 +1,7 @@
 'use client';
 import React, {useState, useRef, useEffect, ChangeEvent} from "react";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Form, FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Textarea} from "@/components/ui/textarea";
 import {Input} from "@/components/ui/input";
 import {Dropzone} from "@/components/ui/Dropzone";
@@ -21,8 +21,10 @@ import {getUser, updateTrialGeneratedCount} from "@/app/actions/usersAction";
 import {FormValues} from "@/app/generator/components/content-generator-ui";
 import * as z from "zod";
 import {sendToGemini} from "@/app/actions/voiceGenerateAction";
+import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 
 const formSchema = z.object({
+    title: z.string().min(1, ""),
     imageDescriptions: z.array(z.string().optional()).optional(),
     emoji: z.boolean().default(false),
 });
@@ -47,6 +49,8 @@ export default function VoiceChatDemo() {
     const [audioSaved, setAudioSaved] = useState(false);
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pageName, setPageName] = useState("");
 
     useEffect(() => {
         if (!currentUser) {
@@ -63,6 +67,7 @@ export default function VoiceChatDemo() {
         // @ts-ignore
         resolver: zodResolver(formSchema),
         defaultValues: {
+            title: "",
             imageDescriptions: [],
             emoji: false
         },
@@ -224,7 +229,7 @@ export default function VoiceChatDemo() {
     const onSaveContent = async () => {
         setIsSaving(true);
         try {
-            const result = await saveContent(title, generatedContent);
+            const result = await saveContent(form.getValues().title, generatedContent);
             form.reset();
             setUploadedImages([]);
 
@@ -245,6 +250,7 @@ export default function VoiceChatDemo() {
             setGeneratedContent("");
             setBase64Audio("")
             setIsSaving(false);
+            setIsModalOpen(false)
         }
     }
 
@@ -276,81 +282,112 @@ export default function VoiceChatDemo() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-white p-6 rounded-xl shadow-lg border border-gray-700 mb-5">
-                                {/* Title */}
-                                <h2 className="text-2xl font-bold mb-2">{t("voiceRecord.inputTitle")}</h2>
-                                <p className="text-gray-400 mb-6">
-                                    {t("voiceRecord.inputDesc")}
-                                </p>
-
-                                {/* Recording Section */}
-                                <div className="bg-[#14171c] border border-red-900 rounded-lg p-4 flex justify-between items-center mb-5">
-                                    <div className="flex items-center gap-3">
-                                        <span className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></span>
-                                        <span className="text-red-400 font-semibold">
-                                            {recording ? t("voiceRecord.recording") : t("voiceRecord.notRecording")}
-                                          </span>
-                                    </div>
-                                    {recording && (
-                                        <span className="text-red-400 font-mono text-sm">
-                                        00:{String(seconds).padStart(2, "0")}
-                                      </span>
-                                    )}
-                                </div>
-
-                                {/* Success Message */}
-                                {audioSaved && (
-                                    <div className="bg-green-900/50 border border-green-700 text-green-400 rounded-lg px-4 py-3 flex items-center gap-2 mb-5">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-5 w-5 text-green-400"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M5 13l4 4L19 7"
-                                            />
-                                        </svg>
-                                        {t("voiceRecord.recordSuccessDesc")}
-                                    </div>
-                                )}
-
-                                {/* Buttons */}
-                                <div className="flex justify-end">
-                                    {!recording ? (
-                                        <button
-                                            onClick={startRecording}
-                                            className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all"
-                                        >
-                                            <Mic className="w-5 h-5" />
-                                            {t("voiceRecord.startBtn")}
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={stopRecording}
-                                            className="flex items-center gap-2 bg-[#49505f] hover:bg-[#5c6577] text-white px-6 py-3 rounded-lg transition-all shadow-md"
-                                        >
-                                            <StopCircle className="w-5 h-5 text-white" />
-                                            {t("voiceRecord.stopBtn")}
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
 
                             <Form {...form}>
                                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-                                    <FormItem >
+                                    <div className={'relative'} >
+                                        <FormField
+                                            control={form.control}
+                                            name="title"
+                                            render={({ field }) => (
+                                                <FormItem className={'flex-1'} >
+                                                    <FormLabel className="text-white font-bold text-[1.2rem]">{t("pageName")} <span className={'text-red-600'} >*</span></FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            disabled={isGenerating}
+                                                            placeholder={t("pageNamePlaceholder")}
+                                                            {...field}
+                                                            className="border-none font-semibold"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.pageName")}</FormMessage> }
+                                    </div>
+
+                                    <div className="text-white p-6 rounded-xl shadow-lg border border-gray-700">
+                                        {/* Title */}
+                                        <h2 className="text-2xl font-bold mb-2">{t("voiceRecord.inputTitle")}</h2>
+                                        <p className="text-gray-400 mb-6">
+                                            {t("voiceRecord.inputDesc")}
+                                        </p>
+
+                                        {/* Recording Section */}
+                                        <div className="bg-[#14171c] border border-red-900 rounded-lg p-4 flex justify-between items-center mb-5">
+                                            <div className="flex items-center gap-3">
+                                                <span className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></span>
+                                                <span className="text-red-400 font-semibold">
+                                            {recording ? t("voiceRecord.recording") : t("voiceRecord.notRecording")}
+                                          </span>
+                                            </div>
+                                            {recording && (
+                                                <span className="text-red-400 font-mono text-sm">
+                                        00:{String(seconds).padStart(2, "0")}
+                                      </span>
+                                            )}
+                                        </div>
+
+                                        {/* Success Message */}
+                                        {audioSaved && (
+                                            <div className="bg-green-900/50 border border-green-700 text-green-400 rounded-lg px-4 py-3 flex items-center gap-2 mb-5">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="h-5 w-5 text-green-400"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth={2}
+                                                        d="M5 13l4 4L19 7"
+                                                    />
+                                                </svg>
+                                                {t("voiceRecord.recordSuccessDesc")}
+                                            </div>
+                                        )}
+
+                                        {/* Buttons */}
+                                        <div className="flex justify-end">
+                                            {!recording ? (
+                                                <button
+                                                    disabled={isGenerating}
+                                                    type={"button"}
+                                                    onClick={startRecording}
+                                                    className={`flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all ${isGenerating && 'cursor-not-allowed opacity-50'}`}
+                                                >
+                                                    <Mic className="w-5 h-5" />
+                                                    {t("voiceRecord.startBtn")}
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled={isGenerating}
+                                                    type={"button"}
+                                                    onClick={stopRecording}
+                                                    className={`flex items-center gap-2 bg-[#49505f] hover:bg-[#5c6577] text-white px-6 py-3 rounded-lg transition-all shadow-md ${isGenerating && 'cursor-not-allowed opacity-50'}`}
+                                                >
+                                                    <StopCircle className="w-5 h-5 text-white" />
+                                                    {t("voiceRecord.stopBtn")}
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <FormItem>
                                         <FormLabel className="text-white font-bold text-[1.2rem]">
                                             {t("uploadImage")}
                                         </FormLabel>
                                         <FormControl>
-                                            <div className="relative">
-                                                <Dropzone
+                                            <div className="relative" >
+
+                                                {isGenerating ? (
+                                                    <div className="border-2 border-dashed p-20 text-center transition inset-0 bg-black/50 text-white/50 backdrop-blur-sm cursor-not-allowed flex items-center justify-center text-white font-semibold rounded-lg">
+                                                        Processing...
+                                                    </div>
+                                                ) : <Dropzone
                                                     onChange={handleFileChange}
                                                     onFilesAccepted={(files: File[]) => {
                                                         setUploadedImages((prev) => [...prev, ...files]);
@@ -362,6 +399,7 @@ export default function VoiceChatDemo() {
                                                         files.forEach(() => appendImage(""));
                                                     }}
                                                 />
+                                                }
                                             </div>
                                         </FormControl>
                                     </FormItem>
@@ -379,6 +417,7 @@ export default function VoiceChatDemo() {
                                                     </div>
 
                                                     <button
+                                                        disabled={isGenerating}
                                                         type="button"
                                                         onClick={() => {
                                                             setUploadedImages((prev) =>
@@ -396,6 +435,7 @@ export default function VoiceChatDemo() {
 
                                                     <div className="mt-2">
                                                         <Textarea
+                                                            disabled={isGenerating}
                                                             placeholder={`Image ${index + 1} description...`}
                                                             {...register(`imageDescriptions.${index}`)}
                                                             className="border-input focus:border-primary focus:ring-primary/20 text-sm"
@@ -414,8 +454,9 @@ export default function VoiceChatDemo() {
                                                     {t("includeEmojis")}
                                                 </FormLabel>
                                                 <FormControl>
-                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                    <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
                                                         <input
+                                                            disabled={isGenerating}
                                                             type="checkbox"
                                                             checked={field.value}
                                                             onChange={(e) => field.onChange(e.target.checked)}
@@ -423,12 +464,13 @@ export default function VoiceChatDemo() {
                                                         />
                                                         <div
                                                             className={`w-11 h-6 rounded-full transition-colors duration-300 
-                                                                        ${field.value ? "bg-green-500" : "bg-gray-400"}`}
+                                                                            ${field.value ? "bg-green-500" : "bg-gray-400"}`}
                                                         >
                                                             <div
                                                                 className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
-                                                                           ${field.value ? "translate-x-5" : "translate-x-0"}`}
-                                                            ></div>
+                                                                               ${field.value ? "translate-x-5" : "translate-x-0"}`}
+                                                            >
+                                                            </div>
                                                         </div>
                                                     </label>
                                                 </FormControl>
@@ -489,21 +531,24 @@ export default function VoiceChatDemo() {
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-                            <div>
-                                <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent")}</label>
-                                <Input
-                                    id="title"
-                                    value={title}
-                                    onChange={onTitleHandler}
-                                    placeholder={t("titlePlaceholder")}
-                                    className="bg-white border-black/20 mt-2  placeholder:text-white/50 focus:border-primary"
-                                />
-                            </div>
+                            {/*<div>*/}
+                            {/*    <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent")}</label>*/}
+                            {/*    <Input*/}
+                            {/*        id="title"*/}
+                            {/*        value={title}*/}
+                            {/*        onChange={onTitleHandler}*/}
+                            {/*        placeholder={t("titlePlaceholder")}*/}
+                            {/*        className="bg-white border-black/20 mt-2  placeholder:text-white/50 focus:border-primary"*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                             <Button
                                 type="button"
                                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
                                 size="lg"
-                                onClick={onSaveContent}
+                                onClick={() => {
+                                    setPageName(form.getValues().title);
+                                    setIsModalOpen(true);
+                                }}
                                 disabled={isSaving}
                             >
                                 {isSaving ? (
@@ -533,6 +578,42 @@ export default function VoiceChatDemo() {
                     )}
                 </CardContent>
             </Card>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="bg-gray-900 text-white border border-red-700">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold">{t("pageName")}</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mt-4">
+                        <Input
+                            value={pageName}
+                            onChange={(e) => setPageName(e.target.value)}
+                            placeholder={t("pageNamePlaceholder")}
+                            className="bg-white text-black"
+                        />
+                    </div>
+
+                    <DialogFooter className="mt-6 flex justify-end gap-3">
+                        <DialogClose asChild>
+                            <Button
+                                disabled={isSaving}
+                                variant="outline"
+                                className={`bg-gray-700 text-white hover:bg-gray-600 ${isSaving && 'cursor-not-allowed'}`}
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            className="bg-primary hover:bg-primary/90 text-white"
+                            disabled={isSaving || !pageName.trim()}
+                            onClick={onSaveContent}
+                        >
+                            {isSaving ? t("saving") : t("saveContent")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
 
     );

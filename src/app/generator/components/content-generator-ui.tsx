@@ -24,6 +24,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+    DialogDescription,
+    DialogClose,
+} from "@/components/ui/dialog";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import {generateContentAction, saveContent} from "@/app/actions/contentsAction";
@@ -40,6 +50,7 @@ import {getUser} from "@/app/actions/usersAction";
 
 
 const formSchema = z.object({
+    title: z.string().min(1, ""),
     topic: z.string().min(3, ""),
     purpose: z.string().min(1, ""),
     audience: z.string().min(3, ""),
@@ -62,10 +73,13 @@ export default function ContentGeneratorUi() {
     const [isSaving, setIsSaving] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-    const [title, setTitle] = useState("");
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
+    const [titleError, setTitleError] = useState("");
     const router = useRouter();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pageName, setPageName] = useState("");
+
 
     // @ts-ignore
     const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
@@ -99,6 +113,7 @@ export default function ContentGeneratorUi() {
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            title: "",
             topic: "",
             purpose: "",
             audience: "",
@@ -113,7 +128,7 @@ export default function ContentGeneratorUi() {
         },
     });
 
-    const { control, handleSubmit, register } = form;
+    const { control, handleSubmit, register, reset, watch } = form;
     const {
         fields: imageFields,
         append: appendImage,
@@ -123,6 +138,21 @@ export default function ContentGeneratorUi() {
         // @ts-ignore
         name: "imageDescriptions",
     });
+
+    // useEffect(() => {
+    //     const saved = localStorage.getItem("contentForm");
+    //     if (saved) {
+    //         const parsed = JSON.parse(saved);
+    //         reset(parsed);
+    //     }
+    // }, [reset]);
+    //
+    // useEffect(() => {
+    //     const subscription = watch((values) => {
+    //         localStorage.setItem("contentForm", JSON.stringify(values));
+    //     });
+    //     return () => subscription.unsubscribe();
+    // }, [watch]);
 
     const fileToBase64 = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
@@ -153,7 +183,6 @@ export default function ContentGeneratorUi() {
         const base64Images = await Promise.all(uploadedImages.map(fileToBase64));
 
         try {
-
             const apikey = await getApikey();
             const prompt = buildPrompt(values);
 
@@ -167,7 +196,7 @@ export default function ContentGeneratorUi() {
               status: "success",
             });
 
-        } catch {
+        } catch{
             toast({
                 title: t("error"),
                 description: t("errorGenerated"),
@@ -175,13 +204,15 @@ export default function ContentGeneratorUi() {
             });
         } finally{
             setIsGenerating(false);
+            localStorage.removeItem("userForm");
         }
     };
 
     const onSaveContent = async () => {
+
         setIsSaving(true);
         try {
-            const result = await saveContent(title, generatedContent);
+            const result = await saveContent(form.getValues().title, generatedContent);
             form.reset();
             setUploadedImages([]);
 
@@ -198,15 +229,12 @@ export default function ContentGeneratorUi() {
             })
         } finally {
             setPreviewUrls([])
-            setTitle("");
             setGeneratedContent("");
             setIsSaving(false);
+            setIsModalOpen(false)
         }
     }
 
-    const onTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
@@ -237,21 +265,43 @@ export default function ContentGeneratorUi() {
                                     <div className={'relative'} >
                                         <FormField
                                             control={form.control}
+                                            name="title"
+                                            render={({ field }) => (
+                                                <FormItem className={'flex-1'} >
+                                                    <FormLabel className="text-white font-bold text-[1.2rem]">{t("pageName")} <span className={'text-red-600'} >*</span></FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            disabled={isGenerating}
+                                                            placeholder={t("pageNamePlaceholder")}
+                                                            {...field}
+                                                            className="border-none font-semibold"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.pageName")}</FormMessage> }
+                                    </div>
+                                    <div className={'relative'} >
+                                        <FormField
+                                            control={form.control}
                                             name="topic"
                                             render={({ field }) => (
                                                 <FormItem className="flex-1">
                                                     <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('topic')} <span className={'text-red-600'} >*</span></FormLabel>
                                                     <FormControl>
                                                         <Textarea
+                                                            disabled={isGenerating}
                                                             placeholder={t("topicPlaceholder")}
                                                             {...field}
-                                                            className="border-none"
+                                                            className="border-none font-semibold"
                                                         />
                                                     </FormControl>
                                                 </FormItem>
                                             )}
                                         />
-                                        {form.formState.errors.topic && <FormMessage className={'absolute mt-2  text-red-600 text-sm'} >{t("formErrors.topic")}</FormMessage> }
+                                        {form.formState.errors.topic && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.topic")}</FormMessage> }
                                     </div>
 
 
@@ -261,33 +311,27 @@ export default function ContentGeneratorUi() {
                                                 control={form.control}
                                                 name="purpose"
                                                 render={({ field }) => (
-                                                    <FormField
-                                                        control={form.control}
-                                                        name="purpose"
-                                                        render={({ field }) => (
-                                                            <FormItem>
-                                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
-                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                    <FormControl>
-                                                                        <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
-                                                                            <SelectValue placeholder={t("purposePlaceholder")} />
-                                                                        </SelectTrigger>
-                                                                    </FormControl>
-                                                                    <SelectContent>
-                                                                        <SelectItem value={t("purpose.option-1")}>{t("purpose.option-1")}</SelectItem>
-                                                                        <SelectItem value={t("purpose.option-2")}>{t("purpose.option-2")}</SelectItem>
-                                                                        <SelectItem value={t("purpose.option-3")}>{t("purpose.option-3")}</SelectItem>
-                                                                        <SelectItem value={t("purpose.option-4")}>{t("purpose.option-4")}</SelectItem>
-                                                                        <SelectItem value={t("purpose.option-5")}>{t("purpose.option-5")}</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        )}
-                                                    />
+                                                    <FormItem>
+                                                        <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
+                                                        <Select defaultValue={field.value} onValueChange={field.onChange} disabled={isGenerating}  >
+                                                            <FormControl>
+                                                                <SelectTrigger className="border-none">
+                                                                    <SelectValue placeholder={t("purposePlaceholder")} />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent className={'font-semibold'} >
+                                                                <SelectItem value="Providing Useful News/Information (အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း)">{t("purpose.option-1")}</SelectItem>
+                                                                <SelectItem value="Generating Audience Engagement/Response (Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း)">{t("purpose.option-2")}</SelectItem>
+                                                                <SelectItem value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
+                                                                <SelectItem value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
+                                                                <SelectItem value="Announcing an Event/Update (Event/Update ကြေညာခြင်း )">{t("purpose.option-5")}</SelectItem>
+                                                            </SelectContent>
+                                                        </Select >
+                                                        <FormMessage />
+                                                    </FormItem>
                                                 )}
                                             />
-                                            {form.formState.errors.purpose && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.purpose")}</p> }
+                                            {form.formState.errors.purpose && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.purpose")}</p> }
                                         </div>
 
                                         <div className={'relative flex-1'} >
@@ -299,16 +343,17 @@ export default function ContentGeneratorUi() {
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("audience")} <span className={'text-red-600'} >*</span></FormLabel>
                                                         <FormControl>
                                                             <Input
+                                                                disabled={isGenerating}
                                                                 placeholder={t("audiencePlaceholder")}
                                                                 {...field}
-                                                                className="border-none"
+                                                                className="border-none font-semibold"
                                                             />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}
                                             />
-                                            {form.formState.errors.audience && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.audience")}</p> }
+                                            {form.formState.errors.audience && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.audience")}</p> }
                                         </div>
 
 
@@ -322,13 +367,13 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem >
                                                         <FormLabel className="text-white font-bold text-[1.2rem]">{t("writingStyle")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
                                                             <FormControl>
-                                                                <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
+                                                                <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("writingStylePlaceholder")} />
                                                                 </SelectTrigger>
                                                             </FormControl>
-                                                            <SelectContent>
+                                                            <SelectContent className={'font-semibold'} >
                                                                 <SelectItem value="ဖော်ရွေသော(friendly)">{t("writingStyleOptions.friendly")}</SelectItem>
                                                                 <SelectItem value="တရားဝင်(formal)">{t("writingStyleOptions.formal")}</SelectItem>
                                                                 <SelectItem value="ဟာသ(humorous)">{t("writingStyleOptions.humorous")}</SelectItem>
@@ -345,7 +390,7 @@ export default function ContentGeneratorUi() {
                                                     </FormItem>
                                                 )}
                                             />
-                                            {form.formState.errors.writingStyle && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.writingStyle")}</p> }
+                                            {form.formState.errors.writingStyle && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.writingStyle")}</p> }
                                         </div>
 
                                         <div className={'relative flex-1'} >
@@ -355,13 +400,13 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("contentLength")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
                                                             <FormControl>
-                                                                <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
+                                                                <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("contentLengthPlaceholder")} />
                                                                 </SelectTrigger>
                                                             </FormControl>
-                                                            <SelectContent>
+                                                            <SelectContent className={'font-semibold'} >
                                                                 <SelectItem value="short">{t("contentLengthOptions.short")}</SelectItem>
                                                                 <SelectItem value="medium">{t("contentLengthOptions.medium")}</SelectItem>
                                                                 <SelectItem value="long">{t("contentLengthOptions.long")}</SelectItem>
@@ -371,7 +416,7 @@ export default function ContentGeneratorUi() {
                                                     </FormItem>
                                                 )}
                                             />
-                                            {form.formState.errors.contentLength && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.contentLength")}</p> }
+                                            {form.formState.errors.contentLength && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.contentLength")}</p> }
                                         </div>
 
                                         <div className={'relative flex-1'} >
@@ -381,13 +426,13 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem className="flex-1">
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("outputLanguage")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
                                                             <FormControl>
-                                                                <SelectTrigger className="border-input focus:border-primary focus:ring-primary/20">
+                                                                <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("outputLanguagePlaceholder")}/>
                                                                 </SelectTrigger>
                                                             </FormControl>
-                                                            <SelectContent>
+                                                            <SelectContent className={'font-semibold'} >
                                                                 <SelectItem value="မြန်မာ">{t("outputLanguageOptions.myanmar")}</SelectItem>
                                                                 <SelectItem value="English">{t("outputLanguageOptions.english")}</SelectItem>
                                                             </SelectContent>
@@ -396,7 +441,7 @@ export default function ContentGeneratorUi() {
                                                     </FormItem>
                                                 )}
                                             />
-                                            {form.formState.errors.outputLanguage && <p className={'mt-2 absolute text-red-600 text-sm'} >{t("formErrors.outputLanguage")}</p> }
+                                            {form.formState.errors.outputLanguage && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.outputLanguage")}</p> }
                                         </div>
                                     </div>
 
@@ -405,8 +450,13 @@ export default function ContentGeneratorUi() {
                                             {t("uploadImage")}
                                         </FormLabel>
                                         <FormControl>
-                                            <div className="relative">
-                                                <Dropzone
+                                            <div className="relative" >
+
+                                                {isGenerating ? (
+                                                    <div className="border-2 border-dashed p-20 text-center transition inset-0 bg-black/50 text-white/50 backdrop-blur-sm cursor-not-allowed flex items-center justify-center text-white font-semibold rounded-lg">
+                                                        Processing...
+                                                    </div>
+                                                ) : <Dropzone
                                                     onChange={handleFileChange}
                                                     onFilesAccepted={(files: File[]) => {
                                                         setUploadedImages((prev) => [...prev, ...files]);
@@ -418,6 +468,7 @@ export default function ContentGeneratorUi() {
                                                         files.forEach(() => appendImage(""));
                                                     }}
                                                 />
+                                                }
                                             </div>
                                         </FormControl>
                                     </FormItem>
@@ -435,6 +486,7 @@ export default function ContentGeneratorUi() {
                                                     </div>
 
                                                     <button
+                                                        disabled={isGenerating}
                                                         type="button"
                                                         onClick={() => {
                                                             setUploadedImages((prev) =>
@@ -452,6 +504,7 @@ export default function ContentGeneratorUi() {
 
                                                     <div className="mt-2">
                                                         <Textarea
+                                                            disabled={isGenerating}
                                                             placeholder={`Image ${index + 1} description...`}
                                                             {...register(`imageDescriptions.${index}`)}
                                                             className="border-input focus:border-primary focus:ring-primary/20 text-sm"
@@ -472,9 +525,10 @@ export default function ContentGeneratorUi() {
                                                     <FormLabel className="text-white font-bold text-[1.2rem]">{t("hashtags")}</FormLabel>
                                                     <FormControl>
                                                         <Input
+                                                            disabled={isGenerating}
                                                             placeholder={t("hashtagsPlaceholder")}
                                                             {...field}
-                                                            className="border-none"
+                                                            className="border-none font-semibold"
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -491,9 +545,10 @@ export default function ContentGeneratorUi() {
                                                     <FormLabel className="text-white font-bold text-[1.2rem]">{t("negativeConstraints")}</FormLabel>
                                                     <FormControl>
                                                         <Input
+                                                            disabled={isGenerating}
                                                             placeholder={t("negativeConstraintsPlaceholder")}
                                                             {...field}
-                                                            className="border-none"
+                                                            className="border-none font-semibold"
                                                         />
                                                     </FormControl>
                                                     <FormDescription className="text-muted-foreground">{t("negativeConstraintsDescription")}</FormDescription>
@@ -513,22 +568,24 @@ export default function ContentGeneratorUi() {
                                                     {t("includeEmojis")}
                                                 </FormLabel>
                                                 <FormControl>
-                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                    <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
                                                         <input
+                                                            disabled={isGenerating}
                                                             type="checkbox"
                                                             checked={field.value}
                                                             onChange={(e) => field.onChange(e.target.checked)}
                                                             className="sr-only peer "
                                                         />
-                                                        <div
-                                                            className={`w-11 h-6 rounded-full transition-colors duration-300 
-                                                                        ${field.value ? "bg-green-500" : "bg-gray-400"}`}
-                                                        >
                                                             <div
-                                                                className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
-                                                                           ${field.value ? "translate-x-5" : "translate-x-0"}`}
-                                                            ></div>
-                                                        </div>
+                                                                className={`w-11 h-6 rounded-full transition-colors duration-300 
+                                                                            ${field.value ? "bg-green-500" : "bg-gray-400"}`}
+                                                            >
+                                                                <div
+                                                                    className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
+                                                                               ${field.value ? "translate-x-5" : "translate-x-0"}`}
+                                                                >
+                                                                </div>
+                                                            </div>
                                                     </label>
                                                 </FormControl>
                                             </FormItem>
@@ -539,7 +596,7 @@ export default function ContentGeneratorUi() {
                                         type="submit"
                                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
                                         size="lg"
-                                        disabled={isGenerating}
+                                        disabled={isGenerating || isSaving}
                                     >
                                         {isGenerating ? (
                                             <>
@@ -582,27 +639,32 @@ export default function ContentGeneratorUi() {
                     ) : generatedContent ? (
                         <div className="space-y-6">
                             <Textarea
-                                className="h-96 min-h-[24rem]  bg-white border-white/20 text-black  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
+                                className="h-96 min-h-[24rem] font-semibold  bg-white border-none text-black  placeholder:text-white/50"
                                 value={generatedContent}
                                 disabled={isSaving}
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-                            <div>
-                                <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent")}</label>
-                                <Input
-                                    id="title"
-                                    value={title}
-                                    onChange={onTitleHandler}
-                                    placeholder={t("titlePlaceholder")}
-                                    className="bg-white border-black/20 mt-2  placeholder:text-white/50 focus:border-primary"
-                                />
-                            </div>
+                            {/*<div className={'flex flex-col gap-1 '}>*/}
+                            {/*    <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent.title")}</label>*/}
+                            {/*    <Input*/}
+                            {/*        disabled={isSaving}*/}
+                            {/*        id="title"*/}
+                            {/*        value={title}*/}
+                            {/*        onChange={onTitleHandler}*/}
+                            {/*        placeholder={t("titlePlaceholder")}*/}
+                            {/*        className="bg-white border-none"*/}
+                            {/*    />*/}
+                            {/*    { titleError && <p className={'text-red-600 text-sm'} >{t("titleOfContent.errorMsg")}</p>}*/}
+                            {/*</div>*/}
                             <Button
                                 type="button"
                                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
                                 size="lg"
-                                onClick={onSaveContent}
+                                onClick={() => {
+                                    setPageName(form.getValues().title);
+                                    setIsModalOpen(true);
+                                }}
                                 disabled={isSaving}
                             >
                                 {isSaving ? (
@@ -632,6 +694,44 @@ export default function ContentGeneratorUi() {
                     )}
                 </CardContent>
             </Card>
+
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="bg-gray-900 text-white border border-red-700">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold">{t("pageName")}</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mt-4">
+                        <Input
+                            value={pageName}
+                            onChange={(e) => setPageName(e.target.value)}
+                            placeholder={t("pageNamePlaceholder")}
+                            className="bg-white text-black"
+                        />
+                    </div>
+
+                    <DialogFooter className="mt-6 flex justify-end gap-3">
+                        <DialogClose asChild>
+                            <Button
+                                disabled={isSaving}
+                                variant="outline"
+                                className={`bg-gray-700 text-white hover:bg-gray-600 ${isSaving && 'cursor-not-allowed'}`}
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            className="bg-primary hover:bg-primary/90 text-white"
+                            disabled={isSaving || !pageName.trim()}
+                            onClick={onSaveContent}
+                        >
+                            {isSaving ? t("saving") : t("saveContent")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
         </div>
     );
 }
