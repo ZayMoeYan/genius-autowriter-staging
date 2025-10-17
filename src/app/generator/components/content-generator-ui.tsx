@@ -696,9 +696,13 @@ export default function ContentGeneratorUi() {
             </Card>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="bg-gray-900 text-white border border-red-700">
+                <DialogContent
+                    className="bg-gray-900 text-white border border-red-700 rounded-xl"
+                >
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">{t("pageName")}</DialogTitle>
+                        <DialogTitle className="text-lg sm:text-xl font-bold">
+                            {t("pageName")}
+                        </DialogTitle>
                     </DialogHeader>
 
                     <div className="mt-4">
@@ -706,23 +710,30 @@ export default function ContentGeneratorUi() {
                             value={pageName}
                             onChange={(e) => setPageName(e.target.value)}
                             placeholder={t("pageNamePlaceholder")}
-                            className="bg-white text-black"
+                            className="bg-white text-black w-full text-base sm:text-lg"
                         />
                     </div>
 
-                    <DialogFooter className="mt-6 flex justify-end gap-3">
+                    <DialogFooter
+                        className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3"
+                    >
                         <DialogClose asChild>
                             <Button
                                 disabled={isSaving}
                                 variant="outline"
-                                className={`bg-gray-700 text-white hover:bg-gray-600 ${isSaving && 'cursor-not-allowed'}`}
+                                className={`
+            bg-gray-700 text-white hover:bg-gray-600 
+            w-full sm:w-auto 
+            ${isSaving && "cursor-not-allowed opacity-70"}
+          `}
                                 onClick={() => setIsModalOpen(false)}
                             >
                                 {t("cancel")}
                             </Button>
                         </DialogClose>
+
                         <Button
-                            className="bg-primary hover:bg-primary/90 text-white"
+                            className="bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
                             disabled={isSaving || !pageName.trim()}
                             onClick={onSaveContent}
                         >
@@ -731,6 +742,7 @@ export default function ContentGeneratorUi() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+
 
         </div>
     );
