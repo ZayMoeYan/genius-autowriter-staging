@@ -204,7 +204,6 @@ export default function ContentGeneratorUi() {
             });
         } finally{
             setIsGenerating(false);
-            localStorage.removeItem("userForm");
         }
     };
 
@@ -313,7 +312,7 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select defaultValue={field.value} onValueChange={field.onChange} disabled={isGenerating}  >
+                                                        <Select value={field.value} onValueChange={field.onChange} disabled={isGenerating}  >
                                                             <FormControl>
                                                                 <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("purposePlaceholder")} />
@@ -367,7 +366,7 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem >
                                                         <FormLabel className="text-white font-bold text-[1.2rem]">{t("writingStyle")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
+                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isGenerating} >
                                                             <FormControl>
                                                                 <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("writingStylePlaceholder")} />
@@ -400,7 +399,7 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("contentLength")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
+                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isGenerating} >
                                                             <FormControl>
                                                                 <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("contentLengthPlaceholder")} />
@@ -426,7 +425,7 @@ export default function ContentGeneratorUi() {
                                                 render={({ field }) => (
                                                     <FormItem className="flex-1">
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("outputLanguage")} <span className={'text-red-600'} >*</span></FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating} >
+                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isGenerating} >
                                                             <FormControl>
                                                                 <SelectTrigger className="border-none">
                                                                     <SelectValue placeholder={t("outputLanguagePlaceholder")}/>
@@ -697,7 +696,7 @@ export default function ContentGeneratorUi() {
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent
-                    className="bg-gray-900 text-white border border-red-700 rounded-xl"
+                    className="bg-gray-900 text-white border-[0.4px] border-red-800 rounded-xl"
                 >
                     <DialogHeader>
                         <DialogTitle className="text-lg sm:text-xl font-bold">
