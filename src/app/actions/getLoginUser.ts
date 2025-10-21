@@ -23,11 +23,14 @@ export async function getLoginUser() {
         const createdAtFromCookie = cookieStore.get('createdAt-token')?.value!;
         const expiredAtFromCookie = cookieStore.get('expiredAt-token')?.value!;
         const countFromCookie = cookieStore.get('count-token')?.value!;
+        const idFromCookie = cookieStore.get('id-token')?.value!;
         const createdAt = jwt.verify(createdAtFromCookie, process.env.NEXT_SECRET_KEY!)
         const expiredAt = jwt.verify(expiredAtFromCookie, process.env.NEXT_SECRET_KEY!)
         const generatedCount = jwt.verify(countFromCookie, process.env.NEXT_SECRET_KEY!)
+        const id = jwt.verify(idFromCookie, process.env.NEXT_SECRET_KEY!)
 
         return {
+            id,
             username,
             role,
             email,

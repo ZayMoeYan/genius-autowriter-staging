@@ -43,7 +43,9 @@
     "option-2": "Generating Audience Engagement/Response",
     "option-3": "Selling Products/Services",
     "option-4": "Creating a Feeling/Emotion",
-    "option-5": "Announcing an Event/Update"
+    "option-5": "Announcing an Event/Update",
+    "option-6": "Giving Educational Tutorial",
+    "option-7": "Showing Product Feature/Showcase"
   },
   "purposePlaceholder": "Select the purpose",
   "audience": "Target Audience",
@@ -68,7 +70,8 @@
   "generating": "Generating...",
   "success": "Success",
   "successGenerated": "Your content has been generated successfully.",
-  "errorGenerated": "You've reached the maximum limit of generating contents for your trial plan. To continue using Genius Autowriter without interruption, please upgrade your subscription.",
+  "errorGenerated": "Your Gemini API key exceeded the limit",
+  "trialErrorGenerated": "You've reached the maximum limit of generating contents for your trial plan. To continue using Genius Autowriter without interruption, please upgrade your subscription.",
   "successSaved": "Your content has been saved successfully.",
   "error": "Error",
   "errorSaving": "Something went wrong while saving.",

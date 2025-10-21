@@ -58,7 +58,6 @@ const formSchema = z.object({
     outputLanguage: z.string().min(1, ""),
     contentLength: z.string().min(1, ""),
     imageDescriptions: z.array(z.string().optional()).optional(),
-    keywords: z.string().optional(),
     negativeConstraints: z.string().optional(),
     hashtags: z.string().optional(),
     emoji: z.boolean().default(false),
@@ -75,8 +74,6 @@ export default function ContentGeneratorUi() {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
-    const [titleError, setTitleError] = useState("");
-    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageName, setPageName] = useState("");
 
@@ -86,13 +83,28 @@ export default function ContentGeneratorUi() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
+
         if (!currentUser) {
             getLoginUser().then((user) => {
-                if (user) { // @ts-ignore
+                if (user) {
+                    // @ts-ignore
                     setCurrentUser(user);
+                    // @ts-ignore
+                    if (user?.role === "TRIAL" && user?.id) {
+                        // @ts-ignore
+                        getUser(user.id).then((curUser) => {
+                            // @ts-ignore
+                            setCurrentUser({
+                                ...user,
+                                generatedCount: curUser.generated_count,
+                                expiredAt: curUser.trial_expires_at,
+                            });
+                        });
+                    }
                 }
             });
         }
+
     }, [currentUser, setCurrentUser]);
 
     const handleCopy = async () => {
@@ -121,7 +133,6 @@ export default function ContentGeneratorUi() {
             outputLanguage: "",
             contentLength: "",
             imageDescriptions: [],
-            keywords: "",
             negativeConstraints: "",
             hashtags: "",
             emoji: false,
@@ -186,22 +197,44 @@ export default function ContentGeneratorUi() {
             const apikey = await getApikey();
             const prompt = buildPrompt(values);
 
-            //@ts-ignore
+            console.log(prompt)
+
+            // @ts-ignore
             const result = await generateContentAction(prompt, base64Images, apikey!);
             setGeneratedContent(result.content);
-            currentUser?.id && getUser(currentUser?.id).then(user => setCurrentUser(user))
+
+            if(currentUser?.role === "TRIAL") {
+                currentUser?.id && getUser(currentUser?.id).then(user => {
+                    setCurrentUser({
+                        ...user,
+                        generatedCount: user.generated_count,
+                        expiredAt: user.trial_expires_at,
+                    });
+                })
+            }
+
             toast({
               title: t("success"),
               description: t("successGenerated"),
               status: "success",
             });
 
-        } catch{
-            toast({
-                title: t("error"),
-                description: t("errorGenerated"),
-                status: "error",
-            });
+        } catch (err){
+            // @ts-ignore
+            if(err.message) {
+                toast({
+                    title: t("error"),
+                    description: t("trialErrorGenerated"),
+                    status: "error",
+                });
+            }else {
+                toast({
+                    title: t("error"),
+                    description: t("errorGenerated"),
+                    status: "error",
+                });
+            }
+
         } finally{
             setIsGenerating(false);
         }
@@ -211,7 +244,7 @@ export default function ContentGeneratorUi() {
 
         setIsSaving(true);
         try {
-            const result = await saveContent(form.getValues().title, generatedContent);
+            const result = await saveContent(pageName, generatedContent);
             form.reset();
             setUploadedImages([]);
 
@@ -324,6 +357,8 @@ export default function ContentGeneratorUi() {
                                                                 <SelectItem value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
                                                                 <SelectItem value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
                                                                 <SelectItem value="Announcing an Event/Update (Event/Update ကြေညာခြင်း )">{t("purpose.option-5")}</SelectItem>
+                                                                <SelectItem value="Giving Educational Tutorial (သင်ခန်းစာပေးခြင်း)">{t("purpose.option-6")}</SelectItem>
+                                                                <SelectItem value="Showing Product Feature/Showcase (Product Feature ပြခြင်း)">{t("purpose.option-7")}</SelectItem>
                                                             </SelectContent>
                                                         </Select >
                                                         <FormMessage />
@@ -721,10 +756,10 @@ export default function ContentGeneratorUi() {
                                 disabled={isSaving}
                                 variant="outline"
                                 className={`
-            bg-gray-700 text-white hover:bg-gray-600 
-            w-full sm:w-auto 
-            ${isSaving && "cursor-not-allowed opacity-70"}
-          `}
+                                    bg-gray-700 text-white hover:bg-gray-600 
+                                    w-full sm:w-auto 
+                                    ${isSaving && "cursor-not-allowed opacity-70"}
+                                  `}
                                 onClick={() => setIsModalOpen(false)}
                             >
                                 {t("cancel")}

@@ -46,7 +46,6 @@ export default function LoginPage() {
             }
 
             const res = await login(data.email, data.password, data.apikey);
-            console.log(res)
 
             if (!res.ok && res.ok !== undefined) {
                 if (res.status === 403) {
@@ -74,7 +73,7 @@ export default function LoginPage() {
             const user = res;
 
             if (user.role === "ADMIN") {
-                router.push("/admin");
+                router.push("/admin/dashboard");
             } else {
                 router.push("/generator");
             }

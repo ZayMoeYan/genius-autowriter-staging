@@ -436,7 +436,7 @@ export default function AdminDashboard() {
                                                 disabled={currentPage === 1}
                                                 variant="outline"
                                                 size="sm"
-                                                className="border-gray-300 hover:border-red-500 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="border-gray-300 hover:border-red-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 <ChevronLeft className="h-4 w-4" />
                                                 Previous
@@ -458,7 +458,7 @@ export default function AdminDashboard() {
                                                                 className={
                                                                     isCurrentPage
                                                                         ? "bg-red-600 hover:bg-red-700 text-white border-red-600"
-                                                                        : "border-gray-300 hover:border-red-500 hover:text-red-600"
+                                                                        : "border-gray-300 hover:border-red-500 hover:text-white"
                                                                 }
                                                             >
                                                                 {page}
@@ -483,7 +483,7 @@ export default function AdminDashboard() {
                                                 disabled={currentPage === totalPages}
                                                 variant="outline"
                                                 size="sm"
-                                                className="border-gray-300 hover:border-red-500 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="border-gray-300 hover:border-red-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 Next
                                                 <ChevronRight className="h-4 w-4" />
@@ -617,7 +617,7 @@ export default function AdminDashboard() {
                                     </Select>
                                 </div>
                                 {
-                                    editUser.generated_count ? <div>
+                                    editUser.generated_count || editUser.role === "TRIAL" ? <div>
                                         <label className="block text-gray-700 mb-2">Credit</label>
                                         <input
                                             id="credit"

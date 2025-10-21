@@ -1,6 +1,7 @@
 'use server';
 
 import axiosInstance from "@/app/axiosInstance";
+import {cookies} from "next/headers";
 
 export async function getUsers() {
     try {

@@ -2,25 +2,25 @@
 
 import {revalidatePath} from "next/cache";
 import axiosInstance from "@/app/axiosInstance";
+import {cookies} from "next/headers";
 
 export async function generateContentAction(prompt: string, images: any, apikey: string) {
     try {
+
         const req = {
             prompt, images, apikey
         }
         const res = await axiosInstance.post("/contents/api/generate", req);
-
-        if (!res.data) {
-            throw new Error(`Failed: ${res.status}`);
-        }
-
+        
         const result = await res.data;
 
         return result;
 
-    } catch (err) {
-        console.error("Error generating content:", err);
-        throw err;
+    } catch (error) {
+        // @ts-ignore
+        if (error.response.status === 403) {
+            throw new Error("Trial users can only generate 5 contents.");
+        }
     }
 }
 

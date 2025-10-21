@@ -26,8 +26,8 @@ const LanguageSwitcher = () => {
                     <SelectValue placeholder="Language" />
                 </SelectTrigger>
                 <SelectContent className={'w-auto min-w-fit'} >
-                    <SelectItem value="en">🇬🇧EN</SelectItem>
-                    <SelectItem value="mm">🇲🇲MM</SelectItem>
+                    <SelectItem value="en">&#127468;🇧EN</SelectItem>
+                    <SelectItem value="mm">&#127474;🇲MM</SelectItem>
                 </SelectContent>
             </Select>
         </div>

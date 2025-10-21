@@ -32,6 +32,7 @@ export const UserNav = () => {
     useEffect(() => {
         // @ts-ignore
         setGeneratedCount(currentUser?.generatedCount!)
+
         if (!currentUser?.expiredAt) return;
 
         const interval = setInterval(() => {
@@ -84,7 +85,7 @@ export const UserNav = () => {
     };
 
     return (
-        <nav className="shadow-lg w-full  bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]">
+        <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]">
 
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600"></div>
 
@@ -173,8 +174,8 @@ export const UserNav = () => {
                             </Avatar>
 
                             <div className="flex flex-col ">
-                                <div className="flex items-center space-x-2">
-                                    <span className="text-white font-medium">{currentUser?.username}</span>
+                                <div className="flex items-center space-x-1">
+                                    <span className="text-white font-medium">{currentUser?.username?.split(' ')[0]}</span>
                                     <Badge
                                         variant={"secondary"}
                                         className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
