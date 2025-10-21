@@ -13,4 +13,5 @@ export async function logout() {
     cookieStore.delete('createdAt-token');
     cookieStore.delete('expiredAt-token');
     cookieStore.delete('count-token');
+    cookieStore.delete('id-token');
 }

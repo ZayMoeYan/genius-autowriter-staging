@@ -83,7 +83,6 @@ export default function ContentGeneratorUi() {
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-
         if (!currentUser) {
             getLoginUser().then((user) => {
                 if (user) {
@@ -196,8 +195,6 @@ export default function ContentGeneratorUi() {
         try {
             const apikey = await getApikey();
             const prompt = buildPrompt(values);
-
-            console.log(prompt)
 
             // @ts-ignore
             const result = await generateContentAction(prompt, base64Images, apikey!);

@@ -16,6 +16,8 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {useTranslation} from "react-i18next";
 //@ts-ignore
 import { DateTime } from "luxon";
+import {getLoginUser} from "@/app/actions/getLoginUser";
+import {getUser} from "@/app/actions/usersAction";
 
 
 export const UserNav = () => {
@@ -30,8 +32,36 @@ export const UserNav = () => {
     const { t } = useTranslation();
 
     useEffect(() => {
+        if (!currentUser) {
+            getLoginUser().then((user) => {
+                if (user) {
+                    // @ts-ignore
+                    setCurrentUser(user);
+                    // @ts-ignore
+                    if (user?.role === "TRIAL" && user?.id) {
+                        // @ts-ignore
+                        getUser(user.id).then((curUser) => {
+                            // @ts-ignore
+                            setCurrentUser({
+                                ...user,
+                                generatedCount: curUser.generated_count,
+                                expiredAt: curUser.trial_expires_at,
+                            });
+                        });
+                    }
+                }
+            });
+        }
+
+    }, [currentUser, setCurrentUser]);
+
+    useEffect(() => {
         // @ts-ignore
         setGeneratedCount(currentUser?.generatedCount!)
+        if(currentUser?.generatedCount === undefined) {
+            // @ts-ignore
+            setGeneratedCount(currentUser?.generated_count)
+        }
 
         if (!currentUser?.expiredAt) return;
 

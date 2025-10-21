@@ -53,13 +53,28 @@ export default function VoiceChatDemo() {
     const [pageName, setPageName] = useState("");
 
     useEffect(() => {
+
         if (!currentUser) {
             getLoginUser().then((user) => {
-                if (user) { // @ts-ignore
+                if (user) {
+                    // @ts-ignore
                     setCurrentUser(user);
+                    // @ts-ignore
+                    if (user?.role === "TRIAL" && user?.id) {
+                        // @ts-ignore
+                        getUser(user.id).then((curUser) => {
+                            // @ts-ignore
+                            setCurrentUser({
+                                ...user,
+                                generatedCount: curUser.generated_count,
+                                expiredAt: curUser.trial_expires_at,
+                            });
+                        });
+                    }
                 }
             });
         }
+
     }, [currentUser, setCurrentUser]);
 
 
@@ -200,9 +215,22 @@ export default function VoiceChatDemo() {
 
         try {
 
+            if (!currentUser?.generatedCount) {
+                toast({
+                    title: t("error"),
+                    description: t("trialErrorGenerated"),
+                    status: "error",
+                });
+                return
+            }
             const result = await sendToGemini(base64Images, base64audio, values);
             if(currentUser?.role === "TRIAL" ) {
-                currentUser?.id && await updateTrialGeneratedCount(currentUser.id);
+                const user = currentUser?.id && await updateTrialGeneratedCount(currentUser.id);
+                setCurrentUser({
+                    ...user,
+                    generatedCount: user.generated_count,
+                    expiredAt: user.trial_expires_at,
+                });
             }
 
             // @ts-ignore
