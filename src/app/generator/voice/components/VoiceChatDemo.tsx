@@ -257,10 +257,10 @@ export default function VoiceChatDemo() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
+        <div className="min-h-screen font-body antialiased bg-gradient-to-b from-black via-black to-red-950 py-20">
 
             {/* Header */}
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <div>
@@ -270,7 +270,7 @@ export default function VoiceChatDemo() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl border-red-800 border-[0.5px] rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
+            <div className="max-w-7xl border-red-800 border rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
                 <div className="flex flex-col gap-8">
                     <Card className="shadow-mot border-0 backdrop-blur-sm bg-black">
                         <CardHeader className="space-y-2">
@@ -305,7 +305,7 @@ export default function VoiceChatDemo() {
                                         {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.pageName")}</FormMessage> }
                                     </div>
 
-                                    <div className="text-white p-6 rounded-xl shadow-lg border border-gray-700">
+                                    <div className="text-white p-6 rounded-xl shadow-lg border border-red-600">
                                         {/* Title */}
                                         <h2 className="text-2xl font-bold mb-2">{t("voiceRecord.inputTitle")}</h2>
                                         <p className="text-gray-400 mb-6">
@@ -355,7 +355,7 @@ export default function VoiceChatDemo() {
                                                     disabled={isGenerating}
                                                     type={"button"}
                                                     onClick={startRecording}
-                                                    className={`flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all ${isGenerating && 'cursor-not-allowed opacity-50'}`}
+                                                    className={`flex items-center gap-2 bg-white hover:bg-gray-400 text-black px-6 py-3 rounded-lg transition-all ${isGenerating && 'cursor-not-allowed opacity-50'}`}
                                                 >
                                                     <Mic className="w-5 h-5" />
                                                     {t("voiceRecord.startBtn")}
@@ -501,7 +501,7 @@ export default function VoiceChatDemo() {
                 </div>
             </div>
 
-            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] lg:mx-20 md:mx-10 mx-5 mt-10 rounded-xl">
+            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border lg:mx-20 md:mx-10 mx-5 mt-10 rounded-xl">
                 <CardHeader className="space-y-2 ">
                     <CardTitle className={`text-white font-bold ${i18n.language === "mm" ? "text-2xl" : "text-3xl"}`} > {t("generatedContent")}</CardTitle>
                     <CardDescription className="text-primary">
@@ -529,16 +529,7 @@ export default function VoiceChatDemo() {
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-                            {/*<div>*/}
-                            {/*    <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent")}</label>*/}
-                            {/*    <Input*/}
-                            {/*        id="title"*/}
-                            {/*        value={title}*/}
-                            {/*        onChange={onTitleHandler}*/}
-                            {/*        placeholder={t("titlePlaceholder")}*/}
-                            {/*        className="bg-white border-black/20 mt-2  placeholder:text-white/50 focus:border-primary"*/}
-                            {/*    />*/}
-                            {/*</div>*/}
+
                             <Button
                                 type="button"
                                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"

@@ -92,11 +92,9 @@ export const UserNav = () => {
         return pathname === page;
     };
 
+    // @ts-ignore
     return (
-        <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[0.5px]">
-
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600"></div>
-
+        <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[1.5px]">
             <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto">
 
                 <div className="flex items-center space-x-3 cursor-pointer">
@@ -126,58 +124,58 @@ export const UserNav = () => {
                         p-4 md:p-0 space-y-4 md:space-y-0 transition-all duration-300 ease-in-out 
                         ${menuOpen ? "flex" : "hidden"}`}
                 >
-                    <div className="flex flex-row md:flex-row md:space-x-2 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-auto">
-                    <Link href="/generator">
-                            <Button
-                                variant="ghost"
-                                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                                    isActive('/generator')
-                                        ? 'bg-red-600 text-white hover:bg-red-700'
-                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                                }`}
-                            >
-                                <Wand2 className="h-4 w-4" />
-                                <span>{t("generator")}</span>
-                            </Button>
-                        </Link>
+                    <div className="py-2 md:py-0 lg:py-0 flex flex-row md:flex-row md:space-x-2 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-auto md:border-none lg:border-none border-t-red-600 border-t border-b-red-600 border-b">
+                        <Link href="/generator">
+                                <Button
+                                    variant="ghost"
+                                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+                                        isActive('/generator')
+                                            ? 'bg-red-600 text-white hover:bg-red-700'
+                                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                    }`}
+                                >
+                                    <Wand2 className="h-4 w-4" />
+                                    <span>{t("generator")}</span>
+                                </Button>
+                            </Link>
 
-                        <Link href="/generator/voice">
-                            <Button
-                                variant="ghost"
-                                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                                    isActive('/generator/voice')
-                                        ? 'bg-red-600 text-white hover:bg-red-700'
-                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                                }`}
-                            >
-                                <Mic className="h-4 w-4" />
-                                <span>{t("voiceRecord.navTitle")}</span>
-                            </Button>
-                        </Link>
+                            <Link href="/generator/voice">
+                                <Button
+                                    variant="ghost"
+                                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+                                        isActive('/generator/voice')
+                                            ? 'bg-red-600 text-white hover:bg-red-700'
+                                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                    }`}
+                                >
+                                    <Mic className="h-4 w-4" />
+                                    <span>{t("voiceRecord.navTitle")}</span>
+                                </Button>
+                            </Link>
 
-                        <Link href="/dashboard">
-                            <Button
-                                variant="ghost"
-                                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                                    isActive('/dashboard')
-                                        ? 'bg-red-600 text-white hover:bg-red-700'
-                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                                }`}
-                            >
-                                <BarChart3 className="h-4 w-4" />
-                                <span>{t("dashboard")}</span>
-                            </Button>
-                        </Link>
+                            <Link href="/dashboard">
+                                <Button
+                                    variant="ghost"
+                                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+                                        isActive('/dashboard')
+                                            ? 'bg-red-600 text-white hover:bg-red-700'
+                                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                    }`}
+                                >
+                                    <BarChart3 className="h-4 w-4" />
+                                    <span>{t("dashboard")}</span>
+                                </Button>
+                            </Link>
 
 
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-center border-t md:border-t-0 md:border-l border-gray-700 pt-4 md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center  md:border-t-0 md:border-l md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">
                         {/* User Info */}
                         <div className="flex items-center space-x-3">
-                            <Avatar className="h-9 w-9 bg-gray-700 border border-gray-600">
+                            <Avatar className="h-11 w-11 bg-gray-700 border border-gray-600">
                                 <div className="flex items-center justify-center h-full w-full">
-                                    <User className="h-5 w-5 text-gray-300" />
+                                    <User className="h-10 w-10 text-gray-300" />
                                 </div>
                             </Avatar>
 
@@ -188,7 +186,7 @@ export const UserNav = () => {
                                         variant={"secondary"}
                                         className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
                                     >
-                                        {currentUser?.role}
+                                        {currentUser?.role as string}
                                     </Badge>
                                     {
                                         currentUser?.role === "TRIAL" && generatedCount! >= 0 ? <span>Credit <span className={'bg-gray-700 rounded-xl px-1.5'} >{generatedCount}</span></span>
@@ -218,7 +216,7 @@ export const UserNav = () => {
                                                 </svg> : ''
                                     }
                                 </div>
-                                <span className="text-gray-400 text-xs">{currentUser?.email}</span>
+                                <span className="text-gray-400 text-xs">{currentUser?.email as string}</span>
                                 {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
                                     <span className="text-red-400 text-xs">
                                         Expires in: {timeLeft ?? "Loading..."}

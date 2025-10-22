@@ -15,7 +15,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className={'bg-black'}>
         <head>
             <link rel="icon" href="/icon.ico" sizes="32*32"/>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,17 +25,16 @@ export default function RootLayout({
                 rel="stylesheet"
             />
         </head>
-        <body className="font-body antialiased bg-black">
-        <Providers>
-            {/*<AuthProvider>*/}
-                <Nav/>
-                <main>{children}</main>
-                <Toaster />
-                <footer className="text-center text-sm text-muted-foreground bg-black p-4">
-                    <p>Copyright &copy; 2025 Myanmar Online Technology</p>
-                </footer>
-            {/*</AuthProvider>*/}
-        </Providers>
+        <body className="font-body antialiased bg-gradient-to-b from-black via-black to-red-950">
+            <Providers>
+                    <Nav/>
+                    <main>{children}</main>
+                    <Toaster />
+
+                    <footer className="text-center text-xs text-muted-foreground p-4">
+                        <p>Copyright &copy; Powered By 2025 Myanmar Online Technology</p>
+                    </footer>
+            </Providers>
         </body>
 
         </html>

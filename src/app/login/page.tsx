@@ -101,26 +101,26 @@ export default function LoginPage() {
 
 
     return (
-        <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center h-[120vh] z-0 p-4">
+        <div className="flex items-center justify-center h-[140vh] z-0 px-4 mx-5 md:mx-0 lg:mx-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
 
-            <div className="relative w-full max-w-md z-0">
+            <div className="relative w-full max-w-md z-0 mt-10">
                 <form
                     onSubmit={handleSubmit(handleLogin)}
-                    className="bg-black backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-red-800"
+                    className="bg-black backdrop-blur-sm px-8 pt-1 pb-5 rounded-2xl shadow-2xl border-[0.5px] border-red-800"
                 >
                     {/* Logo and Header */}
                     <div className="text-center mb-8">
-                        <div className="flex items-center justify-center mb-4">
+                        <div className="flex items-center justify-center mb-4 h-14">
                             <img
                                 src={motLogo.src}
                                 alt="MOT Logo"
-                                className="h-14 w-auto"
+                                className="h-full w-auto"
                             />
                         </div>
-                        <h2 className={`text-white font-bold mb-2 ${i18n.language === "mm" ? 'text-xl' : 'text-2xl'}`}>
+                        <h1 className={`text-white font-bold mb-2 ${i18n.language === "mm" ? 'text-xl' : 'text-3xl'}`}>
                             {t("welcomeBack")}
-                        </h2>
+                        </h1>
                         <p className="text-red-600 tracking-wider font-bold">
                             GENIUS AUTOWRITER
                         </p>
@@ -181,25 +181,27 @@ export default function LoginPage() {
                             )}
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
-                        >
-                            {isSubmitting ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                                    {t("loggingIn")}
-                                </div>
-                            ) : (
-                                t("login")
-                            )}
-                        </button>
+                        <div className={'flex items-center justify-center'} >
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-[80%] md:w-full lg:w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
+                            >
+                                {isSubmitting ? (
+                                    <div className="flex items-center justify-center">
+                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                        {t("loggingIn")}
+                                    </div>
+                                ) : (
+                                    t("login")
+                                )}
+                            </button>
+                        </div>
 
                     </div>
 
-                    <div className="mt-8 text-center">
-                        <p className="text-gray-500">{t("poweredBy")}</p>
+                    <div className="mt-10 text-center">
+                        <p className="text-zinc-700 text-sm pt-8">{t("poweredBy")}</p>
                     </div>
                 </form>
             </div>

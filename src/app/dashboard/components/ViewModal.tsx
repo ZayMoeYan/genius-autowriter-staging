@@ -58,26 +58,21 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                             {content.title}
                         </h2>
                         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
-                            <Badge
-                                variant={content.is_posted ? "default" : "secondary"}
-                                className={
-                                    content.is_posted
-                                        ? "bg-green-100 text-green-800 hover:bg-green-200"
-                                        : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                                }
+                            <div
+                                className={'bg-white border border-red-600 rounded-full w-fit'}
                             >
                                 {content.is_posted ? (
-                                    <>
-                                        <Eye className="h-3 w-3 mr-1" />
+                                    <div className={'text-red-600 flex items-center px-2 font-semibold'} >
+                                        <Eye className="h-3 w-3 mr-1 " />
                                         {t("viewModal.status_posted")}
-                                    </>
+                                    </div>
                                 ) : (
-                                    <>
-                                        <EyeOff className="h-3 w-3 mr-1" />
+                                    <div className={'text-red-600 flex items-center px-2 font-semibold'}>
+                                        <EyeOff className="h-3 w-3 mr-1 " />
                                         {t("viewModal.status_not_posted")}
-                                    </>
+                                    </div>
                                 )}
-                            </Badge>
+                            </div>
                             <div className="flex flex-col sm:flex-row sm:space-x-4 text-sm text-gray-500">
                                 <div className="flex items-center space-x-1">
                                     <Calendar className="h-4 w-4" />
@@ -96,14 +91,26 @@ export default function ViewModal({ content, onClose }: ViewModalProps) {
                             </div>
                         </div>
                     </div>
-                    <Button
+                    <button
+                        type="button"
                         onClick={onClose}
-                        variant="ghost"
-                        size="sm"
-                        className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 self-end sm:self-auto"
+                        className="p-2 hover:bg-gray-100 hidden md:block lg:block rounded-full transition-colors duration-200 group"
+                        aria-label="Close modal"
                     >
-                        <X className="h-5 w-5" />
-                    </Button>
+                        <svg
+                            className="w-5 h-5 text-gray-400 group-hover:text-gray-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
                 </div>
 
                 <div className="p-4 sm:p-8 overflow-y-auto max-h-[calc(90vh-140px)]">

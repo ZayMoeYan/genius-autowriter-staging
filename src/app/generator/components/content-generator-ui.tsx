@@ -224,10 +224,9 @@ export default function ContentGeneratorUi() {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20">
-
+        <div className="min-h-screen font-body antialiased bg-gradient-to-b from-black via-black to-red-950 py-20">
             {/* Header */}
-            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border-[0.5px] rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
+            <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <div>
@@ -237,7 +236,7 @@ export default function ContentGeneratorUi() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl border-red-800 border-[0.5px] rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
+            <div className="max-w-7xl border-red-800 border rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
                 <div className="flex flex-col gap-8">
                     <Card className="shadow-mot border-0 backdrop-blur-sm bg-black">
                         <CardHeader className="space-y-2">
@@ -307,13 +306,13 @@ export default function ContentGeneratorUi() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent className={'font-semibold'} >
-                                                                <SelectItem value="Providing Useful News/Information (အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း)">{t("purpose.option-1")}</SelectItem>
-                                                                <SelectItem value="Generating Audience Engagement/Response (Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း)">{t("purpose.option-2")}</SelectItem>
-                                                                <SelectItem value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
-                                                                <SelectItem value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
-                                                                <SelectItem value="Announcing an Event/Update (Event/Update ကြေညာခြင်း )">{t("purpose.option-5")}</SelectItem>
-                                                                <SelectItem value="Giving Educational Tutorial (သင်ခန်းစာပေးခြင်း)">{t("purpose.option-6")}</SelectItem>
-                                                                <SelectItem value="Showing Product Feature/Showcase (Product Feature ပြခြင်း)">{t("purpose.option-7")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Providing Useful News/Information (အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း)">{t("purpose.option-1")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Generating Audience Engagement/Response (Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း)">{t("purpose.option-2")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Announcing an Event/Update (Event/Update ကြေညာခြင်း )">{t("purpose.option-5")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Giving Educational Tutorial (သင်ခန်းစာပေးခြင်း)">{t("purpose.option-6")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Showing Product Feature/Showcase (Product Feature ပြခြင်း)">{t("purpose.option-7")}</SelectItem>
                                                             </SelectContent>
                                                         </Select >
                                                         <FormMessage />
@@ -363,16 +362,16 @@ export default function ContentGeneratorUi() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent className={'font-semibold'} >
-                                                                <SelectItem value="ဖော်ရွေသော(friendly)">{t("writingStyleOptions.friendly")}</SelectItem>
-                                                                <SelectItem value="တရားဝင်(formal)">{t("writingStyleOptions.formal")}</SelectItem>
-                                                                <SelectItem value="ဟာသ(humorous)">{t("writingStyleOptions.humorous")}</SelectItem>
-                                                                <SelectItem value="ယုံကြည်မှုရှိသော(confident)">{t("writingStyleOptions.confident")}</SelectItem>
-                                                                <SelectItem value="စိတ်အားထက်သန်သော(motivational)">{t("writingStyleOptions.motivational")}</SelectItem>
-                                                                <SelectItem value="ပရော်ဖက်ရှင်နယ်(professional)">{t("writingStyleOptions.professional")}</SelectItem>
-                                                                <SelectItem value="စကားပြောပုံစံ(conversational)">{t("writingStyleOptions.conversational")}</SelectItem>
-                                                                <SelectItem value="ဇာတ်လမ်းပြောပုံစံ(storytelling)">{t("writingStyleOptions.storytelling")}</SelectItem>
-                                                                <SelectItem value="အသိပေးရှင်းပြပုံစံ(informative)">{t("writingStyleOptions.informative")}</SelectItem>
-                                                                <SelectItem value="စည်းရုံးဆွဲဆောင်ပုံစံ(persuasive)">{t("writingStyleOptions.persuasive")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဖော်ရွေသော(friendly)">{t("writingStyleOptions.friendly")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="တရားဝင်(formal)">{t("writingStyleOptions.formal")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဟာသ(humorous)">{t("writingStyleOptions.humorous")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ယုံကြည်မှုရှိသော(confident)">{t("writingStyleOptions.confident")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စိတ်အားထက်သန်သော(motivational)">{t("writingStyleOptions.motivational")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ပရော်ဖက်ရှင်နယ်(professional)">{t("writingStyleOptions.professional")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စကားပြောပုံစံ(conversational)">{t("writingStyleOptions.conversational")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဇာတ်လမ်းပြောပုံစံ(storytelling)">{t("writingStyleOptions.storytelling")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="အသိပေးရှင်းပြပုံစံ(informative)">{t("writingStyleOptions.informative")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စည်းရုံးဆွဲဆောင်ပုံစံ(persuasive)">{t("writingStyleOptions.persuasive")}</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <FormMessage />
@@ -396,9 +395,9 @@ export default function ContentGeneratorUi() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent className={'font-semibold'} >
-                                                                <SelectItem value="short">{t("contentLengthOptions.short")}</SelectItem>
-                                                                <SelectItem value="medium">{t("contentLengthOptions.medium")}</SelectItem>
-                                                                <SelectItem value="long">{t("contentLengthOptions.long")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="short">{t("contentLengthOptions.short")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="medium">{t("contentLengthOptions.medium")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="long">{t("contentLengthOptions.long")}</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <FormMessage />
@@ -422,8 +421,8 @@ export default function ContentGeneratorUi() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent className={'font-semibold'} >
-                                                                <SelectItem value="မြန်မာ">{t("outputLanguageOptions.myanmar")}</SelectItem>
-                                                                <SelectItem value="English">{t("outputLanguageOptions.english")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="မြန်မာ">{t("outputLanguageOptions.myanmar")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="English">{t("outputLanguageOptions.english")}</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <FormMessage />
@@ -634,18 +633,7 @@ export default function ContentGeneratorUi() {
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-                            {/*<div className={'flex flex-col gap-1 '}>*/}
-                            {/*    <label htmlFor="title" className="text-white text-[1.2rem]">{t("titleOfContent.title")}</label>*/}
-                            {/*    <Input*/}
-                            {/*        disabled={isSaving}*/}
-                            {/*        id="title"*/}
-                            {/*        value={title}*/}
-                            {/*        onChange={onTitleHandler}*/}
-                            {/*        placeholder={t("titlePlaceholder")}*/}
-                            {/*        className="bg-white border-none"*/}
-                            {/*    />*/}
-                            {/*    { titleError && <p className={'text-red-600 text-sm'} >{t("titleOfContent.errorMsg")}</p>}*/}
-                            {/*</div>*/}
+
                             <Button
                                 type="button"
                                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
@@ -686,7 +674,7 @@ export default function ContentGeneratorUi() {
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent
-                    className="bg-gray-900 text-white border-[0.4px] border-red-800 rounded-xl"
+                    className="bg-gray-900 text-white border border-red-800 rounded-xl"
                 >
                     <DialogHeader>
                         <DialogTitle className="text-lg sm:text-xl font-bold">
