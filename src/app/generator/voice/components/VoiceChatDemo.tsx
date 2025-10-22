@@ -9,19 +9,16 @@ import {Copy, Mic, Sparkles, StopCircle, Wand2, X} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Skeleton} from "@/components/ui/skeleton";
 import {useToast} from "@/hooks/use-toast";
-import {useRouter} from "next/navigation";
-import {useAuth} from "@/app/context/AuthProvider";
-import {CurrentUserType} from "@/components/Nav";
 import {useTranslation} from "next-i18next";
-import {getLoginUser} from "@/app/actions/getLoginUser";
 import {useFieldArray, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {saveContent} from "@/app/actions/contentsAction";
-import {getUser, updateTrialGeneratedCount} from "@/app/actions/usersAction";
 import {FormValues} from "@/app/generator/components/content-generator-ui";
 import * as z from "zod";
 import {sendToGemini} from "@/app/actions/voiceGenerateAction";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import {useAuthStore} from "@/stores/useAuthStore";
+import {updateTrialGeneratedCount} from "@/app/actions/usersAction";
 
 const formSchema = z.object({
     title: z.string().min(1, ""),
@@ -38,13 +35,10 @@ export default function VoiceChatDemo() {
     const [isSaving, setIsSaving] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-    const [title, setTitle] = useState("");
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
     const [base64audio, setBase64Audio] = useState("");
-    const router = useRouter();
-    // @ts-ignore
-    const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
+    const [title, setTitle] = useState("");
     const { t, i18n } = useTranslation();
     const [audioSaved, setAudioSaved] = useState(false);
     const [seconds, setSeconds] = useState(0);
@@ -52,31 +46,7 @@ export default function VoiceChatDemo() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageName, setPageName] = useState("");
 
-    useEffect(() => {
-
-        if (!currentUser) {
-            getLoginUser().then((user) => {
-                if (user) {
-                    // @ts-ignore
-                    setCurrentUser(user);
-                    // @ts-ignore
-                    if (user?.role === "TRIAL" && user?.id) {
-                        // @ts-ignore
-                        getUser(user.id).then((curUser) => {
-                            // @ts-ignore
-                            setCurrentUser({
-                                ...user,
-                                generatedCount: curUser.generated_count,
-                                expiredAt: curUser.trial_expires_at,
-                            });
-                        });
-                    }
-                }
-            });
-        }
-
-    }, [currentUser, setCurrentUser]);
-
+    const { currentUser, refreshUser } = useAuthStore();
 
     const form = useForm<FormValues>({
         // @ts-ignore
@@ -208,6 +178,16 @@ export default function VoiceChatDemo() {
     };
 
     const onSubmit = async (values: FormValues) => {
+
+        if (!currentUser?.generatedCount) {
+            toast({
+                title: t("error"),
+                description: t("trialErrorGenerated"),
+                status: "error",
+            });
+            return
+        }
+
         setIsGenerating(true);
         setGeneratedContent("");
 
@@ -215,27 +195,17 @@ export default function VoiceChatDemo() {
 
         try {
 
-            if (!currentUser?.generatedCount) {
-                toast({
-                    title: t("error"),
-                    description: t("trialErrorGenerated"),
-                    status: "error",
-                });
-                return
-            }
             const result = await sendToGemini(base64Images, base64audio, values);
-            if(currentUser?.role === "TRIAL" ) {
-                const user = currentUser?.id && await updateTrialGeneratedCount(currentUser.id);
-                setCurrentUser({
-                    ...user,
-                    generatedCount: user.generated_count,
-                    expiredAt: user.trial_expires_at,
-                });
+            if(currentUser.role === "TRIAL") {
+                // @ts-ignore
+                await updateTrialGeneratedCount(currentUser?.id);
             }
 
             // @ts-ignore
             setGeneratedContent(result)
-            currentUser?.id && getUser(currentUser?.id).then(user => setCurrentUser(user))
+
+            await refreshUser();
+
             toast({
                 title: t("success"),
                 description: t("successGenerated"),

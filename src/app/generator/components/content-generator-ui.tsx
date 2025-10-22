@@ -1,10 +1,10 @@
 "use client";
 
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, { useEffect, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {Wand2, X, Sparkles, SaveIcon, Copy} from "lucide-react";
+import {Wand2, X, Sparkles, Copy} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -30,7 +30,6 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
-    DialogDescription,
     DialogClose,
 } from "@/components/ui/dialog";
 
@@ -40,13 +39,10 @@ import {generateContentAction, saveContent} from "@/app/actions/contentsAction";
 import { buildPrompt } from "@/utils/buildPrompt";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dropzone} from "@/components/ui/Dropzone";
-import {useAuth} from "@/app/context/AuthProvider";
-import {getLoginUser} from "@/app/actions/getLoginUser";
-import {CurrentUserType} from "@/components/Nav";
 import getApikey from "@/app/actions/getApikey";
 import { useTranslation } from "next-i18next";
-import {useRouter} from "next/navigation";
 import {getUser} from "@/app/actions/usersAction";
+import {useAuthStore} from "@/stores/useAuthStore";
 
 
 const formSchema = z.object({
@@ -76,35 +72,10 @@ export default function ContentGeneratorUi() {
     const [copied, setCopied] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageName, setPageName] = useState("");
-
-
-    // @ts-ignore
-    const { currentUser, setCurrentUser } = useAuth<CurrentUserType>();
+    const { refreshUser, currentUser } = useAuthStore();
     const { t, i18n } = useTranslation();
 
-    useEffect(() => {
-        if (!currentUser) {
-            getLoginUser().then((user) => {
-                if (user) {
-                    // @ts-ignore
-                    setCurrentUser(user);
-                    // @ts-ignore
-                    if (user?.role === "TRIAL" && user?.id) {
-                        // @ts-ignore
-                        getUser(user.id).then((curUser) => {
-                            // @ts-ignore
-                            setCurrentUser({
-                                ...user,
-                                generatedCount: curUser.generated_count,
-                                expiredAt: curUser.trial_expires_at,
-                            });
-                        });
-                    }
-                }
-            });
-        }
 
-    }, [currentUser, setCurrentUser]);
 
     const handleCopy = async () => {
         try {
@@ -149,21 +120,6 @@ export default function ContentGeneratorUi() {
         name: "imageDescriptions",
     });
 
-    // useEffect(() => {
-    //     const saved = localStorage.getItem("contentForm");
-    //     if (saved) {
-    //         const parsed = JSON.parse(saved);
-    //         reset(parsed);
-    //     }
-    // }, [reset]);
-    //
-    // useEffect(() => {
-    //     const subscription = watch((values) => {
-    //         localStorage.setItem("contentForm", JSON.stringify(values));
-    //     });
-    //     return () => subscription.unsubscribe();
-    // }, [watch]);
-
     const fileToBase64 = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -187,6 +143,16 @@ export default function ContentGeneratorUi() {
     };
 
     const onSubmit = async (values: FormValues) => {
+
+        if (!currentUser?.generatedCount) {
+            toast({
+                title: t("error"),
+                description: t("trialErrorGenerated"),
+                status: "error",
+            });
+            return
+        }
+
         setIsGenerating(true);
         setGeneratedContent("");
 
@@ -200,15 +166,7 @@ export default function ContentGeneratorUi() {
             const result = await generateContentAction(prompt, base64Images, apikey!);
             setGeneratedContent(result.content);
 
-            if(currentUser?.role === "TRIAL") {
-                currentUser?.id && getUser(currentUser?.id).then(user => {
-                    setCurrentUser({
-                        ...user,
-                        generatedCount: user.generated_count,
-                        expiredAt: user.trial_expires_at,
-                    });
-                })
-            }
+            await refreshUser();
 
             toast({
               title: t("success"),

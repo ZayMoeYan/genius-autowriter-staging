@@ -11,24 +11,15 @@ import {logout} from "@/app/actions/logoutAction";
 
 import motLogo from '@/app/images/MOT.png';
 import {useToast} from "@/hooks/use-toast";
-import { useAuth} from "@/app/context/AuthProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import {useAuthStore} from "@/stores/useAuthStore";
 
-export type CurrentUserType = {
-    id: number | undefined
-    username: string | undefined
-    role: string | undefined
-    isLoggedIn: string | undefined
-    email: string | undefined
-    expiredAt: string | undefined
-    generatedCount: number
-}
 
 export const Nav = () => {
     const router = useRouter();
     const pathname = usePathname();
     const { toast } = useToast();
-    const { currentUser, setCurrentUser } = useAuth();
+    const { currentUser, setCurrentUser, refreshUser, loading } = useAuthStore();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = async () => {

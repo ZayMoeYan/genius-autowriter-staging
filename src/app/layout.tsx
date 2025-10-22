@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import {Nav} from "@/components/Nav";
 import {Toaster} from "@/components/Toaster";
-import {AuthProvider} from "@/app/context/AuthProvider";
 import Providers from "@/app/Providers";
 
 export const metadata: Metadata = {
@@ -28,14 +27,14 @@ export default function RootLayout({
         </head>
         <body className="font-body antialiased bg-black">
         <Providers>
-            <AuthProvider>
+            {/*<AuthProvider>*/}
                 <Nav/>
                 <main>{children}</main>
                 <Toaster />
                 <footer className="text-center text-sm text-muted-foreground bg-black p-4">
                     <p>Copyright &copy; 2025 Myanmar Online Technology</p>
                 </footer>
-            </AuthProvider>
+            {/*</AuthProvider>*/}
         </Providers>
         </body>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {
     FileText,
     Edit,
@@ -22,9 +22,6 @@ import {getContents, deleteContent, updateContent} from "@/app/actions/contentsA
 import ViewModal from "@/app/dashboard/components/ViewModal";
 import DeleteModal from "@/app/dashboard/components/DeleteModal";
 import {useToast} from "@/hooks/use-toast";
-import {useAuth} from "@/app/context/AuthProvider";
-import {getLoginUser} from "@/app/actions/getLoginUser";
-import {CurrentUserType} from "@/components/Nav";
 import {useTranslation} from "react-i18next";
 
 const contentsPerPage = 8;
@@ -42,18 +39,7 @@ export default function Dashboard() {
     const [togglingId, setTogglingId] = useState<number | null>(null);
     const { toast } = useToast();
     const [currentPage, setCurrentPage] = useState(1);
-    const { currentUser, setCurrentUser } = useAuth();
     const { t, i18n } = useTranslation();
-
-    useEffect(() => {
-        if (!currentUser) {
-            getLoginUser().then((user) => {
-                if (user) { // @ts-ignore
-                    setCurrentUser(user);
-                }
-            });
-        }
-    }, [currentUser, setCurrentUser]);
 
 
     useEffect(() => {

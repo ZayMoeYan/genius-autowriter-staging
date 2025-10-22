@@ -30,7 +30,6 @@ export async function login(username: string, password: string, apikey: string) 
         let userRole = "";
         let name = "";
         let userEmail = "";
-        let userCreatedAt = "";
         let userExpiredAt = "";
         let userGeneratedCount = "";
         let apikeyToken = "";
@@ -44,8 +43,7 @@ export async function login(username: string, password: string, apikey: string) 
             userRole = jwt.sign(data.role, process.env.NEXT_SECRET_KEY!);
             name = jwt.sign(data.username, process.env.NEXT_SECRET_KEY!);
             userEmail = jwt.sign(data.email, process.env.NEXT_SECRET_KEY!);
-             userCreatedAt = jwt.sign(data.created_at, process.env.NEXT_SECRET_KEY!);
-             userExpiredAt = jwt.sign(data.trial_expires_at, process.env.NEXT_SECRET_KEY!);
+            userExpiredAt = jwt.sign(data.trial_expires_at, process.env.NEXT_SECRET_KEY!);
              userGeneratedCount = jwt.sign(data.generated_count, process.env.NEXT_SECRET_KEY!);
              idToken = jwt.sign(data.id, process.env.NEXT_SECRET_KEY!);
              apikeyToken = jwt.sign(apikey, process.env.NEXT_SECRET_KEY!);
@@ -60,7 +58,6 @@ export async function login(username: string, password: string, apikey: string) 
             cookieStore.set('role-token', userRole, { httpOnly: true, secure: true})
             cookieStore.set('username-token', name, { httpOnly: true, secure: true})
             cookieStore.set('email-token', userEmail, { httpOnly: true, secure: true})
-            cookieStore.set('createdAt-token', userCreatedAt, { httpOnly: true, secure: true})
             cookieStore.set('expiredAt-token', userExpiredAt, { httpOnly: true, secure: true})
             cookieStore.set('count-token', userGeneratedCount, { httpOnly: true, secure: true})
             cookieStore.set('id-token', idToken, { httpOnly: true, secure: true})

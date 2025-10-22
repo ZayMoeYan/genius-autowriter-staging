@@ -11,13 +11,11 @@ import {logout} from "@/app/actions/logoutAction";
 
 import motLogo from '@/app/images/MOT.png';
 import {useToast} from "@/hooks/use-toast";
-import { useAuth} from "@/app/context/AuthProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {useTranslation} from "react-i18next";
 //@ts-ignore
 import { DateTime } from "luxon";
-import {getLoginUser} from "@/app/actions/getLoginUser";
-import {getUser} from "@/app/actions/usersAction";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 
 export const UserNav = () => {
@@ -25,43 +23,23 @@ export const UserNav = () => {
     const router = useRouter();
     const pathname = usePathname();
     const { toast } = useToast();
-    const { currentUser, setCurrentUser } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [generatedCount, setGeneratedCount] = useState();
     const [timeLeft, setTimeLeft] = useState<string | null>(null);
     const { t } = useTranslation();
 
+    const { currentUser, setCurrentUser, refreshUser, loading } = useAuthStore();
+
     useEffect(() => {
         if (!currentUser) {
-            getLoginUser().then((user) => {
-                if (user) {
-                    // @ts-ignore
-                    setCurrentUser(user);
-                    // @ts-ignore
-                    if (user?.role === "TRIAL" && user?.id) {
-                        // @ts-ignore
-                        getUser(user.id).then((curUser) => {
-                            // @ts-ignore
-                            setCurrentUser({
-                                ...user,
-                                generatedCount: curUser.generated_count,
-                                expiredAt: curUser.trial_expires_at,
-                            });
-                        });
-                    }
-                }
-            });
+            refreshUser()
         }
-
-    }, [currentUser, setCurrentUser]);
+    }, [currentUser])
 
     useEffect(() => {
+
         // @ts-ignore
         setGeneratedCount(currentUser?.generatedCount!)
-        if(currentUser?.generatedCount === undefined) {
-            // @ts-ignore
-            setGeneratedCount(currentUser?.generated_count)
-        }
 
         if (!currentUser?.expiredAt) return;
 

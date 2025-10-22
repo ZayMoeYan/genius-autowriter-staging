@@ -21,13 +21,13 @@ import { Card } from "@/components/ui/card";
 import {deleteUserOrAdmin, getUsers, save, updateUserOrAdmin} from "@/app/actions/usersAction";
 import UserDeleteModal from "@/app/admin/dashboard/components/UserDeleteModal";
 import {useToast} from "@/hooks/use-toast";
-import { useAuth} from "@/app/context/AuthProvider";
 import {getLoginUser} from "@/app/actions/getLoginUser";
 import {useRouter} from "next/navigation";
 import {logout} from "@/app/actions/logoutAction";
 import UserForm from "@/app/admin/dashboard/components/UserForm";
 // @ts-ignore
 import { DateTime } from 'luxon';
+import {useAuthStore} from "@/stores/useAuthStore";
 
 function formatDateTime(dateTime: any) {
     return DateTime.fromISO(dateTime, { zone: "Asia/Yangon" })
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
     const [userToDelete, setUserToDelete] = useState<any | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const { toast } = useToast();
-    const { currentUser, setCurrentUser } = useAuth();
+    const { currentUser, setCurrentUser, refreshUser } = useAuthStore();
     const [showPassword, setShowPassword] = useState(false);
     const [expiryFilter, setExpiryFilter] = useState("all");
     const router = useRouter();
