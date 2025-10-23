@@ -17,7 +17,6 @@ import {FormValues} from "@/app/generator/components/content-generator-ui";
 import * as z from "zod";
 import {sendToGemini} from "@/app/actions/voiceGenerateAction";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {useAuthStore} from "@/stores/useAuthStore";
 import {updateTrialGeneratedCount} from "@/app/actions/usersAction";
 
 const formSchema = z.object({
@@ -45,8 +44,6 @@ export default function VoiceChatDemo() {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageName, setPageName] = useState("");
-
-    const { currentUser, refreshUser } = useAuthStore();
 
     const form = useForm<FormValues>({
         // @ts-ignore

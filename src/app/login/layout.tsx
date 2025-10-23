@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import {UserNav} from "@/app/generator/components/UserNav";
+import {Nav} from "@/components/Nav";
 
 
 
@@ -9,10 +9,10 @@ interface Props {
 
 export default function RootLayout({ children }: Props) {
     return (
-        <>
-            <UserNav/>
+        <div>
+            <Nav/>
             {children}
-        </>
+        </div>
     );
 }
 

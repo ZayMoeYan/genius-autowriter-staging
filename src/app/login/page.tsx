@@ -101,13 +101,13 @@ export default function LoginPage() {
 
 
     return (
-        <div className="flex items-center justify-center h-[140vh] z-0 px-4 mx-5 md:mx-0 lg:mx-0">
+        <div className="flex items-center justify-center h-[140vh] z-0 px-4 mx-3 md:mx-0 lg:mx-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
 
             <div className="relative w-full max-w-md z-0 mt-10">
                 <form
                     onSubmit={handleSubmit(handleLogin)}
-                    className="bg-black backdrop-blur-sm px-8 pt-1 pb-5 rounded-2xl shadow-2xl border-[0.5px] border-red-800"
+                    className="bg-black backdrop-blur-sm px-8 pt-1 pb-5 rounded-2xl shadow-2xl border border-red-800"
                 >
                     {/* Logo and Header */}
                     <div className="text-center mb-8">

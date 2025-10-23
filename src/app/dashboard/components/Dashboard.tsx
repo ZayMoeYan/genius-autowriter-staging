@@ -182,7 +182,7 @@ export default function Dashboard() {
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
-                            <h1 className={`font-bold text-white mb-1 text-3xl`}>{t('contentDashboard.title')}</h1>
+                            <h1 className={`font-bold text-white mb-1 ${i18n.language === "mm" ? "text-2xl" : "text-3xl"}`}>{t('contentDashboard.title')}</h1>
                             <p className={`tracking-wider font-medium  text-red-600 ${i18n.language === "mm" ? "text-sm" : "text-primary"}`}>{t('contentDashboard.subtitle')}</p>
                         </div>
                     </div>
@@ -265,8 +265,8 @@ export default function Dashboard() {
 
                 <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800 border overflow-hidden">
                     <div className="p-6 border-b border-red-800">
-                        <h2 className={`text-white text-2xl`}>{t("contentDashboard.table.title")}</h2>
-                        <p className={`text-gray-400 ${i18n.language === "mm" ? "text-sm mt-2" : ""}`}>{t("contentDashboard.table.description")}</p>
+                        <h2 className={`text-white ${i18n.language === "mm" ? "text-xl" : "text-2xl"}`}>{t("contentDashboard.table.title")}</h2>
+                        <p className={`text-gray-400 ${i18n.language === "mm" ? "text-xs mt-2" : ""}`}>{t("contentDashboard.table.description")}</p>
                     </div>
 
                     {loading ? (
@@ -293,19 +293,19 @@ export default function Dashboard() {
                                     <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
                                         <div className="flex-1 space-y-3">
                                             <div className="flex items-center space-x-3">
-                                                <h3 className="text-white text-xl max-w-[100px] truncate md:max-w-none lg:max-w-none">
+                                                <h3 className="text-white text-xl max-w-[100px] truncate md:max-w-none lg:max-w-none ">
                                                     {content.title}
                                                 </h3>
                                                 <div
                                                     className={'bg-white border border-red-600 rounded-full w-fit'}
                                                 >
                                                     {content.is_posted ? (
-                                                        <div className={'text-red-600 flex items-center px-2 font-semibold'} >
-                                                            <Eye className="h-8 w-4 mr-1 " />
+                                                        <div className={`text-red-600 flex items-center px-2 text-xs py-1 font-semibold`} >
+                                                            <Eye className="h-4 w-4 mr-1 " />
                                                             {t("viewModal.status_posted")}
                                                         </div>
                                                     ) : (
-                                                        <div className={'text-red-600 flex items-center px-2 font-semibold'}>
+                                                        <div className={`text-red-600 flex items-center px-2 text-xs py-1 font-semibold`}>
                                                             <EyeOff className="h-4 w-4 mr-1" />
                                                             {t("viewModal.status_not_posted")}
                                                         </div>

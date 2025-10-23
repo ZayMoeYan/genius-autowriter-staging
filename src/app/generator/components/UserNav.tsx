@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Wand2, BarChart3, LogOut, User, Menu, X, Mic} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -24,11 +24,12 @@ export const UserNav = () => {
     const pathname = usePathname();
     const { toast } = useToast();
     const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
     const [generatedCount, setGeneratedCount] = useState();
     const [timeLeft, setTimeLeft] = useState<string | null>(null);
     const { t } = useTranslation();
 
-    const { currentUser, setCurrentUser, refreshUser, loading } = useAuthStore();
+    const { currentUser, setCurrentUser, refreshUser } = useAuthStore();
 
     useEffect(() => {
         if (!currentUser) {
@@ -119,14 +120,16 @@ export const UserNav = () => {
                 </div>
 
                 <div
+                    ref={menuRef}
                     className={`flex-col md:flex md:flex-row md:items-center md:space-x-6 
                         fixed md:static top-16 left-0 w-full md:w-auto bg-black md:bg-transparent 
                         p-4 md:p-0 space-y-4 md:space-y-0 transition-all duration-300 ease-in-out 
                         ${menuOpen ? "flex" : "hidden"}`}
                 >
-                    <div className="py-2 md:py-0 lg:py-0 flex flex-row md:flex-row md:space-x-2 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-auto md:border-none lg:border-none border-t-red-600 border-t border-b-red-600 border-b">
+                    <div className="py-2 md:py-0 lg:py-0 flex flex-row md:flex-row md:space-x-2 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-auto md:border-none lg:border-none border-t-red-600 border-t border-b-red-600 border-b gap-2">
                         <Link href="/generator">
                                 <Button
+                                    onClick={() => setMenuOpen(false)}
                                     variant="ghost"
                                     className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
                                         isActive('/generator')
@@ -139,8 +142,10 @@ export const UserNav = () => {
                                 </Button>
                             </Link>
 
-                            <Link href="/generator/voice">
+                        {
+                           !currentUser || currentUser?.role === "TRIAL" ?  '' : <Link href="/generator/voice">
                                 <Button
+                                    onClick={() => setMenuOpen(false)}
                                     variant="ghost"
                                     className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
                                         isActive('/generator/voice')
@@ -152,6 +157,7 @@ export const UserNav = () => {
                                     <span>{t("voiceRecord.navTitle")}</span>
                                 </Button>
                             </Link>
+                        }
 
                             <Link href="/dashboard">
                                 <Button
@@ -179,68 +185,93 @@ export const UserNav = () => {
                                 </div>
                             </Avatar>
 
-                            <div className="flex flex-col ">
-                                <div className="flex items-center space-x-1">
-                                    <span className="text-white font-medium">{currentUser?.username?.split(' ')[0]}</span>
-                                    <Badge
-                                        variant={"secondary"}
-                                        className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
+                            {
+                                !currentUser ? <svg
+                                        className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
                                     >
-                                        {currentUser?.role as string}
-                                    </Badge>
-                                    {
-                                        currentUser?.role === "TRIAL" && generatedCount! >= 0 ? <span>Credit <span className={'bg-gray-700 rounded-xl px-1.5'} >{generatedCount}</span></span>
-                                            : currentUser?.role === "TRIAL" ?
-                                                <svg
-                                                    className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <circle
-                                                        className="opacity-25"
-                                                        cx="12"
-                                                        cy="12"
-                                                        r="10"
-                                                        stroke="currentColor"
-                                                        strokeWidth="4"
-                                                    ></circle>
-                                                    <path
-                                                        className="opacity-75"
-                                                        fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        ></circle>
+                                        <path
+                                            className="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373
                                            0 0 5.373 0 12h4zm2 5.291A7.962
                                            7.962 0 014 12H0c0 3.042 1.135
                                            5.824 3 7.938l3-2.647z"
-                                                    ></path>
-                                                </svg> : ''
-                                    }
-                                </div>
-                                <span className="text-gray-400 text-xs">{currentUser?.email as string}</span>
-                                {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
-                                    <span className="text-red-400 text-xs">
+                                        ></path>
+                                    </svg>  :
+                                    <div className="flex flex-col ">
+                                        <div className="flex items-center space-x-1">
+                                            <span className="text-white font-medium">{currentUser?.username?.split(' ')[0]}</span>
+                                            <Badge
+                                                variant={"secondary"}
+                                                className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
+                                            >
+                                                {currentUser?.role as string}
+                                            </Badge>
+                                            {
+                                                currentUser?.role === "TRIAL" && generatedCount! >= 0 ? <span>Credit <span className={'bg-gray-700 rounded-xl px-1.5'} >{generatedCount}</span></span>
+                                                    : currentUser?.role === "TRIAL" ?
+                                                        <svg
+                                                            className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <circle
+                                                                className="opacity-25"
+                                                                cx="12"
+                                                                cy="12"
+                                                                r="10"
+                                                                stroke="currentColor"
+                                                                strokeWidth="4"
+                                                            ></circle>
+                                                            <path
+                                                                className="opacity-75"
+                                                                fill="currentColor"
+                                                                d="M4 12a8 8 0 018-8V0C5.373
+                                           0 0 5.373 0 12h4zm2 5.291A7.962
+                                           7.962 0 014 12H0c0 3.042 1.135
+                                           5.824 3 7.938l3-2.647z"
+                                                            ></path>
+                                                        </svg> : ''
+                                            }
+                                        </div>
+                                        <span className="text-gray-400 text-xs">{currentUser?.email as string}</span>
+                                        {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
+                                            <span className="text-red-400 text-xs">
                                         Expires in: {timeLeft ?? "Loading..."}
                                       </span>
-                                )}
+                                        )}
 
-                            </div>
+                                    </div>
+                            }
                         </div>
 
                         {/* Logout + Language Switcher */}
-                        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3 w-full md:w-auto">
+                        <div className="flex items-center md:flex-row  md:items-center gap-2 md:gap-3 w-full md:w-auto">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all w-full md:w-auto"
+                                className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all w-[80%] md:w-auto"
                                 onClick={handleLogout}
                             >
                                 <LogOut className="h-4 w-4 mr-2" />
                                 {t("logout")}
                             </Button>
 
-                            <div className="w-full md:w-auto">
+
                                 <LanguageSwitcher />
-                            </div>
+
                         </div>
                     </div>
                 </div>

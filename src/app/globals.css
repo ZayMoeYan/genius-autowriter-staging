@@ -15,6 +15,17 @@ All colors MUST be HSL.
 }
 
 @layer base {
+
+
+  body {
+    @apply bg-gradient-to-b from-black via-black to-red-950 text-white;
+  }
+
+  /* Default style for all cards/div containers */
+  div {
+    @apply bg-transparent;
+  }
+
   :root {
     /* MOT Theme - Inspired by the logo colors */
     --background: 0 0% 100%;

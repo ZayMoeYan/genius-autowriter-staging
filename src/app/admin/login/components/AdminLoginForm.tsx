@@ -87,7 +87,7 @@ export default function LoginPage() {
 
     // @ts-ignore
     return (
-        <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center h-[120vh] z-0 p-4">
+        <div className="antialiased  flex items-center justify-center h-[120vh] z-0 p-4">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
 
             <div className="relative w-full max-w-md z-0">
