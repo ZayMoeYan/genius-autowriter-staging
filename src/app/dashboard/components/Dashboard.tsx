@@ -190,7 +190,8 @@ export default function Dashboard() {
             </div>
             <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5">
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">*/}
+                <div className="flex flex-col gap-6 mb-8">
                     <Card className="bg-black/95 backdrop-blur-sm border-red-800 border p-6">
                         <div className="flex items-center space-x-4">
                             <div className="bg-white border border-red-600 p-3 rounded-lg">
@@ -229,10 +230,12 @@ export default function Dashboard() {
                 </div>
 
                 {/* Search and Filter Section */}
-                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800  border p-6 mb-8">
-                    <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                        <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">
-                            <div className="relative flex-1 max-w-md">
+                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800  border pt-6 pb-2 mb-8">
+                    {/*<div className="flex flex-col sm:flex-row gap-4 items-center justify-between">*/}
+                    <div className="flex flex-col items-center justify-center">
+                        {/*<div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">*/}
+                        <div className="flex flex-col gap-3 mb-2 justify-center items-center w-full">
+                            <div className="relative w-[75%] ">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                                 <Input
                                     type="text"
@@ -244,7 +247,7 @@ export default function Dashboard() {
                             </div>
 
                             <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="w-full sm:w-48 border-none">
+                                <SelectTrigger className="w-[75%] border-none">
                                     <SelectValue placeholder={t("contentDashboard.filterPlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -255,8 +258,8 @@ export default function Dashboard() {
                             </Select>
                         </div>
 
-                        <div className="flex items-center space-x-2 ">
-                            <p className="text-gray-400">
+                        <div className="flex items-center">
+                            <p className={`text-gray-400 ${i18n.language === 'mm' ? 'text-sm py-1' : ''}`}>
                                 {t("contentDashboard.showing")} {paginatedContents.length} of {totalContents}
                             </p>
                         </div>
@@ -290,24 +293,24 @@ export default function Dashboard() {
                                     key={content.id}
                                     className="p-6 bg-white/20 hover:bg-white/40 transition-colors"
                                 >
-                                    <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
+                                    <div className="flex flex-col justify-between space-y-4 ">
                                         <div className="flex-1 space-y-3">
                                             <div className="flex items-center space-x-3">
                                                 <h3 className="text-white text-xl max-w-[100px] truncate md:max-w-none lg:max-w-none ">
                                                     {content.title}
                                                 </h3>
                                                 <div
-                                                    className={'bg-white border border-red-600 rounded-full w-fit'}
+                                                    className={'bg-white border border-red-600 rounded-full w-fit px-3'}
                                                 >
                                                     {content.is_posted ? (
-                                                        <div className={`text-red-600 flex items-center px-2 text-xs py-1 font-semibold`} >
+                                                        <div className={`text-red-600 flex items-center px-2 ${i18n.language === 'mm' ? 'text-xs' : 'text-sm'} py-1 font-semibold`} >
                                                             <Eye className="h-4 w-4 mr-1 " />
-                                                            {t("viewModal.status_posted")}
+                                                            {t("contentDashboard.status.posted")}
                                                         </div>
                                                     ) : (
-                                                        <div className={`text-red-600 flex items-center px-2 text-xs py-1 font-semibold`}>
+                                                        <div className={`text-red-600 flex items-center px-2  ${i18n.language === 'mm' ? 'text-xs' : 'text-sm'} py-1 font-semibold`}>
                                                             <EyeOff className="h-4 w-4 mr-1" />
-                                                            {t("viewModal.status_not_posted")}
+                                                            {t("contentDashboard.status.draft")}
                                                         </div>
                                                     )}
                                                 </div>
@@ -360,14 +363,12 @@ export default function Dashboard() {
 
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
 
-
-                                            {/* Action Buttons */}
                                             <div className="flex space-x-2">
                                                 <Button
                                                     onClick={() => handleView(content)}
                                                     variant="outline"
                                                     size="sm"
-                                                    className="border-red-600 bg-white border hover:bg-red-200"
+                                                    className="border-red-600 rounded-none bg-white border hover:bg-red-200"
                                                 >
                                                     <Eye className="h-4 w-4 text-red-600" />
                                                 </Button>
@@ -375,7 +376,7 @@ export default function Dashboard() {
                                                     onClick={() => handleEdit(content)}
                                                     variant="outline"
                                                     size="sm"
-                                                    className="border-red-600 bg-white border hover:bg-red-200 "
+                                                    className="border-red-600 rounded-none bg-white border hover:bg-red-200 "
                                                 >
                                                     <Edit className="h-4 w-4 text-red-600" />
                                                 </Button>
@@ -383,7 +384,7 @@ export default function Dashboard() {
                                                     onClick={() => handleDelete(content)}
                                                     variant="outline"
                                                     size="sm"
-                                                    className="border-red-600 bg-white border hover:bg-red-200"
+                                                    className="border-red-600 rounded-none bg-white border hover:bg-red-200"
                                                 >
                                                     <Trash2 className="h-4 w-4 text-red-600" />
                                                 </Button>
@@ -397,8 +398,8 @@ export default function Dashboard() {
                 </div>
 
                 {totalPages > 1 && (
-                    <div className="flex items-center justify-between p-4 border-t border-red-800">
-                        <p className="text-sm text-gray-400">
+                    <div className="flex items-center justify-between p-4">
+                        <p className="text-sm text-gray-400 hidden md:block">
                             { i18n.language === "en" ? 'Showing ' : (
                                 <>
                                     Content စာမျက်နှာ{" "}

@@ -4,7 +4,7 @@ import React, { useEffect, useState} from "react";
 import {useFieldArray, useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {Wand2, X, Sparkles, Copy} from "lucide-react";
+import {Wand2, X, Sparkles, Copy, SaveIcon} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -310,7 +310,7 @@ export default function ContentGeneratorUi() {
                                                                 <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Generating Audience Engagement/Response (Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း)">{t("purpose.option-2")}</SelectItem>
                                                                 <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
                                                                 <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Announcing an Event/Update (Event/Update ကြေညာခြင်း )">{t("purpose.option-5")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Announcing an Event (Event ကြေညာခြင်း)">{t("purpose.option-5")}</SelectItem>
                                                                 <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Giving Educational Tutorial (သင်ခန်းစာပေးခြင်း)">{t("purpose.option-6")}</SelectItem>
                                                                 <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Showing Product Feature/Showcase (Product Feature ပြခြင်း)">{t("purpose.option-7")}</SelectItem>
                                                             </SelectContent>
@@ -547,57 +547,61 @@ export default function ContentGeneratorUi() {
 
                                     </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="emoji"
-                                        render={({ field }) => (
-                                            <FormItem className="flex items-center justify-between pb-4 px-5 pt-2  border-[0.3px] border-red-600 rounded-xl">
-                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem] mt-1">
-                                                    {t("includeEmojis")}
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
-                                                        <input
-                                                            disabled={isGenerating}
-                                                            type="checkbox"
-                                                            checked={field.value}
-                                                            onChange={(e) => field.onChange(e.target.checked)}
-                                                            className="sr-only peer "
-                                                        />
-                                                            <div
-                                                                className={`w-11 h-6 rounded-full transition-colors duration-300 
+                                   <div className={'md:flex md:items-center md:justify-center'} >
+                                       <FormField
+                                           control={form.control}
+                                           name="emoji"
+                                           render={({ field }) => (
+                                               <FormItem className="flex items-center justify-between md:w-[50%] pb-4 px-5 pt-2  border border-red-600 rounded-xl">
+                                                   <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem] mt-1">
+                                                       {t("includeEmojis")}
+                                                   </FormLabel>
+                                                   <FormControl>
+                                                       <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
+                                                           <input
+                                                               disabled={isGenerating}
+                                                               type="checkbox"
+                                                               checked={field.value}
+                                                               onChange={(e) => field.onChange(e.target.checked)}
+                                                               className="sr-only peer "
+                                                           />
+                                                           <div
+                                                               className={`w-11 h-6 rounded-full transition-colors duration-300 
                                                                             ${field.value ? "bg-green-500" : "bg-gray-400"}`}
-                                                            >
-                                                                <div
-                                                                    className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
+                                                           >
+                                                               <div
+                                                                   className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
                                                                                ${field.value ? "translate-x-5" : "translate-x-0"}`}
-                                                                >
-                                                                </div>
-                                                            </div>
-                                                    </label>
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
+                                                               >
+                                                               </div>
+                                                           </div>
+                                                       </label>
+                                                   </FormControl>
+                                               </FormItem>
+                                           )}
+                                       />
+                                   </div>
 
-                                    <Button
-                                        type="submit"
-                                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
-                                        size="lg"
-                                        disabled={isGenerating || isSaving}
-                                    >
-                                        {isGenerating ? (
-                                            <>
-                                                <Sparkles className="mr-2 h-4 w-4 animate-spin" />
-                                                {t("generating")}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Wand2 className="mr-2 h-4 w-4" />
-                                                {t("generateContent")}
-                                            </>
-                                        )}
-                                    </Button>
+                                    <div className={'w-full flex justify-center items-center'} >
+                                        <Button
+                                            type="submit"
+                                            className="md:w-[50%] w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
+                                            size="lg"
+                                            disabled={isGenerating || isSaving}
+                                        >
+                                            {isGenerating ? (
+                                                <>
+                                                    <Sparkles className="mr-2 h-4 w-4 animate-spin" />
+                                                    {t("generating")}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Wand2 className="mr-2 h-4 w-4" />
+                                                    {t("generateContent")}
+                                                </>
+                                            )}
+                                        </Button>
+                                    </div>
                                 </form>
                             </Form>
                         </CardContent>
@@ -605,7 +609,7 @@ export default function ContentGeneratorUi() {
                 </div>
             </div>
 
-            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border-[0.5px] lg:mx-20 md:mx-10 mx-5 mt-10 rounded-xl">
+            <Card className="shadow-mot backdrop-blur-sm bg-black border-red-800 border lg:mx-20 md:mx-10 mx-5 mt-10 rounded-xl">
                 <CardHeader className="space-y-2 ">
                     <CardTitle className={`text-white font-bold ${i18n.language === "mm" ? "text-2xl" : "text-3xl"}`} > {t("generatedContent")}</CardTitle>
                     <CardDescription className="text-primary">
@@ -625,7 +629,7 @@ export default function ContentGeneratorUi() {
                             <Skeleton className="h-4 w-2/3 bg-white/20" />
                         </div>
                     ) : generatedContent ? (
-                        <div className="space-y-6">
+                        <div className="space-y-6 justify-center">
                             <Textarea
                                 className="h-96 min-h-[24rem] font-semibold  bg-white border-none text-black  placeholder:text-white/50"
                                 value={generatedContent}
@@ -633,40 +637,39 @@ export default function ContentGeneratorUi() {
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-
-                            <Button
-                                type="button"
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
-                                size="lg"
-                                onClick={() => {
-                                    setPageName(form.getValues().title);
-                                    setIsModalOpen(true);
-                                }}
-                                disabled={isSaving}
-                            >
-                                {isSaving ? (
+                            <div className={'flex items-center justify-center gap-3 w-[30%] mx-auto'} >
+                                <Button
+                                    type={"button"}
+                                    onClick={handleCopy}
+                                    variant="outline"
+                                    className="md:w-[45%] px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
+                                >
+                                    <Copy className="h-4 w-4" />
+                                    <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
+                                </Button>
+                                <Button
+                                    variant={'outline'}
+                                    type="button"
+                                    className="md:w-[45%] px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
+                                    size="lg"
+                                    onClick={() => {
+                                        setPageName(form.getValues().title);
+                                        setIsModalOpen(true);
+                                    }}
+                                    disabled={isSaving}
+                                >
                                     <>
-                                        <Sparkles className="mr-2 h-4 w-4 animate-spin" />
-                                        {t("saving")}
+                                        <SaveIcon className="h-4 w-4" />
+                                        {t("saveContent")}
                                     </>
-                                ) : (
-                                    t("saveContent")
-                                )}
-                            </Button>
-                            <Button
-                                onClick={handleCopy}
-                                variant="outline"
-                                className="px-4 py-2 sm:px-6 sm:py-2.5 border-none text-white bg-primary hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
-                            >
-                                <Copy className="h-4 w-4" />
-                                <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
-                            </Button>
+                                </Button>
+                            </div>
                         </div>
                     ) : (
                         <div className="flex flex-col h-[50vh]  items-center justify-center rounded-lg border-2 border-dashed border-primary/50 text-center p-8">
                             <Wand2 className="h-16 w-16 text-primary mb-4" />
                             <p className="text-primary text-lg font-medium">{t("emptyStateTitle")}</p>
-                            <p className="text-white/70 mt-2">{t("emptyStateDescription")}</p>
+                            <p className="text-white mt-2">{t("emptyStateDescription")}</p>
                         </div>
                     )}
                 </CardContent>
@@ -674,7 +677,7 @@ export default function ContentGeneratorUi() {
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent
-                    className="bg-gray-900 text-white border border-red-800 rounded-xl"
+                    className="bg-black text-white border border-red-800 rounded-xl"
                 >
                     <DialogHeader>
                         <DialogTitle className="text-lg sm:text-xl font-bold">
@@ -692,7 +695,7 @@ export default function ContentGeneratorUi() {
                     </div>
 
                     <DialogFooter
-                        className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3"
+                        className="mt-6 flex flex-row justify-end gap-3"
                     >
                         <DialogClose asChild>
                             <Button
@@ -700,7 +703,7 @@ export default function ContentGeneratorUi() {
                                 variant="outline"
                                 className={`
                                     bg-gray-700 text-white hover:bg-gray-600 
-                                    w-full sm:w-auto 
+                                    w-fit sm:w-auto 
                                     ${isSaving && "cursor-not-allowed opacity-70"}
                                   `}
                                 onClick={() => setIsModalOpen(false)}
@@ -708,14 +711,19 @@ export default function ContentGeneratorUi() {
                                 {t("cancel")}
                             </Button>
                         </DialogClose>
-
                         <Button
-                            className="bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
+                            variant={'outline'}
+                            type="button"
+                            className="w-fit px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
                             disabled={isSaving || !pageName.trim()}
                             onClick={onSaveContent}
                         >
-                            {isSaving ? t("saving") : t("saveContent")}
+                            <>
+                                <SaveIcon className="h-4 w-4" />
+                                {isSaving ? t("saving") : t("saveContent")}
+                            </>
                         </Button>
+
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

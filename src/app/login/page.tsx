@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { login } from "@/app/actions/loginAction";
-import { Eye, EyeOff } from "lucide-react";
+import {Eye, EyeOff, LogInIcon} from "lucide-react";
 import motLogo from '@/app/images/MOT.png';
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -101,10 +101,9 @@ export default function LoginPage() {
 
 
     return (
-        <div className="flex items-center justify-center h-[140vh] z-0 px-4 mx-3 md:mx-0 lg:mx-0">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
+        <div className="flex items-center justify-center h-[140vh] md:h-[120vh] z-0  px-4 mx-3 md:mx-0">
 
-            <div className="relative w-full max-w-md z-0 mt-10">
+            <div className="w-full max-w-md md:max-w-screen-lg z-0 mt-10">
                 <form
                     onSubmit={handleSubmit(handleLogin)}
                     className="bg-black backdrop-blur-sm px-8 pt-1 pb-5 rounded-2xl shadow-2xl border border-red-800"
@@ -128,12 +127,12 @@ export default function LoginPage() {
 
                     <div className="space-y-6">
 
-                        <div>
-                            <label className="block text-white mb-2">{t("email")}</label>
+                        <div  className={'w-full md:pl-[20%]'} >
+                            <label className="block text-white mb-2 justify-self-start">{t("email")}</label>
                             <input
                                 type="text"
                                 {...register("email")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                className="w-full md:w-[80%] md:py-4 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                 placeholder={t("enterEmail")}
                             />
                             {errors.email && (
@@ -142,18 +141,18 @@ export default function LoginPage() {
                         </div>
 
                         {/* Password */}
-                        <div>
+                        <div className={'md:pl-[20%]'} >
                             <label className="block text-white mb-2">{t("password")}</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     {...register("password")}
-                                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                    className="w-full md:w-[80%] px-4 py-3 md:py-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                     placeholder={t("enterPassword")}
                                 />
                                 <button
                                     type="button"
-                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    className="absolute md:right-[160px] inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
                                     {showPassword ? (
@@ -168,12 +167,12 @@ export default function LoginPage() {
                             )}
                         </div>
 
-                        <div>
+                        <div className={'md:pl-[20%]'} >
                             <label className="block text-white mb-2">{t("apikey")}</label>
                             <input
                                 type="text"
                                 {...register("apikey")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                className="w-full md:w-[80%] md:py-4  px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                 placeholder={t("enterApiKey")}
                             />
                             {errors.apikey && (
@@ -185,7 +184,7 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-[80%] md:w-full lg:w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
+                                className="w-[80%] md:w-[50%] bg-red-600 text-white py-4 font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed shadow-lg"
                             >
                                 {isSubmitting ? (
                                     <div className="flex items-center justify-center">

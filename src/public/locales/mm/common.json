@@ -8,12 +8,12 @@
   "enterPassword": "သင်၏စကားဝှက် ကိုထည့်ပါ",
   "enterApiKey": "သင်၏Gemini API Key ကိုထည့်ပါ",
   "loginSuccessTitle": "လော့ဂ်အင်ဝင်ပြီးပါပြီ! ပြန်လည်ကြိုဆိုပါသည်၊ {{username}}",
-  "loginSuccessDescription": "{{role}} {{username}}၊ သင့်အကောင့်ထဲသို့ဝင်ရောက််ပြီးပါပြီ။",
+  "loginSuccessDescription": "{{role}} {{username}}၊ သင့်အကောင့်ထဲသို့ဝင်ရောက််ပြီးပါပြီ",
   "loginFailedTitle": "ဝင်ရောက်မှုမအောင်မြင်ပါ",
   "loginFailedDescription": {
-    "incorrect": "ကျေးဇူးပြု၍ သင်ထည့်သွင်းသော အီးမေးလ် သို့မဟုတ် စကားဝှက် ကို ပြန်လည်စစ်ဆေးပါ။",
-    "deactivate": "သင်၏ အကောင့်ကို ယာယီ ပိတ်ထားပါသည်။",
-    "expired": "သင်၏ အကောင့်အသုံပြုခွင့်ကာလ ပြီးဆုံးပါပြီ။",
+    "incorrect": "ကျေးဇူးပြု၍ သင်ထည့်သွင်းသော အီးမေးလ် သို့မဟုတ် စကားဝှက် ကို ပြန်လည်စစ်ဆေးပါ",
+    "deactivate": "သင်၏ အကောင့်ကို ယာယီ ပိတ်ထားပါသည်",
+    "expired": "သင်၏ အကောင့်အသုံပြုခွင့်ကာလ ပြီးဆုံးပါပြီ",
     "invalidKey": "သင်၏ Gemini API key သည်မှားရွင်းနေပါသည်"
   },
   "poweredBy": "Myanmar Online Technology မှ ထောက်ပံ့ထားပါသည်",
@@ -23,16 +23,16 @@
   "passwordRequired": "စကားဝှက်လိုအပ်ပါသည်",
   "apiKeyRequired": "Gemini API Key လိုအပ်ပါသည်",
   "logoutSuccess": "အောင်မြင်စွာ logout ပြီးပါပြီ!",
-  "logoutSuccessMessage": "သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ။",
+  "logoutSuccessMessage": "သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ",
   "appTitle": "Genius Autowriter",
   "generator": "Content ဖန်တီးမှု",
   "dashboard": "စာမျက်နှာများ",
   "logout": "ထွက်မည်",
-  "logoutSuccessTitle": "အောင်မြင်စွာ ထွက်ပြီးပါပြီ။",
-  "logoutSuccessDescription": "{{role}} {{username}}၊ သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ။",
+  "logoutSuccessTitle": "အောင်မြင်စွာ ထွက်ပြီးပါပြီ",
+  "logoutSuccessDescription": "{{role}} {{username}}၊ သင်၏ Account မှ အောင်မြင်စွာ logout လိုက်ပါပြီ",
   "contentCreation": "Content ဖန်တီးခြင်း",
   "contentDetailsForm": "Content အသေးစိတ် ဖောင်",
-  "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ။",
+  "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ",
   "pageName": "Page နာမည်",
   "pageNamePlaceholder": "Page နာမည်ကိုထည့်ပါ",
   "topic": "Content ၏ အဓိကအကြောင်းအရာ",
@@ -43,7 +43,7 @@
     "option-2": "Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း",
     "option-3": "Product/Service ရောင်းချခြင်း",
     "option-4": "ခံစားမှုဖန်တီးခြင်း",
-    "option-5": "Event/Update ကြေညာခြင်း",
+    "option-5": "Event ကြေညာခြင်း",
     "option-6": "သင်ခန်းစာပေးခြင်း",
     "option-7": "Product Feature ပြခြင်း"
   },
@@ -61,40 +61,40 @@
   "enterReferenceLink": "ကိုးကား Link ထည့်ပါ",
   "hashtags": "Hashtags",
   "hashtagsPlaceholder": "ဥပမာ - #DigitalMarketingMyanmar #OnlineBusinessTips",
-  "hashtagsDescription": "ပါဝင်စေချင်သော Hashtags များထည့်ပါ။",
+  "hashtagsDescription": "ပါဝင်စေချင်သော Hashtags များထည့်ပါ",
   "negativeConstraints": "တားမြစ်ချက်များ",
   "negativeConstraintsPlaceholder": "ဥပမာ - ဈေးနှုန်း မဖော်ပြရ၊ မသင့်လျော်သော စကားလုံး မသုံးရ",
-  "negativeConstraintsDescription": "Content ထဲတွင် မပါဝင်စေချင််သော အကြောင်းအရာများ။",
+  "negativeConstraintsDescription": "Content ထဲတွင် မပါဝင်စေချင််သော အကြောင်းအရာများ",
   "includeEmojis": "Emojis ထည့်မှာလား",
   "generateContent": "Content ဖန်တီးမည်",
   "generating": "ဖန်တီးနေပါသည်...",
   "success": "အောင်မြင်ပါသည်",
-  "successGenerated": "သင်၏ Content ကို အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။",
+  "successGenerated": "သင်၏ Content ကို အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ",
   "errorGenerated": "သင်၏ Gemini API key အသုံးပြုခွင့် Limit ပြည့်သွားပါပြီ",
-  "trialErrorGenerated": "သင့် အစမ်းသုံးအစီအစဉ် (Trial Plan) အတွက် Content ထုတ်လုပ်နိုင်သည့် အများဆုံးပမာဏကို ပြည့်သွားပါပြီ။ Genius Autowriter ကို ဆက်လက် အသုံးပြုနိုင်ရန် ကျေးဇူးပြု၍ သင်၏ စာရင်းပေးသွင်းမှုကို အဆင့်မြှင့်ပါ။",
-  "successSaved": "သင်၏ Content ကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။",
+  "trialErrorGenerated": "သင့် အစမ်းသုံးအစီအစဉ် (Trial Plan) အတွက် Content ထုတ်လုပ်နိုင်သည့် အများဆုံးပမာဏကို ပြည့်သွားပါပြီ။ Genius Autowriter ကို ဆက်လက် အသုံးပြုနိုင်ရန် ကျေးဇူးပြု၍ သင်၏ စာရင်းပေးသွင်းမှုကို အဆင့်မြှင့်ပါ",
+  "successSaved": "သင်၏ Content ကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ",
   "error": "Error",
-  "errorSaving": "သိမ်းဆည်းနေစဉ် အမှားဖြစ်ပွားခဲ့ပါသည်။",
+  "errorSaving": "သိမ်းဆည်းနေစဉ် အမှားဖြစ်ပွားခဲ့ပါသည်",
   "generatedContent": "ဖန်တီးပြီးသော Content",
-  "generatedContentDescription": "ဖန်တီးထားသော Content ကို ဦးစွာ ကြည့်ပြီး ပြင်ဆင်နိုင်ပါသည်။",
+  "generatedContentDescription": "ဖန်တီးထားသော Content ကို ဦးစွာ ကြည့်ပြီး ပြင်ဆင်နိုင်ပါသည်",
   "titleOfContent": {
     "title": "Content ခေါင်းစဉ်",
-    "errorMsg": "Content ခေါင်းစဉ်ထည့်ရန်လိုပါသည်။"
+    "errorMsg": "Content ခေါင်းစဉ်ထည့်ရန်လိုပါသည်"
   },
   "titlePlaceholder": "ဥပမာ - ဒစ်ဂျစ်တယ် မားကတင်း",
   "saving": "သိမ်းဆည်းနေပါသည်...",
-  "saveContent": "Content သိမ်းဆည်းမည်",
+  "saveContent": "သိမ်းဆည်းမည်",
   "cancel": "မလုပ်တော့ပါ",
-  "emptyStateTitle": "ဖောင်ကို ဖြည့်ပြီး Content ဖန်တီးပါ။",
-  "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်။",
+  "emptyStateTitle": "ဖောင်ကို ဖြည့်ပြီး Content ဖန်တီးပါ",
+  "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်",
   "formErrors": {
-    "pageName": "Page နာမည်ကို ရေးပေးပါ။",
-    "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ။",
-    "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရွေးပေးပါ။",
-    "audience": "Target Audience ကို ရေးပေးပါ။",
-    "writingStyle": "စာပုံစံ (သို့) အသံသွင်းသံ တစ်ခုခန့် ရွေးပေးပါ။",
-    "outputLanguage": "Output Language ကို ရွေးပေးပါ။",
-    "contentLength": "Content Length ကို ရွေးပေးပါ။"
+    "pageName": "Page နာမည်ကို ရေးပေးပါ",
+    "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ",
+    "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရွေးပေးပါ",
+    "audience": "Target Audience ကို ရေးပေးပါ",
+    "writingStyle": "စာပုံစံ (သို့) အသံသွင်းသံ တစ်ခုခန့် ရွေးပေးပါ",
+    "outputLanguage": "Output Language ကို ရွေးပေးပါ",
+    "contentLength": "Content Length ကို ရွေးပေးပါ"
   },
   "writingStyleOptions": {
     "friendly": "ဖော်ရွေသော",
@@ -136,8 +136,8 @@
     "contents": "Content များ",
     "loading": {
       "title": "Content များကိုရှာနေပါသည်...",
-      "emptyTitle": "အကြောင်းအရာမရှိပါ။",
-      "emptyFiltered": "သင်ရွေးချယ်ထားသော အချက်အလက်နှင့် ကိုက်ညီသော Content မတွေ့ရှိပါ။"
+      "emptyTitle": "အကြောင်းအရာမရှိပါ",
+      "emptyFiltered": "သင်ရွေးချယ်ထားသော အချက်အလက်နှင့် ကိုက်ညီသော Content မတွေ့ရှိပါ"
     },
     "table": {
       "title": "Content စာမျက်နှာများ",
@@ -147,7 +147,7 @@
     },
     "status": {
       "posted": "တင်ပြီး",
-      "draft": "မတင်ရသေး",
+      "draft": "မတင်သေး",
       "toggleTooltip": "တင်ထား/မတင်ထား အခြေအနေ ပြောင်းပါ"
     },
     "buttons": {
@@ -159,8 +159,8 @@
     },
     "toast": {
       "success": "အောင်မြင်ပါသည်",
-      "deleteSuccess": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။",
-      "updateSuccess": "Content ကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ။",
+      "deleteSuccess": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ",
+      "updateSuccess": "Content ကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ",
       "error": "အမှား"
     },
     "modals": {
@@ -172,7 +172,7 @@
   },
   "editModal": {
     "title": "Content ပြင်ဆင်ခြင်း",
-    "subtitle": "Content ၏ အသေးစိတ်များကို အောက်တွင် ပြင်ဆင်ပါ။",
+    "subtitle": "Content ၏ အသေးစိတ်များကို ပြင်ဆင်ပါ",
     "label_title": "ခေါင်းစဉ်",
     "label_content": "အကြောင်းအရာ",
     "placeholder_title": "Content ခေါင်းစဉ်ကို ထည့်ပါ...",
@@ -190,30 +190,31 @@
     "button_copy": "ကူးယူမည်",
     "button_copied": "ကူးပြီးပါပြီ!",
     "copy_success": "ကူးယူမှု အောင်မြင်ပါပြီ",
-    "copy_success_desc": "အကြောင်းအရာကို clipboard ထဲသို့ ကူးပြီးပါပြီ။",
-    "copy_error": "အကြောင်းအရာကို ကူးယူရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+    "copy_success_desc": "Content ကို clipboard ထဲသို့ ကူးပြီးပါပြီ",
+    "copy_error": "Content ကို ကူးယူရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ"
   },
   "deleteModal": {
     "title": "Content ဖျက်ခြင်း",
-    "description": "ဤ Content ကို ဖျက်ရန် သင်အတည်ပြုပါသလား။ ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရပါ။",
+    "description": "ဤ Content ကို ဖျက်ရန် သင်အတည်ပြုပါသလား။ ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရပါ",
     "button_cancel": "မဖျက်တော့ပါ",
     "button_delete": "ဖျက်မည်",
     "button_deleting": "ဖျက်နေသည်...",
-    "success_message": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။",
-    "error_message": "Content ကို ဖျက်ရာတွင် ပြသာနာတစ်ခုဖြစ်ပါသည်။ ထပ်မံကြိုးစားပါ။"
+    "success_message": "Content ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ",
+    "error_message": "Content ကို ဖျက်ရာတွင် ပြသာနာတစ်ခုဖြစ်ပါသည်။ ထပ်မံကြိုးစားပါ"
   },
   "voiceRecord": {
     "navTitle": "အသံဖြင့် ဖန်တီးခြင်း",
     "inputTitle": "အသံထည့်သွင်းမှု",
-    "inputDesc": "အကြောင်းအရာ ဖန်တီးရန် သင့်အသံကို မှတ်တမ်းတင်ပါ",
-    "recordSuccessDesc": "အသံမှတ်တမ်းတင်ခြင်း အောင်မြင်ပါသည်။ အကြောင်းအရာ ဖန်တီးရန် အသင့်ဖြစ်ပါပြီ။",
+    "inputDesc": "Content ဖန်တီးရန် သင့်အသံကို မှတ်တမ်းတင်ပါ",
+    "recordSuccessDesc": "အသံမှတ်တမ်းတင်ခြင်း အောင်မြင်ပါသည်။ Content ဖန်တီးရန် အသင့်ဖြစ်ပါပြီ",
+    "notRecordYet": "အသံမှတ်တမ်းတင်ထားခြင်း မရှိပါ",
     "startBtn": "အသံသွင်းခြင်း စတင်ပါ",
     "stopBtn": "အသံသွင်းခြင်း ရပ်ပါ",
     "recording": "အသံသွင်းနေသည်...",
-    "notRecording": "အသံသွင်းထားခြင်းမရှိပါ။"
+    "notRecording": "အသံသွင်းထားခြင်းမရှိပါ"
   },
   "trialExpired": {
     "title": "အစမ်းသုံကာလ ကုန်ဆုံခြင်း",
-    "description": "သင်၏ အစမ်းသုံးကာလ ကုန်ဆုံသွားပါပြီ။"
+    "description": "သင်၏ အစမ်းသုံးကာလ ကုန်ဆုံသွားပါပြီ"
   }
 }

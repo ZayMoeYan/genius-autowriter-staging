@@ -5,7 +5,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {Textarea} from "@/components/ui/textarea";
 import {Input} from "@/components/ui/input";
 import {Dropzone} from "@/components/ui/Dropzone";
-import {Copy, Mic, Sparkles, StopCircle, Wand2, X} from "lucide-react";
+import {Copy, Mic, SaveIcon, Sparkles, StopCircle, Wand2, X} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Skeleton} from "@/components/ui/skeleton";
 import {useToast} from "@/hooks/use-toast";
@@ -18,6 +18,7 @@ import * as z from "zod";
 import {sendToGemini} from "@/app/actions/voiceGenerateAction";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {updateTrialGeneratedCount} from "@/app/actions/usersAction";
+import {useAuthStore} from "@/stores/useAuthStore";
 
 const formSchema = z.object({
     title: z.string().min(1, ""),
@@ -37,13 +38,13 @@ export default function VoiceChatDemo() {
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
     const [base64audio, setBase64Audio] = useState("");
-    const [title, setTitle] = useState("");
     const { t, i18n } = useTranslation();
     const [audioSaved, setAudioSaved] = useState(false);
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageName, setPageName] = useState("");
+    const { currentUser, refreshUser } = useAuthStore();
 
     const form = useForm<FormValues>({
         // @ts-ignore
@@ -185,6 +186,15 @@ export default function VoiceChatDemo() {
             return
         }
 
+        if(!audioSaved) {
+            toast({
+                title: t("error"),
+                description: t("voiceRecord.notRecordYet"),
+                status: "error",
+            });
+            return
+        }
+
         setIsGenerating(true);
         setGeneratedContent("");
 
@@ -241,7 +251,6 @@ export default function VoiceChatDemo() {
             })
         } finally {
             setPreviewUrls([])
-            setTitle("");
             setGeneratedContent("");
             setBase64Audio("")
             setIsSaving(false);
@@ -249,9 +258,6 @@ export default function VoiceChatDemo() {
         }
     }
 
-    const onTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
-    }
 
     return (
         <div className="min-h-screen font-body antialiased bg-gradient-to-b from-black via-black to-red-950 py-20">
@@ -440,59 +446,63 @@ export default function VoiceChatDemo() {
                                             ))}
                                         </div>
                                     )}
-                                    <FormField
-                                        control={form.control}
-                                        name="emoji"
-                                        render={({ field }) => (
-                                            <FormItem className="flex items-center justify-between pb-4 px-5 pt-2  border-[0.3px] border-red-600 rounded-xl">
-                                                <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem] mt-1">
-                                                    {t("includeEmojis")}
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
-                                                        <input
-                                                            disabled={isGenerating}
-                                                            type="checkbox"
-                                                            checked={field.value}
-                                                            onChange={(e) => field.onChange(e.target.checked)}
-                                                            className="sr-only peer "
-                                                        />
-                                                        <div
-                                                            className={`w-11 h-6 rounded-full transition-colors duration-300 
-                                                                            ${field.value ? "bg-green-500" : "bg-gray-400"}`}
-                                                        >
+                                    <div className={'md:flex md:items-center md:justify-center'} >
+                                        <FormField
+                                            control={form.control}
+                                            name="emoji"
+                                            render={({ field }) => (
+                                                <FormItem className="flex items-center justify-between md:w-[50%] pb-4 px-5 pt-2  border border-red-600 rounded-xl">
+                                                    <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem] mt-1">
+                                                        {t("includeEmojis")}
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <label className={`relative inline-flex items-center ${!isGenerating ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed' }`}>
+                                                            <input
+                                                                disabled={isGenerating}
+                                                                type="checkbox"
+                                                                checked={field.value}
+                                                                onChange={(e) => field.onChange(e.target.checked)}
+                                                                className="sr-only peer "
+                                                            />
                                                             <div
-                                                                className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
-                                                                               ${field.value ? "translate-x-5" : "translate-x-0"}`}
+                                                                className={`w-11 h-6 rounded-full transition-colors duration-300 
+                                                                            ${field.value ? "bg-green-500" : "bg-gray-400"}`}
                                                             >
+                                                                <div
+                                                                    className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300
+                                                                               ${field.value ? "translate-x-5" : "translate-x-0"}`}
+                                                                >
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </label>
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button
-                                        type="submit"
-                                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
-                                        size="lg"
-                                        disabled={isGenerating}
-                                    >
-                                        {isGenerating ? (
-                                            <>
-                                                <Sparkles className="mr-2 h-4 w-4 animate-spin" />
-                                                {t("generating")}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Wand2 className="mr-2 h-4 w-4" />
-                                                {t("generateContent")}
-                                            </>
-                                        )}
-                                    </Button>
+                                                        </label>
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+
+                                    <div className={'w-full flex justify-center items-center'} >
+                                        <Button
+                                            type="submit"
+                                            className="md:w-[50%] w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium"
+                                            size="lg"
+                                            disabled={isGenerating || isSaving}
+                                        >
+                                            {isGenerating ? (
+                                                <>
+                                                    <Sparkles className="mr-2 h-4 w-4 animate-spin" />
+                                                    {t("generating")}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Wand2 className="mr-2 h-4 w-4" />
+                                                    {t("generateContent")}
+                                                </>
+                                            )}
+                                        </Button>
+                                    </div>
                                 </form>
                             </Form>
-
                         </CardContent>
                     </Card>
                 </div>
@@ -518,56 +528,60 @@ export default function VoiceChatDemo() {
                             <Skeleton className="h-4 w-2/3 bg-white/20" />
                         </div>
                     ) : generatedContent ? (
-                        <div className="space-y-6">
+                        <div className="space-y-6 justify-center">
                             <Textarea
-                                className="h-96 min-h-[24rem]  bg-white border-white/20 text-black  placeholder:text-white/50 focus:border-primary focus:ring-primary/20"
+                                className="h-96 min-h-[24rem] font-semibold  bg-white border-none text-black  placeholder:text-white/50"
                                 value={generatedContent}
                                 disabled={isSaving}
                                 onChange={(e) => setGeneratedContent(e.target.value)}
                                 placeholder="Your generated content will appear here..."
                             />
-
-                            <Button
-                                type="button"
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-mot-red font-medium border-white"
-                                size="lg"
-                                onClick={() => {
-                                    setPageName(form.getValues().title);
-                                    setIsModalOpen(true);
-                                }}
-                                disabled={isSaving}
-                            >
-                                {isSaving ? (
+                            <div className={'flex items-center justify-center gap-3 w-[30%] mx-auto'} >
+                                <Button
+                                    type={"button"}
+                                    onClick={handleCopy}
+                                    variant="outline"
+                                    className="md:w-[45%] px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
+                                >
+                                    <Copy className="h-4 w-4" />
+                                    <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
+                                </Button>
+                                <Button
+                                    variant={'outline'}
+                                    type="button"
+                                    className="md:w-[45%] px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
+                                    size="lg"
+                                    onClick={() => {
+                                        setPageName(form.getValues().title);
+                                        setIsModalOpen(true);
+                                    }}
+                                    disabled={isSaving}
+                                >
                                     <>
-                                        <Sparkles className="mr-2 h-4 w-4 animate-spin" />
-                                        {t("saving")}
+                                        <SaveIcon className="h-4 w-4" />
+                                        {t("saveContent")}
                                     </>
-                                ) : (
-                                    t("saveContent")
-                                )}
-                            </Button>
-                            <Button
-                                onClick={handleCopy}
-                                variant="outline"
-                                className="px-4 py-2 sm:px-6 sm:py-2.5 border-none text-white bg-primary hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
-                            >
-                                <Copy className="h-4 w-4" />
-                                <span>{copied ? t("viewModal.button_copied") : t("viewModal.button_copy")}</span>
-                            </Button>
+                                </Button>
+                            </div>
                         </div>
                     ) : (
                         <div className="flex flex-col h-[50vh]  items-center justify-center rounded-lg border-2 border-dashed border-primary/50 text-center p-8">
                             <Wand2 className="h-16 w-16 text-primary mb-4" />
                             <p className="text-primary text-lg font-medium">{t("emptyStateTitle")}</p>
-                            <p className="text-white/70 mt-2">{t("emptyStateDescription")}</p>
+                            <p className="text-white mt-2">{t("emptyStateDescription")}</p>
                         </div>
                     )}
                 </CardContent>
             </Card>
+
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="bg-gray-900 text-white border border-red-700">
+                <DialogContent
+                    className="bg-black text-white border border-red-800 rounded-xl"
+                >
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">{t("pageName")}</DialogTitle>
+                        <DialogTitle className="text-lg sm:text-xl font-bold">
+                            {t("pageName")}
+                        </DialogTitle>
                     </DialogHeader>
 
                     <div className="mt-4">
@@ -575,32 +589,45 @@ export default function VoiceChatDemo() {
                             value={pageName}
                             onChange={(e) => setPageName(e.target.value)}
                             placeholder={t("pageNamePlaceholder")}
-                            className="bg-white text-black"
+                            className="bg-white text-black w-full text-base sm:text-lg"
                         />
                     </div>
 
-                    <DialogFooter className="mt-6 flex justify-end gap-3">
+                    <DialogFooter
+                        className="mt-6 flex flex-row justify-end gap-3"
+                    >
                         <DialogClose asChild>
                             <Button
                                 disabled={isSaving}
                                 variant="outline"
-                                className={`bg-gray-700 text-white hover:bg-gray-600 ${isSaving && 'cursor-not-allowed'}`}
+                                className={`
+                                    bg-gray-700 text-white hover:bg-gray-600 
+                                    w-fit sm:w-auto 
+                                    ${isSaving && "cursor-not-allowed opacity-70"}
+                                  `}
                                 onClick={() => setIsModalOpen(false)}
                             >
                                 {t("cancel")}
                             </Button>
                         </DialogClose>
                         <Button
-                            className="bg-primary hover:bg-primary/90 text-white"
+                            variant={'outline'}
+                            type="button"
+                            className="w-fit px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
                             disabled={isSaving || !pageName.trim()}
                             onClick={onSaveContent}
                         >
-                            {isSaving ? t("saving") : t("saveContent")}
+                            <>
+                                <SaveIcon className="h-4 w-4" />
+                                {isSaving ? t("saving") : t("saveContent")}
+                            </>
                         </Button>
+
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
 
+
+        </div>
     );
 }

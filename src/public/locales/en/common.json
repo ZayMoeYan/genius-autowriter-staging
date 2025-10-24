@@ -43,7 +43,7 @@
     "option-2": "Generating Audience Engagement/Response",
     "option-3": "Selling Products/Services",
     "option-4": "Creating a Feeling/Emotion",
-    "option-5": "Announcing an Event/Update",
+    "option-5": "Announcing an Event",
     "option-6": "Giving Educational Tutorial",
     "option-7": "Showing Product Feature/Showcase"
   },
@@ -83,7 +83,7 @@
   },
   "titlePlaceholder": "e.g. Digital Marketing",
   "saving": "Saving...",
-  "saveContent": "Save Content",
+  "saveContent": "Save",
   "cancel": "Cancel",
   "emptyStateTitle": "Fill out the form to generate your content.",
   "emptyStateDescription": "Your content will appear here.",
@@ -185,8 +185,8 @@
     "button_updating": "Updating..."
   },
   "viewModal": {
-    "status_posted": "Posted",
-    "status_not_posted": "Not Posted",
+    "status_posted": "Published",
+    "status_not_posted": "Draft",
     "created_at": "Created",
     "updated_at": "Updated",
     "button_close": "Close",
@@ -210,6 +210,7 @@
     "inputTitle": "Voice Input",
     "inputDesc": "Record your voice for content generation",
     "recordSuccessDesc": "Voice recording saved successfully! Ready for content generation.",
+    "notRecordYet": "There is no voice recording. Record your voice for content generation",
     "startBtn": "Start Recording",
     "stopBtn": "Stop Recording",
     "recording": "Recording...",

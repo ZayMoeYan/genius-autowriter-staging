@@ -43,7 +43,7 @@ export const AdminNav = () => {
             <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto">
                 {/* Logo Section */}
                 <div className="flex items-center space-x-3 cursor-pointer">
-                    <img src={motLogo.src} alt="MOT Logo" className="h-10 w-auto md:h-12" />
+                    <img src={motLogo.src} alt="MOT Logo" className="h-10 w-auto" />
                     <div className="flex flex-col">
                         <span className="text-red-500 text-xl md:text-2xl tracking-wider font-bold">
                             Genius Autowriter
@@ -95,7 +95,7 @@ export const AdminNav = () => {
                                 </Avatar>
                                 <div className="flex flex-col">
                                     <div className="flex items-center space-x-2">
-                                        <span className="text-white font-medium">{currentUser?.username}</span>
+                                        <span className="text-white font-medium">{currentUser?.username as string}</span>
                                         <Badge
                                             variant={currentUser?.role === 'ADMIN' ? 'default' : 'secondary'}
                                             className={`text-xs ${
@@ -105,10 +105,10 @@ export const AdminNav = () => {
                                             }`}
                                         >
                                             {currentUser?.role === 'ADMIN' && <Shield className="h-3 w-3 mr-1" />}
-                                            {currentUser?.role}
+                                            {currentUser?.role as string}
                                         </Badge>
                                     </div>
-                                    <span className="text-gray-400 text-xs">{currentUser?.email}</span>
+                                    <span className="text-gray-400 text-xs">{currentUser?.email as string}</span>
                                 </div>
                             </div>
 
