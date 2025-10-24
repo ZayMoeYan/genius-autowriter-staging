@@ -47,7 +47,7 @@ const LanguageSwitcher = () => {
             {/* Button */}
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between w-full gap-2 bg-white px-3 py-1.5 rounded-lg shadow hover:bg-gray-100 border border-gray-200 transition"
+                className="flex items-center justify-between w-full gap-2 bg-white px-3 py-[5px] rounded-lg shadow hover:bg-gray-100 border border-gray-200 transition"
             >
                 <div className={'flex space-x-2 items-center'} >
                     <img

@@ -301,7 +301,7 @@ export default function ContentGeneratorUi() {
                                                         <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
                                                         <Select value={field.value} onValueChange={field.onChange} disabled={isGenerating}  >
                                                             <FormControl>
-                                                                <SelectTrigger className="border-none">
+                                                                <SelectTrigger className="border-none text-left truncate">
                                                                     <SelectValue placeholder={t("purposePlaceholder")} />
                                                                 </SelectTrigger>
                                                             </FormControl>

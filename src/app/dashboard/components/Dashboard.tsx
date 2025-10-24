@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import EditModal from "@/app/dashboard/components/EditModal";
 import {getContents, deleteContent, updateContent} from "@/app/actions/contentsAction";
 import ViewModal from "@/app/dashboard/components/ViewModal";
@@ -24,7 +23,7 @@ import DeleteModal from "@/app/dashboard/components/DeleteModal";
 import {useToast} from "@/hooks/use-toast";
 import {useTranslation} from "react-i18next";
 
-const contentsPerPage = 8;
+const contentsPerPage = 5;
 
 export default function Dashboard() {
     const [contents, setContents] = useState<any[]>([]);
@@ -55,6 +54,10 @@ export default function Dashboard() {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, statusFilter]);
 
     const handleEdit = (content: any) => {
         setEditingContent(content);
@@ -141,21 +144,21 @@ export default function Dashboard() {
 
     const filteredContents = useMemo(() => {
         return contents.filter((content) => {
-            const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase())
-            const matchesStatus = statusFilter === "all" ||
+            const matchesSearch = content.title.toLowerCase().includes(search.toLowerCase());
+            const matchesStatus =
+                statusFilter === "all" ||
                 (statusFilter === "posted" && content.is_posted) ||
                 (statusFilter === "draft" && !content.is_posted);
             return matchesSearch && matchesStatus;
         });
     }, [contents, search, statusFilter]);
 
+
     const totalContents = filteredContents.length;
     const totalPages = Math.ceil(totalContents / contentsPerPage);
     const startIndex = (currentPage - 1) * contentsPerPage;
-    const paginatedContents = filteredContents.slice(
-        (currentPage - 1) * contentsPerPage,
-        currentPage * contentsPerPage
-    );
+    const paginatedContents = filteredContents.slice(startIndex, startIndex + contentsPerPage);
+
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -439,8 +442,8 @@ export default function Dashboard() {
                                     size="sm"
                                     className={`${
                                         page === currentPage
-                                            ? "bg-red-900 text-white"
-                                            : "border-gray-300 hover:bg-gray-200 hover:text-red-600"
+                                            ? "bg-red-900 opacity-50 text-white pointer-events-none"
+                                            : "hover:bg-red-800 hover:text-white"
                                     }`}
                                 >
                                     {page}

@@ -183,101 +183,102 @@ export const UserNav = () => {
                     </div>
 
                     {/*<div className="flex flex-col md:flex-row md:justify-between md:items-center  md:border-t-0 md:border-l md:pt-0 md:pl-6 lg:pl-6 space-y-4 md:space-y-0 md:space-x-4">*/}
-                    <div className="flex flex-col  space-y-4 md:px-[150px] md:py-5">
+                    <div className="flex flex-col space-y-4 md:px-[50px] lg:px-[200px]  py-3 ">
                         {/* User Info */}
-                        <div className="flex items-center space-x-3">
-                            <Avatar className="h-11 w-11 bg-gray-700 border mt-[-20px] border-gray-600">
-                                <div className="flex items-center justify-center h-full w-full">
-                                    <User className="h-10 w-10 text-gray-300" />
-                                </div>
-                            </Avatar>
+                        <div className="flex gap-2 md:items-center justify-between md:flex-row flex-col">
+                            <div className={'flex items-center md:gap-3 gap-2 lg:w-full'} >
+                                <Avatar className="h-11 w-11 bg-gray-700 border mt-[-20px] border-gray-600">
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <User className="h-10 w-10 text-gray-300" />
+                                    </div>
+                                </Avatar>
 
-                            {
-                                !currentUser ? <svg
-                                        className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                        ></circle>
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373
+                                {
+                                    !currentUser ? <svg
+                                            className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                            ></circle>
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373
                                            0 0 5.373 0 12h4zm2 5.291A7.962
                                            7.962 0 014 12H0c0 3.042 1.135
                                            5.824 3 7.938l3-2.647z"
-                                        ></path>
-                                    </svg>  :
-                                    <div className="flex flex-col gap-0">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-white text-xl">{currentUser?.username?.trim().split(' ')[0]}</span>
-                                            <Badge
-                                                variant={"secondary"}
-                                                className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
-                                            >
-                                                {currentUser?.role as string}
-                                            </Badge>
-                                            {
-                                                currentUser?.role === "TRIAL" && generatedCount! >= 0 ? <span >Credit <span className={'bg-gray-700 rounded-xl px-1.5'} >{generatedCount}</span></span>
-                                                    : currentUser?.role === "TRIAL" ?
-                                                        <svg
-                                                            className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <circle
-                                                                className="opacity-25"
-                                                                cx="12"
-                                                                cy="12"
-                                                                r="10"
-                                                                stroke="currentColor"
-                                                                strokeWidth="4"
-                                                            ></circle>
-                                                            <path
-                                                                className="opacity-75"
-                                                                fill="currentColor"
-                                                                d="M4 12a8 8 0 018-8V0C5.373
+                                            ></path>
+                                        </svg>  :
+                                        <div className="flex flex-col gap-0">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-white text-xl">{currentUser?.username?.trim().split(' ')[0]}</span>
+                                                <Badge
+                                                    variant={"secondary"}
+                                                    className={`text-xs bg-gray-600 text-gray-200 hover:bg-gray-70 `}
+                                                >
+                                                    {currentUser?.role as string}
+                                                </Badge>
+                                                {
+                                                    currentUser?.role === "TRIAL" && generatedCount! >= 0 ? <span >Credit <span className={'bg-gray-700 rounded-xl px-1.5'} >{generatedCount}</span></span>
+                                                        : currentUser?.role === "TRIAL" ?
+                                                            <svg
+                                                                className="animate-spin -ml-1 mr-1 sm:mr-2 h-4 w-4 text-white"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <circle
+                                                                    className="opacity-25"
+                                                                    cx="12"
+                                                                    cy="12"
+                                                                    r="10"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="4"
+                                                                ></circle>
+                                                                <path
+                                                                    className="opacity-75"
+                                                                    fill="currentColor"
+                                                                    d="M4 12a8 8 0 018-8V0C5.373
                                            0 0 5.373 0 12h4zm2 5.291A7.962
                                            7.962 0 014 12H0c0 3.042 1.135
                                            5.824 3 7.938l3-2.647z"
-                                                            ></path>
-                                                        </svg> : ''
-                                            }
-                                        </div>
-                                        <span className="text-gray-300 text-[14px]">{currentUser?.email as string}</span>
-                                        {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
-                                            <span className="text-red-600 text-[14px]">
+                                                                ></path>
+                                                            </svg> : ''
+                                                }
+                                            </div>
+                                            <span className="text-gray-300 text-[14px]">{currentUser?.email as string}</span>
+                                            {currentUser?.role !== "ADMIN" && currentUser?.expiredAt && (
+                                                <span className="text-red-600 text-[14px]">
                                                 Expires in: {timeLeft ?? "Loading..."}
                                             </span>
-                                        )}
+                                            )}
 
-                                    </div>
-                            }
-                        </div>
-
-                        <div className="flex items-center w-full justify-between">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all w-[65%] md:w-[80%] "
-                                onClick={handleLogout}
-                            >
-                                <LogOut className="h-4 w-4 mr-2" />
-                                {t("logout")}
-                            </Button>
+                                        </div>
+                                }
+                            </div>
+                            <div className="flex items-center md:w-fit lg:w-fit w-full gap-3 md:justify-end lg:justify-end justify-between">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all w-[65%] md:w-[60%] lg:w-[60%] "
+                                    onClick={handleLogout}
+                                >
+                                    <LogOut className="h-4 w-4 mr-2" />
+                                    {t("logout")}
+                                </Button>
 
 
                                 <LanguageSwitcher />
 
+                            </div>
                         </div>
                     </div>
                 </div>
