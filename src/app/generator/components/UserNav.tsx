@@ -97,7 +97,7 @@ export const UserNav = () => {
         <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[1.5px]">
             <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto">
 
-                <div className="flex items-center space-x-3 cursor-pointer">
+                <div className="flex items-center space-x-3 cursor-pointer lg:w-[35%] md:w-[45%]">
                     <img src={motLogo.src} alt="MOT Logo" className="h-10 w-auto" />
                     <div className="flex flex-col">
                         <span className="text-red-500 text-xl md:text-2xl tracking-wider font-bold">
@@ -106,8 +106,56 @@ export const UserNav = () => {
                     </div>
                 </div>
 
+                <div className="hidden md:hidden lg:flex py-2 flex-row justify-end overflow-x-auto w-full mr-5 no-scrollbar gap-2">
+                    <Link href="/generator">
+                        <Button
+                            onClick={() => setMenuOpen(false)}
+                            variant="ghost"
+                            className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
+                                isActive('/generator')
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                            }`}
+                        >
+                            <Wand2 className="h-4 w-4" />
+                            <span>{t("generator")}</span>
+                        </Button>
+                    </Link>
 
-                <div className="flex items-center">
+                    {
+                        !currentUser || currentUser?.role === "TRIAL" ?  '' : <Link href="/generator/voice">
+                            <Button
+                                onClick={() => setMenuOpen(false)}
+                                variant="ghost"
+                                className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
+                                    isActive('/generator/voice')
+                                        ? 'bg-red-600 text-white hover:bg-red-700'
+                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                }`}
+                            >
+                                <Mic className="h-4 w-4" />
+                                <span>{t("voiceRecord.navTitle")}</span>
+                            </Button>
+                        </Link>
+                    }
+
+                    <Link href="/dashboard">
+                        <Button
+                            variant="ghost"
+                            className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
+                                isActive('/dashboard')
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                            }`}
+                        >
+                            <BarChart3 className="h-4 w-4" />
+                            <span>{t("dashboard")}</span>
+                        </Button>
+                    </Link>
+                </div>
+
+
+                <div className="cursor-pointer flex items-center">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -126,30 +174,30 @@ export const UserNav = () => {
                 {/*        ${menuOpen ? "flex" : "hidden"}`}*/}
                 {/*>*/}
                 <div
-                    className={`flex-col
+                    className={`flex-col lg:top-[89px]
                         fixed top-16 left-0 md:right-0 w-full md:w-auto bg-black 
-                        p-4  space-y-4 transition-all duration-300 ease-in-out border-b-[0.5px] border-primary
+                        p-4 space-y-4 transition-all duration-300 ease-in-out border-b-[0.5px] border-primary
                         ${menuOpen ? "flex" : "hidden"}`}
                  >
                     {/*<div className="py-2 md:py-0 lg:py-0 flex flex-row md:flex-row md:space-x-2 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-auto md:border-none lg:border-none border-t-red-600 border-t border-b-red-600 border-b gap-2">*/}
-                    <div className="py-2 flex flex-row md:justify-center md:gap-20 overflow-x-auto  no-scrollbar w-full border-t-red-600 border-t border-b-red-600 border-b-[0.5px] gap-2">
+                    <div className="py-2 flex flex-row  lg:hidden md:justify-center md:gap-20 overflow-x-auto  no-scrollbar w-full border-t-red-600 border-t border-b-red-600 border-b-[0.5px] gap-2">
                         <Link href="/generator">
-                                <Button
-                                    onClick={() => setMenuOpen(false)}
-                                    variant="ghost"
-                                    className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
-                                        isActive('/generator')
-                                            ? 'bg-red-600 text-white hover:bg-red-700'
-                                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                                    }`}
-                                >
-                                    <Wand2 className="h-4 w-4" />
-                                    <span>{t("generator")}</span>
-                                </Button>
-                            </Link>
+                            <Button
+                                onClick={() => setMenuOpen(false)}
+                                variant="ghost"
+                                className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
+                                    isActive('/generator')
+                                        ? 'bg-red-600 text-white hover:bg-red-700'
+                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                }`}
+                            >
+                                <Wand2 className="h-4 w-4" />
+                                <span>{t("generator")}</span>
+                            </Button>
+                        </Link>
 
                         {
-                           !currentUser || currentUser?.role === "TRIAL" ?  '' : <Link href="/generator/voice">
+                            !currentUser || currentUser?.role === "TRIAL" ?  '' : <Link href="/generator/voice">
                                 <Button
                                     onClick={() => setMenuOpen(false)}
                                     variant="ghost"
@@ -165,19 +213,19 @@ export const UserNav = () => {
                             </Link>
                         }
 
-                            <Link href="/dashboard">
-                                <Button
-                                    variant="ghost"
-                                    className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
-                                        isActive('/dashboard')
-                                            ? 'bg-red-600 text-white hover:bg-red-700'
-                                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                                    }`}
-                                >
-                                    <BarChart3 className="h-4 w-4" />
-                                    <span>{t("dashboard")}</span>
-                                </Button>
-                            </Link>
+                        <Link href="/dashboard">
+                            <Button
+                                variant="ghost"
+                                className={`flex items-center space-x-2 md:px-10 px-4 py-2 rounded-full transition-all ${
+                                    isActive('/dashboard')
+                                        ? 'bg-red-600 text-white hover:bg-red-700'
+                                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                }`}
+                            >
+                                <BarChart3 className="h-4 w-4" />
+                                <span>{t("dashboard")}</span>
+                            </Button>
+                        </Link>
 
 
                     </div>
