@@ -362,16 +362,11 @@ export default function ContentGeneratorUi() {
                                                                 </SelectTrigger>
                                                             </FormControl>
                                                             <SelectContent className={'font-semibold'} >
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဖော်ရွေသော(friendly)">{t("writingStyleOptions.friendly")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="တရားဝင်(formal)">{t("writingStyleOptions.formal")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဟာသ(humorous)">{t("writingStyleOptions.humorous")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ယုံကြည်မှုရှိသော(confident)">{t("writingStyleOptions.confident")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စိတ်အားထက်သန်သော(motivational)">{t("writingStyleOptions.motivational")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ပရော်ဖက်ရှင်နယ်(professional)">{t("writingStyleOptions.professional")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စကားပြောပုံစံ(conversational)">{t("writingStyleOptions.conversational")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဇာတ်လမ်းပြောပုံစံ(storytelling)">{t("writingStyleOptions.storytelling")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="အသိပေးရှင်းပြပုံစံ(informative)">{t("writingStyleOptions.informative")}</SelectItem>
-                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စည်းရုံးဆွဲဆောင်ပုံစံ(persuasive)">{t("writingStyleOptions.persuasive")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="အရောင်းမြှင့်တင်ရေး (Promotional / Sales-Oriented Style)">{t("writingStyleOptions.promotional")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="စကားပြောပုံစံ (Conversational / Interactive Style)">{t("writingStyleOptions.conversational")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ပညာပေး/အသိပေး (Informational / Educational Style)">{t("writingStyleOptions.informational")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ဇာတ်လမ်းပြောပြခြင်း (Storytelling / Inspirational Style)">{t("writingStyleOptions.storytelling")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="ပေါ့ပေါ့ပါးပါး (Casual / Humorous Style)">{t("writingStyleOptions.casual")}</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <FormMessage />

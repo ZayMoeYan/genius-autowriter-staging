@@ -97,16 +97,11 @@
     "contentLength": "Content Length ကို ရွေးပေးပါ"
   },
   "writingStyleOptions": {
-    "friendly": "ဖော်ရွေသော",
-    "formal": "တရားဝင်",
-    "humorous": "ဟာသ",
-    "confident": "ယုံကြည်မှုရှိသော",
-    "motivational": "စိတ်အားထက်သန်သော",
-    "professional": "ပရော်ဖက်ရှင်နယ်",
-    "conversational": "စကားပြောပုံစံ",
-    "storytelling": "ဇာတ်လမ်းပြောပုံစံ",
-    "informative": "အသိပေးရှင်းပြပုံစံ",
-    "persuasive": "စည်းရုံးဆွဲဆောင်ပုံစံ"
+    "promotional": "အရောင်းမြှင့်တင်ရေး ပုံစံ",
+    "informational": "ပညာပေး/အသိပေး ပုံစံ",
+    "conversational": "စကားပြော ပုံစံ",
+    "storytelling": "ဇာတ်လမ်းပြောပြခြင်း ပုံစံ",
+    "casual": "ပေါ့ပေါ့ပါးပါး ပုံစံ"
   },
   "contentLengthOptions": {
     "short": "အတို",

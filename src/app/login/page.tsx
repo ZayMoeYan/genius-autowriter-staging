@@ -101,7 +101,7 @@ export default function LoginPage() {
 
 
     return (
-        <div className="flex items-center justify-center h-[140vh] md:h-[120vh] z-0  px-4 mx-3 md:mx-0">
+        <div className="flex items-center justify-center h-[140vh] z-0  px-4 mx-3 md:mx-10 ">
 
             <div className="w-full max-w-md md:max-w-screen-lg z-0 mt-10">
                 <form

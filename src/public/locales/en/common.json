@@ -97,16 +97,11 @@
     "contentLength": "Please select a content length."
   },
   "writingStyleOptions": {
-    "friendly": "Friendly",
-    "formal": "Formal",
-    "humorous": "Humorous",
-    "confident": "Confident",
-    "motivational": "Motivational",
-    "professional": "Professional",
-    "conversational": "Conversational",
-    "storytelling": "Storytelling",
-    "informative": "Informative",
-    "persuasive": "Persuasive"
+    "promotional": "Promotional / Sales-Oriented Style",
+    "informational": "Informational / Educational Style",
+    "conversational": "Conversational / Interactive Style",
+    "storytelling": "Storytelling / Inspirational Style",
+    "casual": "Casual / Humorous Style"
   },
   "contentLengthOptions": {
     "short": "Short",
