@@ -43,6 +43,7 @@ import getApikey from "@/app/actions/getApikey";
 import { useTranslation } from "next-i18next";
 import {getUser} from "@/app/actions/usersAction";
 import {useAuthStore} from "@/stores/useAuthStore";
+import {LoadingIndicator} from "@/app/generator/components/LoadingIndicator";
 
 
 const formSchema = z.object({
@@ -74,7 +75,7 @@ export default function ContentGeneratorUi() {
     const [pageName, setPageName] = useState("");
     const { refreshUser, currentUser } = useAuthStore();
     const { t, i18n } = useTranslation();
-
+    const [progress, setProgress] = useState(0);
 
 
     const handleCopy = async () => {
@@ -152,9 +153,19 @@ export default function ContentGeneratorUi() {
             });
             return
         }
-
+        setProgress(0);
         setIsGenerating(true);
         setGeneratedContent("");
+
+        const progressInterval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev >= 99) {
+                    clearInterval(progressInterval);
+                    return 99;
+                }
+                return prev + 1;
+            });
+        }, 250);
 
         const base64Images = await Promise.all(uploadedImages.map(fileToBase64));
 
@@ -192,6 +203,8 @@ export default function ContentGeneratorUi() {
 
         } finally{
             setIsGenerating(false);
+            clearInterval(progressInterval);
+            setProgress(0);
         }
     };
 
@@ -622,7 +635,11 @@ export default function ContentGeneratorUi() {
                             <Skeleton className="h-4 w-full bg-white/20" />
                             <Skeleton className="h-4 w-full bg-white/20" />
                             <Skeleton className="h-4 w-2/3 bg-white/20" />
+                            <LoadingIndicator
+                                progress={progress}
+                            />
                         </div>
+
                     ) : generatedContent ? (
                         <div className="space-y-6 justify-center">
                             <Textarea
@@ -722,8 +739,6 @@ export default function ContentGeneratorUi() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-
         </div>
     );
 }

@@ -1,5 +1,4 @@
 import './globals.css';
-import {Nav} from "@/components/Nav";
 import {Toaster} from "@/components/Toaster";
 import Providers from "@/app/Providers";
 
