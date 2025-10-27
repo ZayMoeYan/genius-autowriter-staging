@@ -16,7 +16,7 @@ export const Nav = () => {
 
             <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto xl:max-w-full">
 
-                <div className="flex items-center space-x-3 cursor-pointer">
+                <div className="flex items-center space-x-3">
                     <img src={motLogo.src} alt="MOT Logo" className="h-10 w-auto" />
                     <div className="flex flex-col">
                         <span className="text-red-500 text-xl md:text-2xl tracking-wider font-bold">

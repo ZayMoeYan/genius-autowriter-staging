@@ -193,8 +193,8 @@ export default function Dashboard() {
             </div>
             <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5 xl:max-w-full">
 
-                {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">*/}
-                <div className="flex flex-col gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {/*<div className="flex flex-col gap-6 mb-8">*/}
                     <Card className="bg-black/95 backdrop-blur-sm border-red-800 border p-6">
                         <div className="flex items-center space-x-4">
                             <div className="bg-white border border-red-600 p-3 rounded-lg">
@@ -233,12 +233,10 @@ export default function Dashboard() {
                 </div>
 
                 {/* Search and Filter Section */}
-                <div className="bg-black/95 backdrop-blur-sm rounded-2xl shadow-2xl border-red-800  border pt-6 pb-2 mb-8">
-                    {/*<div className="flex flex-col sm:flex-row gap-4 items-center justify-between">*/}
-                    <div className="flex flex-col items-center justify-center">
-                        {/*<div className="flex flex-col sm:flex-row gap-4 flex-1 w-full">*/}
-                        <div className="flex flex-col gap-3 mb-2 justify-center items-center w-full">
-                            <div className="relative w-[75%] ">
+                <div className="bg-black/95 backdrop-blur-sm shadow-2xl mb-8">
+                    <div className="flex flex-col px-3 py-5 md:flex-row gap-4 items-center justify-between border-red-800  border rounded-2xl md:px-3 md:pt-3 md:pb-1  ">
+                        <div className="flex flex-col md:flex-row md:justify-start gap-3 mb-2 justify-center items-center w-full">
+                            <div className="relative md:w-[40%] w-full ">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                                 <Input
                                     type="text"
@@ -250,7 +248,7 @@ export default function Dashboard() {
                             </div>
 
                             <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                <SelectTrigger className="w-[75%] border-none">
+                                <SelectTrigger className="md:w-[28%] lg:w-[18%] xl:w-[15%] border-none">
                                     <SelectValue placeholder={t("contentDashboard.filterPlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -260,12 +258,9 @@ export default function Dashboard() {
                                 </SelectContent>
                             </Select>
                         </div>
-
-                        <div className="flex items-center">
-                            <p className={`text-gray-400 ${i18n.language === 'mm' ? 'text-sm py-1' : ''}`}>
-                                {t("contentDashboard.showing")} {paginatedContents.length} of {totalContents}
-                            </p>
-                        </div>
+                        <p className={`text-gray-400 w-full text-center md:w-[25%] xl:w-[10%] -mt-2 ${i18n.language === 'mm' ? 'text-sm' : ''}`}>
+                            {t("contentDashboard.showing")} {paginatedContents.length} of {totalContents}
+                        </p>
                     </div>
                 </div>
 

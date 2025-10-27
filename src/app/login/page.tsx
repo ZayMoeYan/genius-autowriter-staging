@@ -101,12 +101,12 @@ export default function LoginPage() {
 
 
     return (
-        <div className="flex items-center justify-center h-[140vh] z-0  px-4 mx-3 md:mx-10 ">
+        <div className="flex items-center justify-center h-[140vh] z-0 px-4 mx-3 md:mx-10 ">
 
-            <div className="w-full max-w-md md:max-w-screen-lg z-0 mt-10">
+            <div className="w-full max-w-md md:max-w-screen-md z-0 mt-10">
                 <form
                     onSubmit={handleSubmit(handleLogin)}
-                    className="bg-black backdrop-blur-sm px-8 pt-1 pb-5 rounded-2xl shadow-2xl border border-red-800"
+                    className="bg-black backdrop-blur-sm px-8 pt-8 pb-5 rounded-2xl shadow-2xl border border-red-800"
                 >
                     {/* Logo and Header */}
                     <div className="text-center mb-8">
@@ -127,12 +127,12 @@ export default function LoginPage() {
 
                     <div className="space-y-6">
 
-                        <div  className={'w-full md:pl-[20%]'} >
+                        <div  className={'w-full md:pl-[15%]'} >
                             <label className="block text-white mb-2 justify-self-start">{t("email")}</label>
                             <input
                                 type="text"
                                 {...register("email")}
-                                className="w-full md:w-[80%] md:py-4 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                className="w-full md:w-[85%] md:py-4 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                 placeholder={t("enterEmail")}
                             />
                             {errors.email && (
@@ -141,18 +141,18 @@ export default function LoginPage() {
                         </div>
 
                         {/* Password */}
-                        <div className={'md:pl-[20%]'} >
+                        <div className={'md:pl-[15%]'} >
                             <label className="block text-white mb-2">{t("password")}</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     {...register("password")}
-                                    className="w-full md:w-[80%] px-4 py-3 md:py-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                    className="w-full md:w-[85%] px-4 py-3 md:py-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                     placeholder={t("enterPassword")}
                                 />
                                 <button
                                     type="button"
-                                    className="absolute md:right-[160px] inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    className="absolute md:right-[100px] inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
                                     {showPassword ? (
@@ -167,12 +167,12 @@ export default function LoginPage() {
                             )}
                         </div>
 
-                        <div className={'md:pl-[20%]'} >
+                        <div className={'md:pl-[15%]'} >
                             <label className="block text-white mb-2">{t("apikey")}</label>
                             <input
                                 type="text"
                                 {...register("apikey")}
-                                className="w-full md:w-[80%] md:py-4  px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
+                                className="w-full md:w-[85%] md:py-4  px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-white/90"
                                 placeholder={t("enterApiKey")}
                             />
                             {errors.apikey && (
