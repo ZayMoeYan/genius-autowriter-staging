@@ -227,7 +227,7 @@ export default function ContentGeneratorUi() {
         <div className="min-h-screen font-body antialiased bg-gradient-to-b from-black via-black to-red-950 py-20">
             {/* Header */}
             <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 border-red-800 border rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 ">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 xl:max-w-full">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
                         <div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">GENIUS AUTOWRITER</h1>
@@ -236,7 +236,7 @@ export default function ContentGeneratorUi() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl border-red-800 border rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10">
+            <div className="max-w-7xl border-red-800 border rounded-xl lg:mx-20 md:mx-10 mx-5  mt-10 xl:max-w-full">
                 <div className="flex flex-col gap-8">
                     <Card className="shadow-mot border-0 backdrop-blur-sm bg-black">
                         <CardHeader className="space-y-2">

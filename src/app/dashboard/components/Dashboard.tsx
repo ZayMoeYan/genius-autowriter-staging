@@ -182,7 +182,7 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen font-body antialiased bg-gradient-to-b from-black via-black to-red-950 py-20">
             <div className="bg-black/80 backdrop-blur-sm border-b border-primary/20 mb-8 border-red-800 border rounded-xl mt-10 lg:mx-20 md:mx-10 mx-5 "  >
-                <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="max-w-7xl mx-auto px-6 py-8 xl:max-w-full">
                     <div className="flex items-center space-x-4 mb-4">
                         <div>
                             <h1 className={`font-bold text-white mb-1 ${i18n.language === "mm" ? "text-2xl" : "text-3xl"}`}>{t('contentDashboard.title')}</h1>
@@ -191,7 +191,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-            <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5">
+            <div className="max-w-7xl  lg:mx-20 md:mx-10 mx-5 xl:max-w-full">
 
                 {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">*/}
                 <div className="flex flex-col gap-6 mb-8">

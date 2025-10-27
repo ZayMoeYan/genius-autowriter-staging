@@ -95,7 +95,7 @@ export const UserNav = () => {
     // @ts-ignore
     return (
         <nav className="shadow-lg w-full bg-black text-white fixed z-10 border-red-800 border-b-[1.5px]">
-            <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto">
+            <div className="flex flex-row py-4 justify-between w-[90%] max-w-7xl items-center mx-auto xl:max-w-full">
 
                 <div className="flex items-center space-x-3 cursor-pointer lg:w-[50%]">
                     <img src={motLogo.src} alt="MOT Logo" className="h-10 w-auto" />
