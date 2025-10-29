@@ -131,7 +131,7 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
                         ...parts,
                         {
                             inlineData: {
-                                mimeType: "audio/webm",
+                                mimeType: "audio/mp4",
                                 data: base64Audio,
                             },
                         },
