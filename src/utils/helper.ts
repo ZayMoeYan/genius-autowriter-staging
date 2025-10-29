@@ -12,9 +12,9 @@ export function wordContent(value: string): string {
     if(value === "short") {
         return "350";
     }else if(value === "medium") {
-        return "500";
+        return "450";
     }else {
-        return "650";
+        return "550";
     }
 }
 
@@ -29,12 +29,16 @@ export function formatDescriptions(imageDescriptions?: string[]): string {
     return formatted;
 }
 
+const cache = new Map<string, string>();
+
 export function contentReference(purpose?: string): string {
-    let ref = "";
-    contentReferenceList.filter(content => {
-         if(purpose?.includes(content.purpose)) {
-             ref = content.content;
-         }
-    })
-    return ref;
+    if (!purpose) return "";
+    if (cache.has(purpose)) return cache.get(purpose)!;
+
+    const match = contentReferenceList.find(content =>
+        purpose.includes(content.purpose)
+    );
+    const result = match ? match.content : "";
+    cache.set(purpose, result);
+    return result;
 }

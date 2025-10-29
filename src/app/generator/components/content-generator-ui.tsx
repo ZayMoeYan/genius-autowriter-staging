@@ -165,7 +165,7 @@ export default function ContentGeneratorUi() {
                 }
                 return prev + 1;
             });
-        }, 250);
+        }, 240);
 
         const base64Images = await Promise.all(uploadedImages.map(fileToBase64));
 

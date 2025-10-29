@@ -19,12 +19,18 @@ import {sendToGemini} from "@/app/actions/voiceGenerateAction";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {updateTrialGeneratedCount} from "@/app/actions/usersAction";
 import {useAuthStore} from "@/stores/useAuthStore";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 const formSchema = z.object({
     title: z.string().min(1, ""),
     imageDescriptions: z.array(z.string().optional()).optional(),
     emoji: z.boolean().default(false),
+    purpose: z.string().min(1, ""),
+    outputLanguage: z.string().min(1, ""),
+    contentLength: z.string().min(1, ""),
 });
+
+export type FromVoiceValues = z.infer<typeof formSchema>;
 
 export default function VoiceChatDemo() {
     const [recording, setRecording] = useState(false);
@@ -46,7 +52,7 @@ export default function VoiceChatDemo() {
     const [pageName, setPageName] = useState("");
     const { currentUser, refreshUser } = useAuthStore();
 
-    const form = useForm<FormValues>({
+    const form = useForm<FromVoiceValues>({
         // @ts-ignore
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -175,7 +181,7 @@ export default function VoiceChatDemo() {
         newFiles.forEach(() => appendImage(""));
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FromVoiceValues) => {
 
         if (!currentUser?.generatedCount) {
             toast({
@@ -306,6 +312,89 @@ export default function VoiceChatDemo() {
                                             )}
                                         />
                                         {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.pageName")}</FormMessage> }
+                                    </div>
+
+                                    <div className="flex flex-col md:flex-row gap-8 md:gap-6">
+                                        <div className={'relative flex-1'} >
+                                            <FormField
+                                                control={form.control}
+                                                name="purpose"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t('purpose.title')} <span className={'text-red-600'} >*</span></FormLabel>
+                                                        <Select value={field.value} onValueChange={field.onChange} disabled={isGenerating}  >
+                                                            <FormControl>
+                                                                <SelectTrigger className="border-none text-left truncate">
+                                                                    <SelectValue placeholder={t("purposePlaceholder")} />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent className={'font-semibold'} >
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Providing Useful News/Information (အသုံးဝင်သတင်း/အချက်အလက်ပေးခြင်း)">{t("purpose.option-1")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Generating Audience Engagement/Response (Audience တုံ့ပြန်မှုဖော်ခြင်း/Engagement တိုးခြင်း)">{t("purpose.option-2")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Selling Products/Services (Product/Service ရောင်းချခြင်း)">{t("purpose.option-3")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Creating a Feeling/Emotion (ခံစားမှုဖန်တီးခြင်း)">{t("purpose.option-4")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Announcing an Event (Event ကြေညာခြင်း)">{t("purpose.option-5")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Giving Educational Tutorial (သင်ခန်းစာပေးခြင်း)">{t("purpose.option-6")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="Showing Product Feature/Showcase (Product Feature ပြခြင်း)">{t("purpose.option-7")}</SelectItem>
+                                                            </SelectContent>
+                                                        </Select >
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            {form.formState.errors.purpose && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.purpose")}</p> }
+                                        </div>
+
+                                        <div className={'relative flex-1'} >
+                                            <FormField
+                                                control={form.control}
+                                                name="contentLength"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("contentLength")} <span className={'text-red-600'} >*</span></FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isGenerating} >
+                                                            <FormControl>
+                                                                <SelectTrigger className="border-none">
+                                                                    <SelectValue placeholder={t("contentLengthPlaceholder")} />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent className={'font-semibold'} >
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="short">{t("contentLengthOptions.short")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="medium">{t("contentLengthOptions.medium")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="long">{t("contentLengthOptions.long")}</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            {form.formState.errors.contentLength && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.contentLength")}</p> }
+                                        </div>
+
+                                        <div className={'relative flex-1'} >
+                                            <FormField
+                                                control={form.control}
+                                                name="outputLanguage"
+                                                render={({ field }) => (
+                                                    <FormItem className="flex-1">
+                                                        <FormLabel className="text-white font-bold text-lg sm:text-[1.2rem]">{t("outputLanguage")} <span className={'text-red-600'} >*</span></FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isGenerating} >
+                                                            <FormControl>
+                                                                <SelectTrigger className="border-none">
+                                                                    <SelectValue placeholder={t("outputLanguagePlaceholder")}/>
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent className={'font-semibold'} >
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="မြန်မာ">{t("outputLanguageOptions.myanmar")}</SelectItem>
+                                                                <SelectItem className={'hover:shadow-lg hover:shadow-red-600/50 transition-all'} value="English">{t("outputLanguageOptions.english")}</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            {form.formState.errors.outputLanguage && <p className={'mt-1 absolute text-red-600 text-sm'} >{t("formErrors.outputLanguage")}</p> }
+                                        </div>
                                     </div>
 
                                     <div className="text-white p-6 rounded-xl shadow-lg border border-red-600">
