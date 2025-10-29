@@ -14,6 +14,7 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
     const apikey = await getApikey();
     // @ts-ignore
     const genAI = new GoogleGenerativeAI(apikey);
+
     const model = genAI.getGenerativeModel({
         model: "gemini-2.5-flash",
     });
@@ -130,7 +131,7 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
                         ...parts,
                         {
                             inlineData: {
-                                mimeType: "audio/wav",
+                                mimeType: "audio/webm",
                                 data: base64Audio,
                             },
                         },

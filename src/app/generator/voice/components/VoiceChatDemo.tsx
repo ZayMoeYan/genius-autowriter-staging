@@ -137,7 +137,7 @@ export default function VoiceChatDemo() {
     };
 
     const handleRecordingStop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         const arrayBuffer = await audioBlob.arrayBuffer();
         const base64Audio = arrayBufferToBase64(arrayBuffer);
 
