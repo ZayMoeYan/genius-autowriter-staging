@@ -137,7 +137,7 @@ export default function VoiceChatDemo() {
     };
 
     const handleRecordingStop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/mp4" });
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/mp3" });
         const arrayBuffer = await audioBlob.arrayBuffer();
         const base64Audio = arrayBufferToBase64(arrayBuffer);
 
@@ -228,7 +228,7 @@ export default function VoiceChatDemo() {
         } catch {
             toast({
                 title: t("error"),
-                description: t("errorGenerated"),
+                description: "Your location is not supported for the API use.",
                 status: "error",
             });
         } finally{

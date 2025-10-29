@@ -131,7 +131,7 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
                         ...parts,
                         {
                             inlineData: {
-                                mimeType: "audio/mp4",
+                                mimeType: "audio/mp3",
                                 data: base64Audio,
                             },
                         },
@@ -143,6 +143,6 @@ export const sendToGemini = async (base64Images: any, base64Audio: any, values: 
         return result.response.text?.();
 
     } catch (err) {
-        console.error("Gemini error:", err);
+        throw err
     }
 };
