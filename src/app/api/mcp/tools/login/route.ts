@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import {cookies} from "next/headers";
-import jwt from "jsonwebtoken";
-
+import {login} from "@/app/actions/loginAction";
 
 export const runtime = "edge";
 
@@ -17,21 +15,13 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const res = await axios.post(process.env.NEXT_PUBLIC_BASE_URL + 'auth/login', {
-            email,
-            password,
-            geminiApiKey,
-        });
+       const data =  await login(email, password, geminiApiKey)
 
-        const { access_token, role } = res.data;
+        const { access_token } = data;
 
         if (!access_token) {
             throw new Error("JWT token not returned from backend.");
         }
-
-        const cookieStore = await cookies();
-        cookieStore.set('access-token', access_token, { httpOnly: true, secure: true});
-        cookieStore.set('role-token', jwt.sign(role, process.env.NEXT_SECRET_KEY!), { httpOnly: true, secure: true})
 
         return NextResponse.json(
             { success: true, access_token, message: "Login successful." },
