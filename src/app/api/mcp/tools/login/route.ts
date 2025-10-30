@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import {login} from "@/app/actions/loginAction";
 
-export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
     try {
