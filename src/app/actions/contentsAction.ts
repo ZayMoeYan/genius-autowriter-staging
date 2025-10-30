@@ -1,8 +1,6 @@
 "use server";
 
-import {revalidatePath} from "next/cache";
 import axiosInstance from "@/app/axiosInstance";
-import {cookies} from "next/headers";
 
 export async function generateContentAction(prompt: string, images: any, apikey: string) {
     try {
