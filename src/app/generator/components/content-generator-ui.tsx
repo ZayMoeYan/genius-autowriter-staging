@@ -186,14 +186,23 @@ export default function ContentGeneratorUi() {
             });
 
         } catch (err){
+
             // @ts-ignore
-            if(err.message) {
+            if(err.message === "Trial Invalid User.") {
                 toast({
                     title: t("error"),
                     description: t("trialErrorGenerated"),
                     status: "error",
                 });
-            }else {
+                // @ts-ignore
+            }else if(err.message === "Invalid User.") {
+                toast({
+                    title: t("error"),
+                    description: t("Invalid User!"),
+                    status: "error",
+                });
+            }
+            else {
                 toast({
                     title: t("error"),
                     description: t("errorGenerated"),

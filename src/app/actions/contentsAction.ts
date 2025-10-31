@@ -16,8 +16,12 @@ export async function generateContentAction(prompt: string, images: any, apikey:
 
     } catch (error) {
         // @ts-ignore
+        if (error.response.status === 401) {
+            throw new Error("Invalid User.");
+        }
+        // @ts-ignore
         if (error.response.status === 403) {
-            throw new Error("Trial users can only generate 5 contents.");
+            throw new Error("Trial Invalid User.");
         }
     }
 }
