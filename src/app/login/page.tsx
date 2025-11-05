@@ -14,9 +14,9 @@ import {testApiKey} from "@/app/actions/testApiKeyAction";
 import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
-    email: z.string().min(1).email(),
-    password: z.string().min(1),
-    apikey: z.string().min(1)
+    email: z.string().min(1).trim(),
+    password: z.string().min(1).trim(),
+    apikey: z.string().min(1).trim()
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
