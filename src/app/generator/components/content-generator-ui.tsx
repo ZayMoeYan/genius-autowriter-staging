@@ -72,7 +72,7 @@ export default function ContentGeneratorUi() {
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pageName, setPageName] = useState("");
+    const [title, setTitle] = useState("");
     const { refreshUser, currentUser } = useAuthStore();
     const { t, i18n } = useTranslation();
     const [progress, setProgress] = useState(0);
@@ -221,7 +221,7 @@ export default function ContentGeneratorUi() {
 
         setIsSaving(true);
         try {
-            const result = await saveContent(pageName, generatedContent);
+            const result = await saveContent(title, generatedContent);
             form.reset();
             setUploadedImages([]);
 
@@ -276,11 +276,11 @@ export default function ContentGeneratorUi() {
                                             name="title"
                                             render={({ field }) => (
                                                 <FormItem className={'flex-1'} >
-                                                    <FormLabel className="text-white font-bold text-[1.2rem]">{t("pageName")} <span className={'text-red-600'} >*</span></FormLabel>
+                                                    <FormLabel className="text-white font-bold text-[1.2rem]">{t("contentTitle")} <span className={'text-red-600'} >*</span></FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             disabled={isGenerating}
-                                                            placeholder={t("pageNamePlaceholder")}
+                                                            placeholder={t("contentTitlePlaceholder")}
                                                             {...field}
                                                             className="border-none font-semibold"
                                                         />
@@ -289,7 +289,7 @@ export default function ContentGeneratorUi() {
                                                 </FormItem>
                                             )}
                                         />
-                                        {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.pageName")}</FormMessage> }
+                                        {form.formState.errors.title && <FormMessage className={'absolute mt-1  text-red-600 text-sm'} >{t("formErrors.title")}</FormMessage> }
                                     </div>
                                     <div className={'relative'} >
                                         <FormField
@@ -674,7 +674,7 @@ export default function ContentGeneratorUi() {
                                     className="md:w-[45%] px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
                                     size="lg"
                                     onClick={() => {
-                                        setPageName(form.getValues().title);
+                                        setTitle(form.getValues().title);
                                         setIsModalOpen(true);
                                     }}
                                     disabled={isSaving}
@@ -702,15 +702,15 @@ export default function ContentGeneratorUi() {
                 >
                     <DialogHeader>
                         <DialogTitle className="text-lg sm:text-xl font-bold">
-                            {t("pageName")}
+                            {t("contentTitle")}
                         </DialogTitle>
                     </DialogHeader>
 
                     <div className="mt-4">
                         <Input
-                            value={pageName}
-                            onChange={(e) => setPageName(e.target.value)}
-                            placeholder={t("pageNamePlaceholder")}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder={t("contentTitlePlaceholder")}
                             className="bg-white text-black w-full text-base sm:text-lg"
                         />
                     </div>
@@ -736,7 +736,7 @@ export default function ContentGeneratorUi() {
                             variant={'outline'}
                             type="button"
                             className="w-fit px-4 py-2 sm:px-6 sm:py-2.5 border-none text-primary bg-white hover:bg-primary/90 rounded-xl transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base"
-                            disabled={isSaving || !pageName.trim()}
+                            disabled={isSaving || !title.trim()}
                             onClick={onSaveContent}
                         >
                             <>

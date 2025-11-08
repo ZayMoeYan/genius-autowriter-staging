@@ -33,8 +33,8 @@
   "contentCreation": "Content Creation",
   "contentDetailsForm": "Content Details Form",
   "contentDetailsDescription": "Provide the details for the content you want to generate.",
-  "pageName": "Page Name",
-  "pageNamePlaceholder": "Enter page name",
+  "contentTitle": "Content Title",
+  "contentTitlePlaceholder": "Enter Content Title",
   "topic": "Topic",
   "topicPlaceholder": "Write the main topic or draft idea of your content here",
   "purpose": {

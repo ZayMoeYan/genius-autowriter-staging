@@ -33,8 +33,8 @@
   "contentCreation": "Content ဖန်တီးခြင်း",
   "contentDetailsForm": "Content အသေးစိတ် ဖောင်",
   "contentDetailsDescription": "ဖန်တီးလိုသော Content အတွက် အသေးစိတ်အချက်အလက်များ ဖြည့်ပေးပါ",
-  "pageName": "Page နာမည်",
-  "pageNamePlaceholder": "Page နာမည်ကိုထည့်ပါ",
+  "contentTitle": "Content နာမည်",
+  "contentTitlePlaceholder": "Content နာမည်ကိုထည့်ပါ",
   "topic": "Content ၏ အဓိကအကြောင်းအရာ",
   "topicPlaceholder": "ဒီနေရာတွင် Content ၏ အဓိကအကြောင်းအရာ သို့မဟုတ် Idea အကြမ်းကို ရေးပါ",
   "purpose": {
