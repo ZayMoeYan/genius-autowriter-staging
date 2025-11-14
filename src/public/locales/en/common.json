@@ -88,7 +88,7 @@
   "emptyStateTitle": "Fill out the form to generate your content.",
   "emptyStateDescription": "Your content will appear here.",
   "formErrors": {
-    "pageName": "Please write the page name.",
+    "title": "Please write the title of the content.",
     "topic": "Please write the main topic of the content.",
     "purpose": "Please select the purpose of the content.",
     "audience": "Please specify the target audience.",

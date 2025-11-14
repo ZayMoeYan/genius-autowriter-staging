@@ -88,7 +88,7 @@
   "emptyStateTitle": "ဖောင်ကို ဖြည့်ပြီး Content ဖန်တီးပါ",
   "emptyStateDescription": "သင်၏ ဖန်တီးထားသော Content သည် ဤနေရာတွင် ပေါ်လာမည်",
   "formErrors": {
-    "pageName": "Page နာမည်ကို ရေးပေးပါ",
+    "title": "Content ၏ နာမည်ကို ရေးပေးပါ",
     "topic": "Content ၏ အဓိကအကြောင်းကို ရေးပေးပါ",
     "purpose": "Content ၏ ရည်ရွယ်ချက်ကို ရွေးပေးပါ",
     "audience": "Target Audience ကို ရေးပေးပါ",
